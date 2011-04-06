@@ -4,5 +4,5 @@ plot   'Norma.dat' using 1:2 title 'L1 x Ite' with points
 set logscale y
 set xlabel 'iterações'
 set ylabel 'Norma L1(n)/L1(0)'
-set title 'PROG10_CFD1, MÉTODO SIMPLEC, N=12 (31/8/2007)'                
+set title 'norma'                
 replot
