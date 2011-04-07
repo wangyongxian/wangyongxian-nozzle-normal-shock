@@ -1,8 +1,5 @@
 module coeficientes
   
-! objetivo: calcular os coeficientes e termos fontes
-!           das equações discretizadas
-
 use variaveis  
 use dados
   
@@ -100,7 +97,7 @@ contains
 	   awu(i)  = Me(i-1)
 	   aeu(i)  = 0 
        aPu(i)  = Me(i)
-	   bpu(i)  = cp*A(i)*(p(i+1)-p(i-1))/2.0d0
+	   bPu(i)  = cp*A(i)*(p(i+1)-p(i-1))/2.0d0
 	end do
       
     ! Fictício direito P = N

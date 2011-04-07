@@ -1,8 +1,5 @@
 module solvers_1D
 
-! objetivo: resolver sistema linear de equações algébricas
-!           originado de problemas unidimensionais
-
 use variaveis
 
 implicit none

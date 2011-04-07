@@ -1,7 +1,5 @@
 module dados
 
-! objetivo: ler e escrever os dados
-
 use variaveis
 
 !-------------------------------------------------
@@ -18,7 +16,7 @@ contains
 
     open(7,file='prog5_cfd1.ent')
 
-    read(7,*) nome
+!    read(7,*) nome
 	read(7,*) caso
     read(7,*) N
     read(7,*) deltat
@@ -64,7 +62,6 @@ contains
 				 1pe16.8,' = massa específica do fluido',/,     &
 				 1pe16.8,' = fator de atrito de Dárcy',/,   &
 				 1pe16.8,' = velocidade inicial no duto',/, &  
-              	 !1pe16.8,' = diâmetro inicial do duto',/,   &
 				 1pe16.8,' = coeficiente angular do diâmetro ',/)
 				 
 

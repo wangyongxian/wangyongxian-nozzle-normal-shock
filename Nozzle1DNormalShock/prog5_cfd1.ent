@@ -1,5 +1,4 @@
-'reedlei'  = identificação do aluno
-'saida_prog10.txt'             = caso
+'saida.txt'             = caso
      12               N        = número de volumes de controle
       1.0d0           deltat   = número de avanços no tempo
    1000               iteracao = número de iterações (ciclo total)
@@ -18,11 +17,3 @@
       0.4d0	      Ln     = Ln
       1           beta esquema CDS - 1 UDS-0            
 'N=12'  ! título: máximo 50 caracteres
-
-
-
-MODELO MATEMÁTICO:
-
-	equação diferencial:   Re*du2/dx = d2u/dx2 + S
-
-	condições de contorno: u(0) = 0 e u(1) = 1

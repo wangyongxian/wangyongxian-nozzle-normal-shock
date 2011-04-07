@@ -1,10 +1,5 @@
 module resultados
 
-! objetivo: calcular solução numérica e
-!           apresentar gráficos dos resultados
-
-!-------------------------------------------------
-
 use coeficientes
 use solvers_1D
 

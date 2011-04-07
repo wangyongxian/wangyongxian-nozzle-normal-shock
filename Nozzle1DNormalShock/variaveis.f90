@@ -64,7 +64,7 @@ real*8,dimension(:),allocatable :: bPu, bPplinha ! termo fonte de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 
-character*30 :: nome      ! identificação do aluno
+!character*30 :: nome      ! identificação do aluno
 character*20 :: caso      ! nome do arquivo de saída
 
 character*50 :: title     ! título do gráfico
