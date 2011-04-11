@@ -23,13 +23,13 @@ real*8  :: Beta
 real*8  :: fator, Uin  ! Fator de atrito e velocidade inicial
 
 !real*8  :: Dzero, Cd   ! Diâmetro inicial e coeficiente angular 
-real*8  :: T0, Cd   ! Diâmetro inicial e coeficiente angular 
+real*8  :: T0, P0, Cd 
 
 real*8  :: Lt, deltax   ! Comprimento domínio de cálculo e do volume de controle
 
 real*8  :: deltat, Pi  ! Número de avanços no tempo
 
-real*8  :: Fat, R_o, R ! Coeficiente correção velocidade na face
+real*8  :: Fat, R_o, R, razao, Mach ! Coeficiente correção velocidade na face
 
 real*8,dimension(:),allocatable :: u      ! solução numérica
 real*8,dimension(:),allocatable :: p      ! solução numérica

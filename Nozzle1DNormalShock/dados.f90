@@ -16,8 +16,9 @@ contains
 
     open(7,file='dados_entrada.ent')
 
-!    read(7,*) nome
 	read(7,*) caso
+	read(7,*) P0
+	read(7,*) T0
     read(7,*) N
     read(7,*) deltat
 	read(7,*) iteracao
@@ -26,10 +27,10 @@ contains
 	read(7,*) ro
 	read(7,*) fator
 	read(7,*) Uin
-	read(7,*) T0
 	read(7,*) Cd
 	read(7,*) Rgases
 	read(7,*) gama
+	read(7,*) razao
 	read(7,*) rin
 	read(7,*) rg
 	read(7,*) Lc
@@ -70,7 +71,7 @@ contains
 !-------------------------------------------------
 
   subroutine inicializacao
-
+real*8 :: MachN, Machx, Machlx
     ! alocação de memória
     allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N))
     allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N))
@@ -126,6 +127,31 @@ contains
 	end do
 
     cp = gama*Rgases/(gama-1)
+    
+    Mach = 2.0d0
+    
+    do i=1, 1000
+        Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
+        Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
+        MachN = Mach - Machx/Machlx
+        if (Mach == MachN ) then
+            exit
+        end if
+        Mach = MachN
+    end do
+    
+    do i=1, N
+        P(i) = P0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-gama/(gama-1.0d0))
+    end do
+    do i=1, N
+        T(i) = T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1)
+    end do 
+    do i=1, N
+        rop(i) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+    end do 
+    do i=1, N
+        u(i) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
+    end do
     
   end subroutine inicializacao
 
