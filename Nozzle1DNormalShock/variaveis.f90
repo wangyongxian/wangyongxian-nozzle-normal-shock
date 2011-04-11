@@ -36,7 +36,7 @@ real*8,dimension(:),allocatable :: p      ! solução numérica
 real*8,dimension(:),allocatable :: rop      ! solução numérica
 real*8,dimension(:),allocatable :: roe      ! solução numérica
 real*8,dimension(:),allocatable :: plinha ! solução numérica
-real*8,dimension(:),allocatable :: Temperatura ! solução numérica
+real*8,dimension(:),allocatable :: T ! solução numérica
 real*8,dimension(:),allocatable :: u_o    ! solução numérica inicial
 real*8,dimension(:),allocatable :: ue     ! solução numérica
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
@@ -64,7 +64,6 @@ real*8,dimension(:),allocatable :: bPu, bPplinha ! termo fonte de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 
-!character*30 :: nome      ! identificação do aluno
 character*20 :: caso      ! nome do arquivo de saída
 
 character*50 :: title     ! título do gráfico

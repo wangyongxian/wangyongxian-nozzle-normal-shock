@@ -54,7 +54,7 @@ contains
 		  call coeficientes_e_fontes_energia
 		  
 		  ! solução do sistema de equações
-		  call tdma (N,aPu,awu,aeu,bPu,Temperatura)
+		  call tdma (N,aPu,awu,aeu,bPu,T)
 		  
 		  call calculo_massa_especifica
 		  

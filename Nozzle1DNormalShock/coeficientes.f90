@@ -112,23 +112,23 @@ contains
 
 	! Fictício esquerdo P = 1
     awu(1) = 0.0d0
-    aeu(1) = -1.0d0
+    aeu(1) = 1.0d0
     aPu(1) = 1.0d0
-    bPu(1) = T0-((gama-1.0d0)/2.0d0)*(Uin*Uin)/(Rgases*gama)
+    bPu(1) = 2.0d0*T0
 	
 	! volumes internos
     do i = 2, N-1
-	   awu(i)  = Me(i-1)
+	   awu(i)  = -cp*Me(i-1)
 	   aeu(i)  = 0 
-       aPu(i)  = Me(i)
+       aPu(i)  = cp*ro*A(i)*deltax/deltat+awu(i)
 	   bPu(i)  = cp*A(i)*(p(i+1)-p(i-1))/2.0d0
 	end do
       
     ! Fictício direito P = N
-    awu(N) = 1.0d0
+    awu(N) = -1.0d0
     aeu(N) = 0.0d0
     aPu(N) = 1.0d0
-    bPu(N) = u(N-1)-u(N-2)
+    bPu(N) = (2.0d0*(x(N)-x(N-1))/(x(N-1)-x(N-2)))*(T(N-1)-T(N-2))
 
   end subroutine coeficientes_e_fontes_energia
   
@@ -197,7 +197,7 @@ uex = ue
    
     ! Calculando fictício P = 1	
     awplinha(1) = 0.0d0
-    aeplinha(1) = 0.0d0
+    aeplinha(1) = 1.0d0
     aPplinha(1) = 1.0d0
     bpplinha(1) = 0.0d0
 
@@ -212,10 +212,10 @@ uex = ue
     end do
   
     ! Calculando fictício P = N 
-    awplinha(N) = 0.0d0
+    awplinha(N) = -1.0d0
     aeplinha(N) = 0.0d0
     aPplinha(N) = 1.0d0
-    bpplinha(N) = 0.0d0
+    bpplinha(N) = (2.0d0*(x(N)-x(N-1))/(x(N-1)-x(N-2)))*(plinha(N-1)-plinha(N-2))
     uexx = ue
     appl = aPplinha
     awpl = awplinha
@@ -305,7 +305,7 @@ faces = ue
 subroutine calculo_massa_especifica
 
     do i=2, N-1
-        rop(i) = plinha(i)/(Rgases*Temperatura(i))
+        rop(i) = plinha(i)/(Rgases*T(i))
     end do    
     
 end subroutine calculo_massa_especifica
@@ -322,13 +322,13 @@ end subroutine calculo_massa_especifica_nas_faces
 
 subroutine corrigir_massa_especifica
     do i=2, N-1
-    rop(i) = rop(i)+P(i)/(Rgases*Temperatura(i))
+    rop(i) = rop(i)+P(i)/(Rgases*T(i))
     end do
 end subroutine corrigir_massa_especifica
 
 subroutine corrigir_massa_especifica_faces
     do i=2, N-1
-    roe(i) = roe(i) + P(i)/(Rgases*Temperatura(i))
+    roe(i) = roe(i) + P(i)/(Rgases*T(i))
     end do
 end subroutine corrigir_massa_especifica_faces
 
