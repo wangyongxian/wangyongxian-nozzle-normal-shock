@@ -9,7 +9,7 @@ contains
 
 !-------------------------------------------------
 
-  subroutine lista_coeficientes
+  subroutine lista_coeficientes_velocidade
 
     write(10,4)
     4 format(//,4x,'COEFICIENTES DA VELOCIDADE',//,  &
@@ -21,7 +21,7 @@ contains
 
     2 format(i4,4x,5(1pe21.11))
 
-  end subroutine lista_coeficientes
+  end subroutine lista_coeficientes_velocidade
 
 !-------------------------------------------------
 

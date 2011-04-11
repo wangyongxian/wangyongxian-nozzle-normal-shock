@@ -97,7 +97,7 @@ contains
 	tcpu = timef()
 	
 	! escrita dos coeficientes e fontes velocidade 
-	call lista_coeficientes
+	call lista_coeficientes_velocidade
 
 	! escrita dos coeficientes e fontes pressão 
 	call lista_coeficientes_pressao

@@ -12,9 +12,9 @@ contains
 
   subroutine le_dados
 
-    ver = system('notepad prog5_cfd1.ent') ! lista dados
+    ver = system('notepad dados_entrada.ent') ! lista dados
 
-    open(7,file='prog5_cfd1.ent')
+    open(7,file='dados_entrada.ent')
 
 !    read(7,*) nome
 	read(7,*) caso
