@@ -79,6 +79,8 @@ contains
 		  
 	      ! corrigir velocidades das faces
 	      call corrigir_velocidades_faces
+	      !arruamr corrigir massa especifica nas faces mas eh assim?
+	      call calculo_massa_especifica_nas_faces
 	      
 	   end do
 

@@ -92,6 +92,7 @@ contains
 	end do
 	
 	ue(N-1) = (u(N-1)+u(N))/2.0d0
+	!arrumar o uin
 	Fat = (Uin*Ae(1))/(ue(N-1)*Ae(N-1))
   	ue(N-1) = Fat*ue(N-1)
  
@@ -108,8 +109,8 @@ contains
     awT(1) = 0.0d0
     aeT(1) = 1.0d0
     apT(1) = 1.0d0
-    !arrumar
-    bpT(1) = 2.0d0*T(1)
+    !arrumar o u(1) q eh uin
+    bpT(1) = 2.0d0*(T0-1.0d0*(gama-1.0d0)*(u(1)**2)/(2.0d0*gama*Rgases))
 	
 	! volumes internos
     do i = 2, N-1
@@ -229,7 +230,7 @@ contains
 
   subroutine corrigir_massa_especifica
 
-    do i = 2, N-2
+    do i = 1, N
 	   rop(i) = rop(i) + plinha(i)/(Rgases*T(i))
 	end do 
 
@@ -239,7 +240,7 @@ contains
 
 subroutine calculo_massa_especifica
 
-    do i=2, N-1
+    do i=1, N
         rop(i) = p(i)/(Rgases*T(i))
     end do    
     
@@ -249,7 +250,7 @@ end subroutine calculo_massa_especifica
 
 subroutine calculo_massa_especifica_nas_faces
     
-    do i=2, N-1
+    do i=1, N-1
         roe(i) = rop(i) + Beta*(rop(i+1)-rop(i))/2.0d0
     end do
     
