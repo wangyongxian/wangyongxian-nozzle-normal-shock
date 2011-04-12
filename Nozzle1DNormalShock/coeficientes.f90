@@ -44,16 +44,17 @@ contains
 
   subroutine coeficientes_e_fontes_qml
 	
-	real*8 teste1, teste2, teste3
-	real*8,dimension(:),allocatable :: Mx, Mex, ap, aex, aw, bp, uexx, afux, atux, btux, btrux  ! fluxo de massa na face leste
-	allocate (Mx(N),Mex(N), ap(N), aex(N), aw(N), bp(N), uexx(N), afux(N), atux(N), btux(N), btrux(N))
+	!real*8 teste1, teste2, teste3
+	real*8 bpUDS, bpB
+	!real*8,dimension(:),allocatable :: Mx, Mex, ap, aex, aw, bp, uexx, afux, atux, btux, btrux  ! fluxo de massa na face leste
+	!allocate (Mx(N),Mex(N), ap(N), aex(N), aw(N), bp(N), uexx(N), afux(N), atux(N), btux(N), btrux(N))
 	! Calculando o fluxo de massa na face leste
 	do i = 1, N
 	   Me(i) = ro*ue(i)*Ae(i) 
-	   Mex(i) = Me(i)
-	   Mx(i) = M(i)
+	   !Mex(i) = Me(i)
+	   !Mx(i) = M(i)
 	end do
-   uexx = ue
+   !uexx = ue
 	! Fictício esquerdo P = 1
     awu(1) = 0.0d0
     aeu(1) = -1.0d0
@@ -62,20 +63,23 @@ contains
 	
 	! volumes internos
     do i = 2, N-1
-      afu(i)  = (Pi/8.0d0)*ro*fator*u(i)*(2.0d0*raio(i))*deltax
-	   atu(i)  = M(i)/deltat
-	   btu(i)  = (M(i)*u_o(i))/deltat
-	   bpru(i) = - A(i)*(p(i+1)-p(i-1))/2.0d0
+       !afu(i)  = (Pi/8.0d0)*ro*fator*u(i)*(2.0d0*raio(i))*deltax
+	   !atu(i)  = M(i)/deltat
+	   !btu(i)  = (M(i)*u_o(i))/deltat
+	   !bpru(i) = - A(i)*(p(i+1)-p(i-1))/2.0d0
 
-	   awu(i)  = Me(i-1) + mi*Ae(i-1)/deltax
-	   aeu(i)  = mi*Ae(i)/deltax
+	   awu(i)  = roe(i-1)*ue(i-1)*Ae(i-1)
+	   aeu(i)  = 0
 	   
-      aPu(i)  = awu(i) + aeu(i) + afu(i) + atu(i)  
-	   bpu(i)  = btu(i) + bpru(i)
-	   aex(i) = aeu(i)
-	   ap(i) = aPu(i)
-	   aw(i) = awu(i)
-	   bp(i) = bpu(i)
+       aPu(i)  = -(awu(i) + aeu(i)) + rop(i)*A(i)*deltax/deltat
+	   !bpu(i)  = btu(i) + bpru(i)
+	   bpUDS = rop(i)*A(i)*u(i)*deltax/deltat+A(i)*(p(i-1)-p(i+1))/2.0d0-Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
+	   bpB = beta*(roe(i-1)*ue(i-1)*Ae(i-1)*(u(i)-u(i-1))-roe(i)*ue(i)*Ae(i)*(u(i+1)-u(i)))/2.0d0
+	   bpu(i)  = bpUDS+bpB
+	   !aex(i) = aeu(i)
+	   !ap(i) = aPu(i)
+	   !aw(i) = awu(i)
+	   !bp(i) = bpu(i)
 	end do
       
     ! Fictício direito P = N
@@ -84,18 +88,18 @@ contains
     aPu(N) = 1.0d0
     bPu(N) = (2.0d0*(x(N)-x(N-1))/(x(N-1)-x(N-2)))*(u(N-1)-u(N-2))
     
-    aex(1) = aeu(1)
-    aw(1) = awu(1)
-    ap(1) = aPu(1)
-    bp(1) = bpu(1)
-    afux = afu
-    atux = atu
-    btux = btu
-    btrux = bpru
-    aex(N) = aeu(N)
-    aw(N) = awu(N)
-    ap(N) = aPu(N)
-    bp(N) = bpu(N)
+    !aex(1) = aeu(1)
+    !aw(1) = awu(1)
+    !ap(1) = aPu(1)
+    !bp(1) = bpu(1)
+    !afux = afu
+    !atux = atu
+    !btux = btu
+    !btrux = bpru
+    !aex(N) = aeu(N)
+    !aw(N) = awu(N)
+    !ap(N) = aPu(N)
+    !bp(N) = bpu(N)
 !write(*,*), 'cacareco'
 
   end subroutine coeficientes_e_fontes_qml
@@ -284,19 +288,19 @@ real*8 teste1, teste2
 
   subroutine corrigir_velocidades_faces
 
-  real*8 testex, teste2, teste3
-   real*8,dimension(:),allocatable :: faces
-   allocate (faces(N) )
-faces = ue
+  !real*8 testex, teste2, teste3
+   !real*8,dimension(:),allocatable :: faces
+   !!allocate (faces(N) )
+!faces = ue
 	! Calculando ue somente para volumes internos
     do i = 2, N-2
-    testex = ue(i)
-    teste2 = plinha(i+1)
-    teste3 = plinha(i)
+ !   testex = ue(i)
+  !  teste2 = plinha(i+1)
+   ! teste3 = plinha(i)
 	   ue(i) = ue(i) - de(i)*(plinha(i+1)-plinha(i))
 	   
 	end do 
-	faces = ue
+	!faces = ue
 !write(*,*), 'eta'
 
   end subroutine corrigir_velocidades_faces
