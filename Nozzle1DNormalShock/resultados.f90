@@ -42,11 +42,11 @@ contains
 	   
 	   !write(8,16) it, R
      
+       ! cálculo dos coeficientes do método SIMPLEC
+	   call coeficientes_simplec
+	   
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
-	   
-	   ! cálculo dos coeficientes do método SIMPLEC
-	   call coeficientes_simplec
 	   
 	   do ite = 1, 2
 		  
@@ -74,8 +74,6 @@ contains
 		  
 	      call corrigir_massa_especifica
 	      
-	      call corrigir_massa_especifica_faces
-	      
 	      ! corrigir velocidades e obter u(p)
 	      call corrigir_velocidades
 		  
@@ -87,6 +85,8 @@ contains
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
 	   ue_o = ue
+	   p_o = p
+	   rop_o = rop
 
 	end do
 

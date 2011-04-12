@@ -10,7 +10,7 @@ use resultados
 
 implicit none
 
-integer :: comp, comp1
+integer ::  comp1
 
 !-------------------------------------------------
 
