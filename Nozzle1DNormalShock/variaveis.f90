@@ -34,6 +34,8 @@ real*8,dimension(:),allocatable :: roe      ! solução numérica
 real*8,dimension(:),allocatable :: plinha ! solução numérica
 real*8,dimension(:),allocatable :: T ! solução numérica
 real*8,dimension(:),allocatable :: u_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: rop_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: p_o    ! solução numérica inicial
 real*8,dimension(:),allocatable :: ue     ! solução numérica
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
 real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
@@ -50,12 +52,11 @@ real*8 :: rg      ! rg
 real*8 :: Lc      ! Lc
 real*8 :: Ln      ! Ln
 
-
-real*8,dimension(:),allocatable :: aPu, aPplinha ! coeficiente central de u e p
-real*8,dimension(:),allocatable :: aWu, aWplinha ! coeficiente esquerdo de u e p
-real*8,dimension(:),allocatable :: aEu, aEplinha ! coeficiente direito de u	e p
+real*8,dimension(:),allocatable :: aPu, aPplinha, aPt ! coeficiente central de u e p
+real*8,dimension(:),allocatable :: aWu, aWplinha, aWt ! coeficiente esquerdo de u e p
+real*8,dimension(:),allocatable :: aEu, aEplinha, aEt ! coeficiente direito de u	e p
 									   
-real*8,dimension(:),allocatable :: bPu, bPplinha ! termo fonte de u e p
+real*8,dimension(:),allocatable :: bPu, bPplinha, bPt ! termo fonte de u e p
 
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC

@@ -75,9 +75,10 @@ contains
     real*8 :: MachN, Machx, Machlx, razao
     ! alocação de memória
     allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), rop(N))
-    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N))
+    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
+	allocate (awt(N),aPt(N),aet(N),bPt(N))
   	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N))
    
     ! Cálculo do deltax
