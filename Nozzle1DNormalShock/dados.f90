@@ -109,15 +109,16 @@ contains
     end do
   
     p = 0.0d0
+    p_o = 0.0d0
     plinha = 0.0d0
     u = 0.0d0 
     u_o = 0.0d0
     ue = 0.0d0
     ue_o = 0.0d0
-    roe = 0
-    rop = 0
-    rop_o = 0
-    T = 0
+    roe = 0.0d0
+    rop = 0.0d0
+    rop_o = 0.0d0
+    T = 0.0d0
 
 	! Calculando a área no ponto p
 	do i = 1, N
@@ -130,11 +131,6 @@ contains
 	   
 	  ! Ae(i) = Pi*((Dzero + Cd*xe(i))**2)/4.0d0
 	end do  
-
-	! Calculando o fluxo de massa no ponto p
-	do i = 1, N
-	   M(i) = ro*A(i)*deltax
-	end do
 
     cp = gama*Rgases/(gama-1)
     

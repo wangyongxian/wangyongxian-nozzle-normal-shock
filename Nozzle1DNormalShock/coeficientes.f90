@@ -46,8 +46,6 @@ contains
 	
 	real*8 bpUDS, bpB
 	
-	!do i = 1, N
-	!end do
 	! Fictício esquerdo P = 1
     awu(1) = 0.0d0
     aeu(1) = -1.0d0
@@ -81,7 +79,7 @@ contains
    
 	! Calculando ue no passo deltat+1
 	ue(1) = (u(1)+u(2))/2.0d0
-	!arrumar
+	
 	do i = 2, N-2
 	   bcP = beta*((roe(i-1)*Ae(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
 	   bcE = beta*((roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Ae(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
@@ -111,7 +109,7 @@ contains
     aeT(1) = 1.0d0
     apT(1) = 1.0d0
     !arrumar
-    bpT(1) = 2.0d0*T0
+    bpT(1) = 2.0d0*T(1)
 	
 	! volumes internos
     do i = 2, N-1
@@ -141,7 +139,7 @@ contains
     aeplinha(1) = 1.0d0
     aPplinha(1) = 1.0d0
     !arrumar
-    bpplinha(1) = 2.0d0*P0
+    bpplinha(1) = 2.0d0*plinha(1)
 
     ! Calculando os volumes internos
     do i = 2, N-1
@@ -205,7 +203,7 @@ contains
   
   subroutine corrigir_velocidades
      !arrumar
-	u(1) = - u(1+1) + 2.0d0*Uin
+	u(1) = - u(1+1) + 2.0d0*U(1)
    
 	! Calculando para volumes internos
 	do i = 2, N-1

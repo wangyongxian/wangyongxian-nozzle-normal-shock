@@ -191,18 +191,6 @@ contains
 
 	close(11)
 	
-	! adapta arquivo de comandos para fazer gráfico
-    !open(8,file='Norma.txt')
-    !  do j = 1, 6
-    !     read(8,*)
-    !  end do
-    !  write(8,17) head
-    !  17 format("set title '",a62,/,"replot")
-    !close(8)
-
-	! mostra o gráfico de Ue
-    !ver = system('wgnuplot Norma.txt')
-
     ! adapta arquivo de comandos para fazer gráfico
     open(7,file='U.gnu')
       do j = 1, 5
