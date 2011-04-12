@@ -42,14 +42,13 @@ integer ::  comp1
 
   comp1 = len(trim(adjustl(title)))
 
- ! write(10,18) trim(adjustl(nome)), trim(adjustl(title)), dia, hora
-  !18 format(/, 'Aluno  = ', a<comp>,  &
-	!        //,'Título = ', a<comp1>, &
-    !        //,5x,'Dia = ',a12,5x,'Hora = ',a8)
-
   call mostra_dados 
   ! calcula a area e outras inicializacoes
   call inicializacao
+
+
+
+
 
   call solucao_numerica
 

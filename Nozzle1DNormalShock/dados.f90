@@ -101,7 +101,11 @@ contains
 
     ! Cálculo do raio
     do i = 1, N
-       Raio(i) = rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(x(i)-Lc)/Ln))
+        if(x(i) >= Lc) then
+           Raio(i) = rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(x(i)-Lc)/Ln))
+        else
+           Raio(i) = rin
+        end if
     end do
   
     p = 0.0d0
@@ -110,6 +114,10 @@ contains
     u_o = 0.0d0
     ue = 0.0d0
     ue_o = 0.0d0
+    roe = 0
+    rop = 0
+    rop_o = 0
+    T = 0
 
 	! Calculando a área no ponto p
 	do i = 1, N

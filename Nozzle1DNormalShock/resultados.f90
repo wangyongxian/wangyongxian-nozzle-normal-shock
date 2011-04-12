@@ -239,6 +239,16 @@ contains
     ! mostra o gráfico de p
     ver = system('wgnuplot p.gnu')
 
+    ! mostra o dominio de calculo
+    open(22,file='dominio.dat')
+	do i = 1, N
+	  write(22,*) x(i), raio(i)
+	end do
+	close(22)
+
+    ver = system('wgnuplot dominio.gnu')
+    
+    
   end subroutine escreve_T
 
 !-------------------------------------------------
