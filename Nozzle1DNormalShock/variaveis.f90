@@ -6,10 +6,7 @@ implicit none
 
 integer :: N           ! número total de nós
 
-integer :: i           ! número do nó
-                       ! i = 1, nó no contorno esquerdo fictício
-                       ! i = N, nó no contorno direito fictício
-                       ! 2 <= i <= N-1, nós internos
+integer :: i,j           ! número do nó e contador
 
 real*8  :: tcpu        ! tempo de CPU em segundos
 
@@ -22,14 +19,13 @@ real*8  :: Beta
 
 real*8  :: fator, Uin  ! Fator de atrito e velocidade inicial
 
-!real*8  :: Dzero, Cd   ! Diâmetro inicial e coeficiente angular 
 real*8  :: T0, P0, Cd 
 
 real*8  :: Lt, deltax   ! Comprimento domínio de cálculo e do volume de controle
 
 real*8  :: deltat, Pi  ! Número de avanços no tempo
 
-real*8  :: Fat, R_o, R, razao, Mach ! Coeficiente correção velocidade na face
+real*8  :: Fat, R_o, R, Mach ! Coeficiente correção velocidade na face
 
 real*8,dimension(:),allocatable :: u      ! solução numérica
 real*8,dimension(:),allocatable :: p      ! solução numérica

@@ -12,7 +12,6 @@
       4.0d-3	      Cd       = coeficiente angular do diâmetro
       526.97d0	      Rgases  = R
       1.4d0	      gama     = gama
-      3.0d0         A/A*  relacao entre areas
       0.3d0	      rin     = rin
       0.1d0	      rg     = rg
       0.1d0	      Lc     = Lc

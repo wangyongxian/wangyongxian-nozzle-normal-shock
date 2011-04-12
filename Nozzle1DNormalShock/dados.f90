@@ -1,5 +1,6 @@
 module dados
 
+
 use variaveis
 
 !-------------------------------------------------
@@ -7,6 +8,7 @@ use variaveis
 implicit none
 
 contains
+
 
 !-------------------------------------------------
 
@@ -30,7 +32,6 @@ contains
 	read(7,*) Cd
 	read(7,*) Rgases
 	read(7,*) gama
-	read(7,*) razao
 	read(7,*) rin
 	read(7,*) rg
 	read(7,*) Lc
@@ -71,9 +72,9 @@ contains
 !-------------------------------------------------
 
   subroutine inicializacao
-real*8 :: MachN, Machx, Machlx
+    real*8 :: MachN, Machx, Machlx, razao
     ! alocação de memória
-    allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N))
+    allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), rop(N))
     allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
@@ -128,8 +129,10 @@ real*8 :: MachN, Machx, Machlx
 
     cp = gama*Rgases/(gama-1)
     
-    Mach = 2.0d0
+    do j=1, N
     
+    Mach = 2.0d0
+    razao = A(j)/(Pi*(rg**2))
     do i=1, 1000
         Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
         Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
@@ -140,17 +143,14 @@ real*8 :: MachN, Machx, Machlx
         Mach = MachN
     end do
     
-    do i=1, N
-        P(i) = P0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-gama/(gama-1.0d0))
-    end do
-    do i=1, N
-        T(i) = T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1)
-    end do 
-    do i=1, N
-        rop(i) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-    end do 
-    do i=1, N
-        u(i) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
+    
+        P(j) = P0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-gama/(gama-1.0d0))
+    
+        T(j) = T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1)
+   
+        rop(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+   
+        u(j) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
     end do
     
   end subroutine inicializacao
