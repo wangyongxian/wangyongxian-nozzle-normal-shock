@@ -43,7 +43,7 @@ contains
 	   !write(8,16) it, R
      
        ! cálculos das velocidades na face leste
-	   call velocidades_ue
+	   call calculo_velocidades_face
 	   
 	   ! cálculo dos coeficientes do método SIMPLEC
 	   call coeficientes_simplec
