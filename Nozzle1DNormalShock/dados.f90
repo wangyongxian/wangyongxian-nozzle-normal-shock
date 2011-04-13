@@ -25,10 +25,7 @@ contains
     read(7,*) deltat
 	read(7,*) iteracao
 	read(7,*) Lt
-	read(7,*) mi
-	read(7,*) ro
 	read(7,*) fator
-	read(7,*) Uin
 	read(7,*) Cd
 	read(7,*) Rgases
 	read(7,*) gama
@@ -51,8 +48,7 @@ contains
 
     comp = len(trim(adjustl(caso)))
 
-!    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,mi,ro,fator,Uin,Dzero,Cd
-    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,mi,ro,fator,Uin,Cd
+    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator,Cd
 
     1 format(/,2x,'DADOS',//,  &
                  a<comp>,' = caso',/, &	 
@@ -138,6 +134,7 @@ contains
     
     Mach = 2.0d0
     razao = A(j)/(Pi*(rg**2))
+    !arrumar condicao de parada
     do i=1, 1000
         Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
         Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))

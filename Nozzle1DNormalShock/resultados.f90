@@ -122,7 +122,8 @@ contains
 	real*8  :: Pref        
 	
     ! Antes das tabelas um Pós-processamento
-    u(1) = Uin
+    !arrumar uin
+    u(1) = 0
 	u(N) = (u(N-1)+u(n))/2.0d0
 	p(1) = (p(1)+p(2))/2.0d0
 	p(N) = (p(N-1)+p(N))/2.0d0

@@ -14,10 +14,9 @@ integer :: ver         ! auxílio do comando System
 
 integer :: iteracao	   !	Número de iterações
 
-real*8  :: mi, ro      ! Viscosidade abs e massa específica do fluido
 real*8  :: Beta
 
-real*8  :: fator, Uin  ! Fator de atrito e velocidade inicial
+real*8  :: fator  ! Fator de atrito e velocidade inicial
 
 real*8  :: T0, P0, Cd 
 

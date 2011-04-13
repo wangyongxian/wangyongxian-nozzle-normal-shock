@@ -92,8 +92,8 @@ contains
 	end do
 	
 	ue(N-1) = (u(N-1)+u(N))/2.0d0
-	!arrumar o uin
-	Fat = (Uin*Ae(1))/(ue(N-1)*Ae(N-1))
+	!arrumar o uin u(1)>uin
+	Fat = (U(1)*Ae(1))/(ue(N-1)*Ae(N-1))
   	ue(N-1) = Fat*ue(N-1)
  
   end subroutine calculo_velocidades_face
