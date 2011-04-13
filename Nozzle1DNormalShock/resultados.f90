@@ -16,7 +16,8 @@ contains
     write(10,15) 
 	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
-
+    !call calcula_fluxo_massa
+	
 	! cálculo dos coeficientes e termos fontes
 	call coeficientes_e_fontes_qml
 	
@@ -135,6 +136,12 @@ contains
 	   p(i) = p(i) - Pref
 	end do
 	
+	
+	
+    call calcula_empuxo
+    call calcula_coeficiente_descarga
+    call calcula_fluxo_massa
+    
 	write(10,14) 
 	14 format(//,4x,'OUTROS RESULTADOS RELEVANTES',/)
 
@@ -165,22 +172,13 @@ contains
 	end do
 
 	write(10,5)
-    5 format(//,t4,'volume',t13,'x versus fluxo de massa nas faces',/)
+    5 format(//,t4,'volume',t13,'x versus fluxo de massa',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
-    open(9,file='fm.dat')
-
 	do i = 1, N 
-	  if (i == N) then
-	     xe(N) = xe(N-1)
-		 Me(N) = Me(N-1)
-	  end if
-	  write( 9,7) i, xe(i), Me(i)
-	  write(10,7) i, xe(i), Me(i)
+	  write(10,7) i, x(i), M(i)
       7 format(i4,4x,2(1pe21.11))
 	end do
-
-	close(9)
 
 	write(10,8)
     8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
@@ -209,18 +207,6 @@ contains
     ver = system('wgnuplot U.gnu')	
 
 	! adapta arquivo de comandos para fazer gráfico
-    open(9,file='fm.gnu')
-      do j = 1, 5
-         read(9,*)
-      end do
-      write(9,12) head
-      12 format("set title '",a62,/,"replot")
-    close(9)
-
-    ! mostra o gráfico de fm
-    ver = system('wgnuplot fm.gnu')
-
-	! adapta arquivo de comandos para fazer gráfico
     open(11,file='p.gnu')
       do j = 1, 5
          read(11,*)
@@ -230,7 +216,7 @@ contains
     close(11)
 
     ! mostra o gráfico de p
-    ver = system('wgnuplot p.gnu')
+    !ver = system('wgnuplot p.gnu')
 
     ! mostra o dominio de calculo
     open(22,file='dominio.dat')
@@ -239,9 +225,22 @@ contains
 	end do
 	close(22)
 
-    ver = system('wgnuplot dominio.gnu')
+    !ver = system('wgnuplot dominio.gnu')
     
+    write(10,*)
+    write(10,*)
+    write(10,*) 'empuxo=',Empuxo
+    write(10,*) 'coeficiente descarga=', Cd
     
+    open(23, file='fm.dat')
+    do i = 1, N
+	  write(23,*) i, x(i), m(i)
+	end do
+	
+    close(23)
+    
+    ver = system('wgnuplot fm.gnu')
+  
   end subroutine escreve_T
 
 !-------------------------------------------------

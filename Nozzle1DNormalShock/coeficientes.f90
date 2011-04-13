@@ -119,7 +119,7 @@ contains
        apT(i)  = cp*A(i)*rop(i)*deltax/deltat-(awT(i)+aeT(i))
        bUDS = cp*A(i)*rop_o(i)*T(i)*deltax/deltat+A(i)*(p(i)-p_o(i))*deltax/deltat+1.0d0*(A(i)*u(i)*(p(i+1)-p(i-1)))/2.0d0+Pi*fator*rop(i)*deltax*u(i)**3
        bBeta = beta*cp*(roe(i-1)*ue(i-1)*Ae(i-1)*(T(i)-T(i-1))-roe(i)*ue(i)*Ae(i)*(T(i+1)-T(i)))/2.0d0
-	   bpT(i)  = bUDS+bBeta
+	   bpT(i)  = bUDS + bBeta
 	end do
       
     ! Fictício direito P = N
@@ -251,10 +251,30 @@ end subroutine calculo_massa_especifica
 subroutine calculo_massa_especifica_nas_faces
     
     do i=1, N-1
-        roe(i) = rop(i) + Beta*(rop(i+1)-rop(i))/2.0d0
+        roe(i) = rop(i) + beta*(rop(i+1)-rop(i))/2.0d0
     end do
     
 end subroutine calculo_massa_especifica_nas_faces
+
+!-------------------------------------------------
+
+subroutine calcula_fluxo_massa
+    do i=1,N
+        m(i) = rop(i)*u(i)*A(i)
+    end do
+end subroutine calcula_fluxo_massa
+
+!-------------------------------------------------
+
+subroutine calcula_coeficiente_descarga
+    Cd = rop(N)*u(N)*A(N)/Ma
+end subroutine calcula_coeficiente_descarga
+
+!-------------------------------------------------
+
+subroutine calcula_empuxo
+    Empuxo = rop(N)*u(N)*A(N)*u(N)
+end subroutine calcula_empuxo
 
 !-------------------------------------------------
 

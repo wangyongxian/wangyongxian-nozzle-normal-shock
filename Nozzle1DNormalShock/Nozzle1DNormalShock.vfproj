@@ -52,6 +52,7 @@
 		<File RelativePath=".\dados.f90"/>
 		<File RelativePath=".\Nozzle1DNormalShock.f90"/>
 		<File RelativePath=".\resultados.f90"/>
+		<File RelativePath=".\Richardson.F90"/>
 		<File RelativePath=".\solvers.f90"/>
 		<File RelativePath=".\variaveis.f90"/></Filter>
 		<File RelativePath=".\ReadMe.txt"/></Files>

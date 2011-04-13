@@ -26,7 +26,6 @@ contains
 	read(7,*) iteracao
 	read(7,*) Lt
 	read(7,*) fator
-	read(7,*) Cd
 	read(7,*) Rgases
 	read(7,*) gama
 	read(7,*) rin
@@ -35,7 +34,6 @@ contains
 	read(7,*) Ln
 	read(7,*) Beta
     read(7,*) title
-
     close(7)
 
   end subroutine le_dados
@@ -48,7 +46,7 @@ contains
 
     comp = len(trim(adjustl(caso)))
 
-    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator,Cd
+    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator
 
     1 format(/,2x,'DADOS',//,  &
                  a<comp>,' = caso',/, &	 
@@ -189,15 +187,11 @@ contains
         ue(j) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
     end do
 
-
-!    do i = 1, N-1
-!        ue(i) = (u(i)+u(i+1))/2.0d0
-!        roe(i) = rop(i) + Beta*(rop(i+1)-rop(i))/2.0d0
-!    end do
     rop_o = rop
     p_o = p
     u_o = u
     ue_o = ue
+    Ma = rop(N)*A(N)*u(N)
     
   end subroutine inicializacao
 

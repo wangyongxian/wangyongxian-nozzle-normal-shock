@@ -18,7 +18,7 @@ real*8  :: Beta
 
 real*8  :: fator  ! Fator de atrito e velocidade inicial
 
-real*8  :: T0, P0, Cd 
+real*8  :: T0, P0 
 
 real*8  :: Lt, deltax   ! Comprimento domínio de cálculo e do volume de controle
 
@@ -45,6 +45,9 @@ real*8,dimension(:),allocatable :: Raio      ! raio do duto
 
 real*8 :: Rgases      ! constante dos gases
 real*8 :: cp      ! cp
+real*8 :: cd      ! coef descarga
+real*8 :: Ma      ! fluxo de massa analitico
+real*8 :: Empuxo      ! empuxo
 real*8 :: gama      ! gama
 real*8 :: rin      ! rin
 real*8 :: rg      ! rg
