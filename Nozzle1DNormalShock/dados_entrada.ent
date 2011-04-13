@@ -2,8 +2,8 @@
       2.0d+6         P0        = pressao de estagnacao
       3420.33d+0     T0        = temperatura de estagnacao
       12             N         = número de volumes de controle
-      1.0d0          deltat    = número de avanços no tempo
-      1000           iteracao  = número de iterações (ciclo total)
+      1.0d-4          deltat    = número de avanços no tempo
+      10000           iteracao  = número de iterações (ciclo total)
       0.5d0          Lt        = comprimento do domínio de cálculo
       0.0d0          fator     = fator de atrito de Dárcy
       4.0d-3	     Cd        = coeficiente angular do diâmetro

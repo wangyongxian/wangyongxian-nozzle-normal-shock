@@ -71,11 +71,40 @@ contains
     real*8 :: MachN, Machx, Machlx, razao
     ! alocação de memória
     allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), rop(N))
-    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N))
+    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N), roe(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
   	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N))
+    afu = 0
+    atu = 0
+    btu = 0
+    bpru = 0
+    awu = 0
+    aPu = 0
+    aeu = 0
+    bPu = 0
+    awt = 0
+    aPt = 0
+    aet = 0
+    bPt = 0
+    awplinha = 0
+    aPplinha = 0
+    aeplinha = 0
+    bPplinha = 0
+    p = 0.0d0
+    p_o = 0.0d0
+    plinha = 0.0d0
+    u = 0.0d0 
+    u_o = 0.0d0
+    ue = 0.0d0
+    ue_o = 0.0d0
+    roe = 0.0d0
+    rop = 0.0d0
+    rop_o = 0.0d0
+    T = 0.0d0
+    A = 0
+    Ae = 0
    
     ! Cálculo do deltax
     deltax = Lt/(N-2.0d0)
@@ -104,17 +133,7 @@ contains
         end if
     end do
   
-    p = 0.0d0
-    p_o = 0.0d0
-    plinha = 0.0d0
-    u = 0.0d0 
-    u_o = 0.0d0
-    ue = 0.0d0
-    ue_o = 0.0d0
-    roe = 0.0d0
-    rop = 0.0d0
-    rop_o = 0.0d0
-    T = 0.0d0
+
 
 	! Calculando a área no ponto p
 	do i = 1, N
@@ -123,37 +142,62 @@ contains
 
 	! Calculando a área na face leste
 	do i = 1, N-1
-	   Ae(i) = Pi*(rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(xe(i)-Lc)/Ln)))**2
-	   
-	  ! Ae(i) = Pi*((Dzero + Cd*xe(i))**2)/4.0d0
+	   if(xe(i) >= Lc) then
+	        Ae(i) = Pi*(rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(xe(i)-Lc)/Ln)))**2
+	   else
+        Ae(i) = Pi*rin**2
+       end if
 	end do  
 
     cp = gama*Rgases/(gama-1)
     
     do j=1, N
-    
-    Mach = 2.0d0
-    razao = A(j)/(Pi*(rg**2))
-    !arrumar condicao de parada
-    do i=1, 1000
-        Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
-        Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
-        MachN = Mach - Machx/Machlx
-        if (Mach == MachN ) then
-            exit
+        if (x(j) < (lc+ln/2.0d0)) then
+            Mach = 0.1d0
+        else
+            Mach = 2.0d0
         end if
-        Mach = MachN
-    end do
+        razao = A(j)/(Pi*(rg**2))
+        do i=1, 50
+            Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
+            Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
+            MachN = Mach - Machx/Machlx
+            Mach = MachN
+        end do
     
-    
-        P(j) = P0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-gama/(gama-1.0d0))
-    
+        p(j) = P0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-gama/(gama-1.0d0))
         T(j) = T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1)
-   
         rop(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-   
         u(j) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
     end do
+    
+    do j=1, N-1
+        if (xe(j) < (lc+ln/2.0d0)) then
+            Mach = 0.1d0
+        else
+            Mach = 2.0d0
+        end if
+        razao = Ae(j)/(Pi*(rg**2))
+        do i=1, 50
+            Machlx = (-1.0/(Mach*Mach))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach*Mach/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
+            Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
+            MachN = Mach - Machx/Machlx
+            Mach = MachN
+        end do
+    
+        roe(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        ue(j) = Mach*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
+    end do
+
+
+!    do i = 1, N-1
+!        ue(i) = (u(i)+u(i+1))/2.0d0
+!        roe(i) = rop(i) + Beta*(rop(i+1)-rop(i))/2.0d0
+!    end do
+    rop_o = rop
+    p_o = p
+    u_o = u
+    ue_o = ue
     
   end subroutine inicializacao
 

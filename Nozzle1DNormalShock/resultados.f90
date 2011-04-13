@@ -16,9 +16,11 @@ contains
     write(10,15) 
 	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
+
 	! cálculo dos coeficientes e termos fontes
 	call coeficientes_e_fontes_qml
 	
+    
 	call norma (N,apu,awu,aeu,bpu,u,R)
 	R_o = R
 	
@@ -26,13 +28,13 @@ contains
 
 	tcpu = timef() ! zera cronômetro
    
-    do it = 1, 10!iteracao
+    do it = 1, iteracao
 	
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
 	   
 	   ! solução do sistema de equações
-	   call tdma (N,aPu,awu,aeu,bPu,u)	
+	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
 	   	write(8,16) it, R
 	   16 format (i11,5x,1pe20.13)
@@ -48,13 +50,13 @@ contains
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
 	   
-	   do ite = 1, 2
+	   !do ite = 1, 2
 		  
 		  ! cálculo dos coef e fontes da energia
 		  call coeficientes_e_fontes_energia
 		  
 		  ! solução do sistema de equações
-		  call tdma (N,apT,awT,aeT,bpT,T)
+		  call tdma (N,apT,-awT,-aeT,bpT,T)
 		  
 		  call calculo_massa_especifica
 		  
@@ -64,7 +66,7 @@ contains
 	      call coeficientes_fontes_massa
 		  
 	      ! solução do sistema de equações
-	      call tdma (N,aPplinha,awplinha,aeplinha,bPplinha,plinha)
+	      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
 	      
 	      ! atualizando plinha fictícios da massa
 	      call atualizar_ficticios_massa
@@ -79,10 +81,10 @@ contains
 		  
 	      ! corrigir velocidades das faces
 	      call corrigir_velocidades_faces
-	      !arruamr corrigir massa especifica nas faces mas eh assim?
+	      
 	      call calculo_massa_especifica_nas_faces
 	      
-	   end do
+	  ! end do
 
 	   ! Atualizando campos para novo avanço
 	   u_o  = u

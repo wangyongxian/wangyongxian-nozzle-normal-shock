@@ -84,17 +84,17 @@ contains
 	   bcP = beta*((roe(i-1)*Ae(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
 	   bcE = beta*((roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Ae(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
 	   ! arrumar o raio hidraulico do volume de controle
-	   bfP = -Pi*fator*rop(i)*u(i)*raio(i)*deltax/4.0d0
-	   bfE = -Pi*fator*rop(i+1)*u(i+1)*raio(i+1)*deltax/4.0d0
+	   bfP = 0 !-Pi*fator*rop(i)*u(i)*raio(i)*deltax/4.0d0
+	   bfE = 0 !-Pi*fator*rop(i+1)*u(i+1)*raio(i+1)*deltax/4.0d0
 	   sigmap = awu(i)*u(i-1) + aeu(i)*u(i+1)
 	   sigmaE = awu(i+1)*u(i) + aeu(i+1)*u(i+2)
-	   ue(i) = (sigmap+sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)/deltat)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)/deltat)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
 	end do
 	
 	ue(N-1) = (u(N-1)+u(N))/2.0d0
 	!arrumar o uin u(1)>uin
-	Fat = (U(1)*Ae(1))/(ue(N-1)*Ae(N-1))
-  	ue(N-1) = Fat*ue(N-1)
+	!Fat = (u(1)*Ae(1))/(ue(N-1)*Ae(N-1))
+  	!ue(N-1) = Fat*ue(N-1)
  
   end subroutine calculo_velocidades_face
 
@@ -204,7 +204,7 @@ contains
   
   subroutine corrigir_velocidades
      !arrumar
-	u(1) = - u(1+1) + 2.0d0*U(1)
+	u(1) = - u(1+1) + 2.0d0*u(1)
    
 	! Calculando para volumes internos
 	do i = 2, N-1
