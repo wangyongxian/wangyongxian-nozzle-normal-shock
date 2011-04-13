@@ -46,10 +46,6 @@ integer ::  comp1
   ! calcula a area e outras inicializacoes
   call inicializacao
 
-
-
-
-
   call solucao_numerica
 
   close (10)
