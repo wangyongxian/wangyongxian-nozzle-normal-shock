@@ -44,7 +44,7 @@ contains
 
   subroutine coeficientes_e_fontes_qml
 	
-	real*8 bpUDS, bpB
+	real*8 :: bpUDS, bpB
 	
 	! Fictício esquerdo P = 1
     awu(1) = 0.0d0
@@ -55,12 +55,12 @@ contains
 	! volumes internos
     do i = 2, N-1
 	   awu(i)  = -roe(i-1)*ue(i-1)*Ae(i-1)
-	   aeu(i)  = 0
+	   aeu(i)  = 0.0d0
        aPu(i)  = rop_o(i)*A(i)*deltax/deltat - (awu(i) + aeu(i))
 	   
-	   bpUDS = rop_o(i)*A(i)*u_o(i)*deltax/deltat + A(i)*(p(i-1)-p(i+1))/2.0d0 - Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
+	   bpUDS = rop_o(i)*A(i)*u_o(i)*deltax/deltat - A(i)*(p(i+1)-p(i-1))/2.0d0 - Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
 	   bpB = beta*(roe(i-1)*ue(i-1)*Ae(i-1)*(u(i)-u(i-1))-roe(i)*ue(i)*Ae(i)*(u(i+1)-u(i)))/2.0d0
-	   bpu(i)  = bpUDS + bpB
+	   bpu(i) = bpUDS + bpB
 	end do
       
     ! Fictício direito P = N
@@ -204,7 +204,7 @@ contains
   
   subroutine corrigir_velocidades
      !arrumar
-	u(1) = - u(1+1) + 2.0d0*u(1)
+	u(1) = - u(2) + 2.0d0*u(1)
    
 	! Calculando para volumes internos
 	do i = 2, N-1
@@ -267,13 +267,15 @@ end subroutine calcula_fluxo_massa
 !-------------------------------------------------
 
 subroutine calcula_coeficiente_descarga
-    Cd = rop(N)*u(N)*A(N)/Ma
+    !Cd = rop(N)*u(N)*A(N)/Ma
 end subroutine calcula_coeficiente_descarga
 
 !-------------------------------------------------
 
 subroutine calcula_empuxo
-    Empuxo = rop(N)*u(N)*A(N)*u(N)
+    do i=1, N
+        Empuxo(i) = rop(i)*u(i)*A(i)*u(i)
+    end do
 end subroutine calcula_empuxo
 
 !-------------------------------------------------

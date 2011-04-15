@@ -51,7 +51,7 @@ integer ::  comp1
   close (10)
 
   note_caso = 'notepad '//caso
-  ver = system(note_caso) ! lista arquivo de resultados
+  !ver = system(note_caso) ! lista arquivo de resultados
 
 ! -----------------------------------------------
 

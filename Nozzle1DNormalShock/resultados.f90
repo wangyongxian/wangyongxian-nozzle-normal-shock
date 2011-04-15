@@ -11,8 +11,8 @@ contains
 
   subroutine solucao_numerica
 
-	integer :: it, ite  ! auxiliar 
-
+	integer :: it
+    
     write(10,15) 
 	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
@@ -22,7 +22,7 @@ contains
 	call coeficientes_e_fontes_qml
 	
     
-	call norma (N,apu,awu,aeu,bpu,u,R)
+	call norma (N,apu,-awu,-aeu,bpu,u,R)
 	R_o = R
 	
 	open(8,file='Norma.dat')
@@ -40,8 +40,8 @@ contains
 	   	write(8,16) it, R
 	   16 format (i11,5x,1pe20.13)
 	   
-	   call norma (N,apu,awu,aeu,bpu,u,R)
-	   R = R/R_o	   
+	!   call norma (N,apu,awu,aeu,bpu,u,R)
+	!   R = R/R_o	   
 	   
 	   !write(8,16) it, R
      
@@ -50,43 +50,39 @@ contains
 	   
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
-	   
-	   !do ite = 1, 2
-		  
-		  ! cálculo dos coef e fontes da energia
-		  call coeficientes_e_fontes_energia
-		  
-		  ! solução do sistema de equações
-		  call tdma (N,apT,-awT,-aeT,bpT,T)
-		  
-		  call calculo_massa_especifica
-		  
-		  call calculo_massa_especifica_nas_faces
-		  
-		  ! cálculo dos coef e fontes da massa
-	      call coeficientes_fontes_massa
-		  
-	      ! solução do sistema de equações
-	      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
-	      
-	      ! atualizando plinha fictícios da massa
-	      call atualizar_ficticios_massa
-		  
-	      ! corrigir a pressao e obter p(p)
-	      call corrigir_pressao
-		  
-	      call corrigir_massa_especifica
-	      
-	      ! corrigir velocidades e obter u(p)
-	      call corrigir_velocidades
-		  
-	      ! corrigir velocidades das faces
-	      call corrigir_velocidades_faces
-	      
-	      call calculo_massa_especifica_nas_faces
-	      
-	  ! end do
-
+!-----------------------------------------------------		  
+	  ! cálculo dos coef e fontes da energia
+	  call coeficientes_e_fontes_energia
+	  
+	  ! solução do sistema de equações
+	  call tdma (N,apT,-awT,-aeT,bpT,T)
+	  
+	  call calculo_massa_especifica
+	  
+	  call calculo_massa_especifica_nas_faces
+	  
+	  ! cálculo dos coef e fontes da massa
+      call coeficientes_fontes_massa
+	  
+      ! solução do sistema de equações
+      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
+      
+      ! atualizando plinha fictícios da massa
+      call atualizar_ficticios_massa
+	  
+      ! corrigir a pressao e obter p(p)
+      call corrigir_pressao
+	  
+      call corrigir_massa_especifica
+      
+      ! corrigir velocidades e obter u(p)
+      call corrigir_velocidades
+	  
+      ! corrigir velocidades das faces
+      call corrigir_velocidades_faces
+      
+      call calculo_massa_especifica_nas_faces
+!-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
 	   ue_o = ue
@@ -126,20 +122,18 @@ contains
 	
     ! Antes das tabelas um Pós-processamento
     !arrumar uin
-    u(1) = 0
-	u(N) = (u(N-1)+u(n))/2.0d0
-	p(1) = (p(1)+p(2))/2.0d0
-	p(N) = (p(N-1)+p(N))/2.0d0
+    !u(1) = 0
+	!u(N) = (u(N-1)+u(n))/2.0d0
+	!p(1) = (p(1)+p(2))/2.0d0
+	!p(N) = (p(N-1)+p(N))/2.0d0
 	
-	Pref = p(1)
-	do i = 1, N
-	   p(i) = p(i) - Pref
-	end do
+	!Pref = p(1)
+	!do i = 1, N
+	!   p(i) = p(i) - Pref
+	!end do
 	
-	
-	
-    call calcula_empuxo
-    call calcula_coeficiente_descarga
+   ! call calcula_empuxo
+    !call calcula_coeficiente_descarga
     call calcula_fluxo_massa
     
 	write(10,14) 
@@ -204,7 +198,7 @@ contains
     close(7)
 
     ! mostra o gráfico de U
-    ver = system('wgnuplot U.gnu')	
+    !ver = system('wgnuplot U.gnu')	
 
 	! adapta arquivo de comandos para fazer gráfico
     open(11,file='p.gnu')
@@ -229,12 +223,12 @@ contains
     
     write(10,*)
     write(10,*)
-    write(10,*) 'empuxo=',Empuxo
-    write(10,*) 'coeficiente descarga=', Cd
+    !write(10,*) 'empuxo=',Empuxo
+   ! write(10,*) 'coeficiente descarga=', Cd
     
     open(23, file='fm.dat')
     do i = 1, N
-	  write(23,*) i, x(i), m(i)
+	  write(23,*) x(i), m(i), Ma(i)
 	end do
 	
     close(23)
