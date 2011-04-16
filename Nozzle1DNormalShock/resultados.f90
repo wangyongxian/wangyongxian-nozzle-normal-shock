@@ -19,11 +19,11 @@ contains
     !call calcula_fluxo_massa
 	
 	! cálculo dos coeficientes e termos fontes
-	call coeficientes_e_fontes_qml
+	!call coeficientes_e_fontes_qml
 	
     
-	call norma (N,apu,-awu,-aeu,bpu,u,R)
-	R_o = R
+	!call norma (N,apu,-awu,-aeu,bpu,u,R)
+	!R_o = R
 	
 	open(8,file='Norma.dat')
 
@@ -46,42 +46,42 @@ contains
 	   !write(8,16) it, R
      
        ! cálculo dos coeficientes do método SIMPLEC
-	   call coeficientes_simplec
+	 !  call coeficientes_simplec
 	   
        ! cálculos das velocidades na face leste
-	   call calculo_velocidades_face
+	!   call calculo_velocidades_face
 !-----------------------------------------------------		  
 	  ! cálculo dos coef e fontes da energia
-	  call coeficientes_e_fontes_energia
+	!  call coeficientes_e_fontes_energia
 	  
 	  ! solução do sistema de equações
-	  call tdma (N,apT,-awT,-aeT,bpT,T)
+	!  call tdma (N,apT,-awT,-aeT,bpT,T)
 	  
-	  call calculo_massa_especifica
+	!  call calculo_massa_especifica
 	  
-	  call calculo_massa_especifica_nas_faces
+	!  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-      call coeficientes_fontes_massa
+   !   call coeficientes_fontes_massa
 	  
       ! solução do sistema de equações
-      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
+     ! call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
       
       ! atualizando plinha fictícios da massa
-      call atualizar_ficticios_massa
+    !  call atualizar_ficticios_massa
 	  
       ! corrigir a pressao e obter p(p)
-      call corrigir_pressao
+    !  call corrigir_pressao
 	  
-      call corrigir_massa_especifica
+    !  call corrigir_massa_especifica
       
       ! corrigir velocidades e obter u(p)
-      call corrigir_velocidades
+    !  call corrigir_velocidades
 	  
       ! corrigir velocidades das faces
-      call corrigir_velocidades_faces
+     ! call corrigir_velocidades_faces
       
-      call calculo_massa_especifica_nas_faces
+    !  call calculo_massa_especifica_nas_faces
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u

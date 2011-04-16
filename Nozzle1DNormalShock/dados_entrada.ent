@@ -2,7 +2,7 @@
       2.0d+6         P0        = pressao de estagnacao
       3420.33d+0     T0        = temperatura de estagnacao
       10             N         = número de volumes de controle
-      1.0d-9         deltat    = número de avanços no tempo
+      1.0d-4         deltat    = número de avanços no tempo
       100          iteracao  = número de iterações (ciclo total)
       0.5d+0          Lt        = comprimento do domínio de cálculo
       0.0d+0          fator     = fator de atrito de Dárcy
@@ -12,5 +12,5 @@
       0.1d+0	         rg        = rg
       0.1d+0	         Lc        = Lc
       0.4d+0	         Ln        = Ln
-      1.0d+0          beta      = esquema CDS - 1 UDS - 0            
+      0.0d+0          beta      = esquema CDS - 1 UDS - 0            
 'Resultado para N=12'  ! título: máximo 50 caracteres

@@ -11,45 +11,43 @@ contains
 
   ! método direto Tri-Diagonal Matrix Algorithm (TDMA)
 
-  subroutine TDMA (N,a,b,c,d,T)
+
+  subroutine TDMA (N,ap,aw,ae,bp,Tp)
 
     implicit none
 
     integer :: i   ! número do nó
-    real*8  :: div ! variável auxiliar
-
     integer,intent(in) :: N ! número de nós
 
-    real*8,dimension(:),allocatable :: P ! coeficiente do tdma
-    real*8,dimension(:),allocatable :: Q ! coeficiente do tdma
+    real*8,dimension(:),allocatable :: Pp ! coeficiente do tdma
+    real*8,dimension(:),allocatable :: Qp ! coeficiente do tdma
 
-    real*8,intent(in), dimension(N) :: a ! coeficiente aP
-    real*8,intent(in), dimension(N) :: b ! coeficiente aW
-    real*8,intent(in), dimension(N) :: c ! coeficiente aE
-    real*8,intent(in), dimension(N) :: d ! termo fonte bP
+    real*8,intent(in), dimension(N) :: ap ! coeficiente aP
+    real*8,intent(in), dimension(N) :: aw ! coeficiente aW
+    real*8,intent(in), dimension(N) :: ae ! coeficiente aE
+    real*8,intent(in), dimension(N) :: bp ! termo fonte bP
 
-    real*8,intent(out),dimension(N) :: T ! incógnita
+    real*8,intent(out),dimension(N) :: Tp ! incógnita
 
-    allocate(P(N),Q(N))
+    allocate(Pp(N),Qp(N))
 	
-	P(1) = c(1) / a(1)
-    Q(1) = d(1) / a(1)
+	Pp(1) = ae(1) / ap(1)
+    Qp(1) = bp(1) / ap(1)
 	
     do i = 2, N
-      div  = a(i) - b(i)*P(i-1)
-      P(i) = c(i) / div
-      Q(i) = (d(i) + b(i)*Q(i-1))/div
+      Pp(i) = ae(i) / (ap(i) - aw(i)*Pp(i-1))
+      Qp(i) = (bp(i) + aw(i)*Qp(i-1))/(ap(i) - aw(i)*Pp(i-1))
     end do
 	
-	T(N) = Q(N)
+	Tp(N) = Qp(N)
    	
     do i = N-1, 1, -1
-      T(i) = P(i)*T(i+1) + Q(i)
+      Tp(i) = Pp(i)*Tp(i+1) + Qp(i)
     end do
 	
-	deallocate(P,Q)
+	deallocate(Pp,Qp)
 
-  end subroutine tdma
+  end subroutine TDMA
 
 !-------------------------------------------------
   
