@@ -3,5 +3,5 @@ set grid
 plot 'p.dat' using 2:3 title 'pressão'
 set xlabel 'x (m)'
 set ylabel 'p (Pa)'
-set title 'Resultado para N=12 (16/4/2011)'                              
+set title 'Resultado para N=12 (18/4/2011)'                              
 replot

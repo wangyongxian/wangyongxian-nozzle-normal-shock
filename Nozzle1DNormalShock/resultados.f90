@@ -13,7 +13,7 @@ contains
 
 	integer :: it
     
-    write(10,15) 
+  !  write(10,15) 
 	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
     !call calcula_fluxo_massa
@@ -37,7 +37,7 @@ contains
 	   ! solução do sistema de equações
 	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
-	   	write(8,16) it, R
+	 !  	write(8,16) it, R
 	   16 format (i11,5x,1pe20.13)
 	   
 	!   call norma (N,apu,awu,aeu,bpu,u,R)
@@ -106,7 +106,7 @@ contains
     ! escrita da variável primária e sua visualização
     call escreve_T
 
-    write(10,1) tcpu
+   ! write(10,1) tcpu
     1 format(/, f14.3, ' = tempo de processamento (segundos)')
 
   end subroutine solucao_numerica
@@ -189,13 +189,13 @@ contains
 	close(11)
 	
     ! adapta arquivo de comandos para fazer gráfico
-    open(7,file='U.gnu')
-      do j = 1, 5
-         read(7,*)
-      end do
-      write(7,10) head
-      10 format("set title '",a62,/,"replot")
-    close(7)
+    !open(7,file='U.gnu')
+    !  do j = 1, 5
+    !     read(7,*)
+    !  end do
+    !  write(7,10) head
+    !  10 format("set title '",a62,/,"replot")
+    !close(7)
 
     ! mostra o gráfico de U
     !ver = system('wgnuplot U.gnu')	
@@ -232,7 +232,17 @@ contains
 	end do
 	
     close(23)
+   ! ver = system('wgnuplot fm.gnu')
     
+    open(23, file='u.dat')
+    do i = 1, N
+	  write(23,*) x(i), U(i), Ua(i)
+	end do
+	
+    close(23)
+    
+    
+    ver = system('wgnuplot U.gnu')
     ver = system('wgnuplot fm.gnu')
   
   end subroutine escreve_T

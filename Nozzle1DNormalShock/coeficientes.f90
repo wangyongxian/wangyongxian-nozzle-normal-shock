@@ -50,7 +50,7 @@ contains
     awu(1) = 0.0d0
     aeu(1) = -1.0d0
     aPu(1) = 1.0d0
-    bPu(1) = -(2.0d0*x(2)/(x(3)-x(2)))*(u(3)-u(2))
+    bPu(1) = -(2.0d0*x(2)*(u(3)-u(2))/(x(3)-x(2)))
 	
 	! volumes internos
     do i = 2, N-1
@@ -58,16 +58,16 @@ contains
 	   aeu(i)  = 0.0d0
        aPu(i)  = rop_o(i)*A(i)*deltax/deltat - (awu(i) + aeu(i))
 	   
-	   bpUDS = rop_o(i)*A(i)*u_o(i)*deltax/deltat - A(i)*(p(i+1)-p(i-1))/2.0d0 - Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
+	   bpUDS = rop_o(i)*A(i)*u_o(i)*deltax/deltat - A(i)*(p(i+1)-p(i-1))/2.0d0 ! - Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
 	   bpB = beta*(roe(i-1)*ue(i-1)*Ae(i-1)*(u(i)-u(i-1))-roe(i)*ue(i)*Ae(i)*(u(i+1)-u(i)))/2.0d0
-	   bpu(i) = bpUDS + bpB
+	   bpu(i) = bpUDS ! + bpB
 	end do
       
     ! Fictício direito P = N
     awu(N) = -1.0d0
     aeu(N) = 0.0d0
     aPu(N) = 1.0d0
-    bPu(N) = (2.0d0*(x(N)-x(N-1))/(x(N-1)-x(N-2)))*(u(N-1)-u(N-2))
+    bPu(N) = (2.0d0*(x(N)-x(N-1))*(u(N-1)-u(N-2))/(x(N-1)-x(N-2)))
     
   end subroutine coeficientes_e_fontes_qml
 
@@ -267,7 +267,10 @@ end subroutine calcula_fluxo_massa
 !-------------------------------------------------
 
 subroutine calcula_coeficiente_descarga
-    !Cd = rop(N)*u(N)*A(N)/Ma
+    call calcula_fluxo_massa
+    do i=1,N
+        Cd(i) = m(i)/Ma(i)
+    end do
 end subroutine calcula_coeficiente_descarga
 
 !-------------------------------------------------

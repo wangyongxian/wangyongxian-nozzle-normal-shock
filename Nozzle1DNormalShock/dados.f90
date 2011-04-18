@@ -73,7 +73,9 @@ contains
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
-  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N))
+  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N))
+  	Cd = 0.0d0
+  	Ua = 0.0d0
   	Empuxo = 0.0d0
     afu = 0.0d0
     atu = 0.0d0
@@ -193,7 +195,7 @@ contains
         roe(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
         ue(j) = Mache(j)*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
     end do
-
+    Ua = u
     rop_o = rop
     p_o = p
     u_o = u

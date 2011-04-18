@@ -3,7 +3,7 @@
       3420.33d+0     T0        = temperatura de estagnacao
       10             N         = número de volumes de controle
       1.0d-4         deltat    = número de avanços no tempo
-      100          iteracao  = número de iterações (ciclo total)
+      100              iteracao  = número de iterações (ciclo total)
       0.5d+0          Lt        = comprimento do domínio de cálculo
       0.0d+0          fator     = fator de atrito de Dárcy
       526.97d+0	     Rgases    = R

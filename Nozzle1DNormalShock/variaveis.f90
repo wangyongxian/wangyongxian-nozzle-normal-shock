@@ -39,14 +39,13 @@ real*8,dimension(:),allocatable :: ue     ! solução numérica
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
 real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
-real*8,dimension(:),allocatable :: Empuxo, Mach, Mache
+real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd
 
 real*8,dimension(:),allocatable :: x, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
 
 real*8 :: Rgases      ! constante dos gases
 real*8 :: cp      ! cp
-real*8 :: cd      ! coef descarga
 real*8 :: gama      ! gama
 real*8 :: rin      ! rin
 real*8 :: rg      ! rg
