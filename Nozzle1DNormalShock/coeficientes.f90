@@ -88,7 +88,8 @@ contains
 	   bfE = 0 !-Pi*fator*rop(i+1)*u(i+1)*raio(i+1)*deltax/4.0d0
 	   sigmap = awu(i)*u(i-1) + aeu(i)*u(i+1)
 	   sigmaE = awu(i+1)*u(i) + aeu(i+1)*u(i+2)
-	   ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)/deltat)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)/deltat)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   ue(i) = (-sigmap-sigmaE+(rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)*ue_o(i)/(deltat*2.0d0) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
 	end do
 	
 	ue(N-1) = (u(N-1)+u(N))/2.0d0

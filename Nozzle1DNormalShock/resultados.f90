@@ -13,7 +13,7 @@ contains
 
 	integer :: it
     
-  !  write(10,15) 
+    write(10,15) 
 	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
     !call calcula_fluxo_massa
@@ -28,7 +28,10 @@ contains
 	open(8,file='Norma.dat')
 
 	tcpu = timef() ! zera cronômetro
-   
+   !u=0
+   !ue = 0
+   !u_o=0
+   !ue_o=0
     do it = 1, iteracao
 	
 	   ! cálculo dos coeficientes e termos fontes
@@ -37,7 +40,7 @@ contains
 	   ! solução do sistema de equações
 	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
-	 !  	write(8,16) it, R
+	!   	write(8,16) it, R
 	   16 format (i11,5x,1pe20.13)
 	   
 	!   call norma (N,apu,awu,aeu,bpu,u,R)
@@ -49,7 +52,7 @@ contains
 	 !  call coeficientes_simplec
 	   
        ! cálculos das velocidades na face leste
-	!   call calculo_velocidades_face
+	   !call calculo_velocidades_face
 !-----------------------------------------------------		  
 	  ! cálculo dos coef e fontes da energia
 	!  call coeficientes_e_fontes_energia
@@ -85,9 +88,9 @@ contains
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
-	   ue_o = ue
-	   p_o = p
-	   rop_o = rop
+	   !ue_o = ue
+	   !p_o = p
+	   !rop_o = rop
 
 	end do
 
