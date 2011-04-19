@@ -1,7 +1,8 @@
 set data style linespoints
 set grid
-plot 'u.dat' using 1:2 title 'numerica' 
-replo 'u.dat' using 1:3 title 'analitica' 
+plot 'u.dat' using 1:2 title 'analítica' 
+replot 'u.dat' using 1:3 title 'numérica' 
+replot 'u.dat' using 1:4 title 'geometria'
 set xlabel 'x (m)'
 set ylabel 'u (m/s)'
 set title 'Resultado para N=12 (18/4/2011)'                              

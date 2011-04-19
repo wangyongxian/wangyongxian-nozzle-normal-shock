@@ -39,7 +39,7 @@ real*8,dimension(:),allocatable :: ue     ! solução numérica
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
 real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
-real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd
+real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA
 
 real*8,dimension(:),allocatable :: x, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto

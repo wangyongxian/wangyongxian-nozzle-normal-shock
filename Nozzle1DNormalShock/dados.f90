@@ -69,11 +69,12 @@ contains
     real*8 :: MachN, Machx, Machlx, razao
     ! alocação de memória
     allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), rop(N))
-    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N), roe(N))
+    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N), roe(N), ropA(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
   	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N))
+  	ropA = 0.0d0
   	Cd = 0.0d0
   	Ua = 0.0d0
   	Empuxo = 0.0d0
@@ -200,6 +201,7 @@ contains
     p_o = p
     u_o = u
     ue_o = ue
+    ropA = rop
     
     
   end subroutine inicializacao

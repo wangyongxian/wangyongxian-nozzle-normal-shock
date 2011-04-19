@@ -25,7 +25,7 @@ contains
 	!call norma (N,apu,-awu,-aeu,bpu,u,R)
 	!R_o = R
 	
-	open(8,file='Norma.dat')
+	!open(8,file='Norma.dat')
 
 	tcpu = timef() ! zera cronômetro
    !u=0
@@ -94,9 +94,9 @@ contains
 
 	end do
 
-	close(8)
+	!close(8)
 
-	write(10,16) it, R
+	!write(10,16) it, R
 	
 	tcpu = timef()
 	
@@ -107,7 +107,7 @@ contains
 	call lista_coeficientes_pressao
    
     ! escrita da variável primária e sua visualização
-    call escreve_T
+    call escreve
 
    ! write(10,1) tcpu
     1 format(/, f14.3, ' = tempo de processamento (segundos)')
@@ -116,9 +116,8 @@ contains
 
 !-------------------------------------------------
 
-  ! Solução Analítica T_exato
 
-  subroutine escreve_T
+  subroutine escreve
 
     integer :: j
 	real*8  :: Pref        
@@ -181,15 +180,15 @@ contains
     8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
-    open(11,file='p.dat')
+    !open(11,file='p.dat')
 
-	do i = 1, N
-	  write(11,9) i, x(i), p(i), plinha(i)
-	  write(10,9) i, x(i), p(i), plinha(i)
-      9 format(i4,4x,3(1pe21.11))
-	end do
+	!!do i = 1, N
+	!  write(11,9) i, x(i), p(i), plinha(i)
+	!  write(10,9) i, x(i), p(i), plinha(i)
+    !  9 format(i4,4x,3(1pe21.11))
+	!end do
 
-	close(11)
+	!close(11)
 	
     ! adapta arquivo de comandos para fazer gráfico
     !open(7,file='U.gnu')
@@ -204,13 +203,13 @@ contains
     !ver = system('wgnuplot U.gnu')	
 
 	! adapta arquivo de comandos para fazer gráfico
-    open(11,file='p.gnu')
-      do j = 1, 5
-         read(11,*)
-      end do
-      write(11,13) head
-      13 format("set title '",a62,/,"replot")
-    close(11)
+    !open(11,file='p.gnu')
+    !  do j = 1, 5
+    !     read(11,*)
+    !  end do
+    !  write(11,13) head
+    !  13 format("set title '",a62,/,"replot")
+    !close(11)
 
     ! mostra o gráfico de p
     !ver = system('wgnuplot p.gnu')
@@ -231,7 +230,7 @@ contains
     
     open(23, file='fm.dat')
     do i = 1, N
-	  write(23,*) x(i), m(i), Ma(i)
+	  write(23,*) x(i), Ma(i), M(i)
 	end do
 	
     close(23)
@@ -239,16 +238,29 @@ contains
     
     open(23, file='u.dat')
     do i = 1, N
-	  write(23,*) x(i), U(i), Ua(i)
+	  write(23,48) x(i), Ua(i), U(i), raio(i)
+	  48 format(4(1pe27.18))
 	end do
 	
     close(23)
     
+    open(23, file='ro.dat')
+    do i = 1, N
+	  write(23,48) x(i), ropA(i), rop(i), raio(i)
+	end do
+	
+	open(23, file='p.dat')
+    do i = 1, N
+	  write(23,48) x(i), p(i), p(i), raio(i)
+	end do
+	
+    close(23)
     
     ver = system('wgnuplot U.gnu')
     ver = system('wgnuplot fm.gnu')
+    ver = system('wgnuplot ro.gnu')
   
-  end subroutine escreve_T
+  end subroutine escreve
 
 !-------------------------------------------------
 
