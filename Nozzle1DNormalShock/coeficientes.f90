@@ -9,35 +9,35 @@ contains
 
 !-------------------------------------------------
 
-  subroutine lista_coeficientes_velocidade
+  !subroutine lista_coeficientes_velocidade
 
-    write(10,4)
-    4 format(//,4x,'COEFICIENTES DA VELOCIDADE',//,  &
-             t4,'volume',t13,'X',t34,'oeste',t55,'central', &
-                     t76,'leste',t97,'fonte',/)
-    do i = 1, N
-       write(10,2) i, X(i), awu(i), aPu(i), aeu(i), bPu(i)
-    end do
+   ! write(10,4)
+   ! 4 format(//,4x,'COEFICIENTES DA VELOCIDADE',//,  &
+    !         t4,'volume',t13,'X',t34,'oeste',t55,'central', &
+     !                t76,'leste',t97,'fonte',/)
+    !do i = 1, N
+     !  write(10,2) i, X(i), awu(i), aPu(i), aeu(i), bPu(i)
+    !end do
 
-    2 format(i4,4x,5(1pe21.11))
+    !2 format(i4,4x,5(1pe21.11))
 
-  end subroutine lista_coeficientes_velocidade
+  !end subroutine lista_coeficientes_velocidade
 
 !-------------------------------------------------
 
-  subroutine lista_coeficientes_pressao
+  !subroutine lista_coeficientes_pressao
 
-    write(10,10)
-    10 format(//,4x,'COEFICIENTES DA PRESSÃO',//,  &
-             t4,'volume',t13,'X',t34,'oeste',t55,'central', &
-                     t76,'leste',t97,'fonte',/)
-    do i = 1, N
-       write(10,2) i, X(i), awplinha(i), aPplinha(i), aeplinha(i), bPplinha(i)
-    end do
+   ! write(10,10)
+    !10 format(//,4x,'COEFICIENTES DA PRESSÃO',//,  &
+     !        t4,'volume',t13,'X',t34,'oeste',t55,'central', &
+      !               t76,'leste',t97,'fonte',/)
+    !do i = 1, N
+     !  write(10,2) i, X(i), awplinha(i), aPplinha(i), aeplinha(i), bPplinha(i)
+   ! end do
 
-    2 format(i4,4x,5(1pe21.11))
+    !2 format(i4,4x,5(1pe21.11))
 
-  end subroutine lista_coeficientes_pressao
+  !end subroutine lista_coeficientes_pressao
 
 !-------------------------------------------------
 

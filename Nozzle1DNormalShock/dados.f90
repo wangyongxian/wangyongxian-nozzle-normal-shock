@@ -40,28 +40,28 @@ contains
 
 !-------------------------------------------------
 
-  subroutine mostra_dados
+!  subroutine mostra_dados
 
-    integer :: comp
+ !   integer :: comp
 
-    comp = len(trim(adjustl(caso)))
+  !  comp = len(trim(adjustl(caso)))
 
-    write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator
+    !write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator
 
-    1 format(/,2x,'DADOS',//,  &
-                 a<comp>,' = caso',/, &	 
-				 8x,i8,  ' = número de volumes de controle',/, &
-				 1pe16.8,' = número de avanços no tempo',/,    &
-				 8x,i8,  ' = número de iterações externas',/,  & 
-				 1pe16.8,' = comprimento domínio de cálculo',/, &
-				 1pe16.8,' = viscosidade absoluta do fluido',/, &
-				 1pe16.8,' = massa específica do fluido',/,     &
-				 1pe16.8,' = fator de atrito de Dárcy',/,   &
-				 1pe16.8,' = velocidade inicial no duto',/, &  
-				 1pe16.8,' = coeficiente angular do diâmetro ',/)
+   ! 1 format(/,2x,'DADOS',//,  &
+     !            a<comp>,' = caso',/, &	 
+	!			 8x,i8,  ' = número de volumes de controle',/, &
+	!			 1pe16.8,' = número de avanços no tempo',/,    &
+	!			 8x,i8,  ' = número de iterações externas',/,  & 
+	!			 1pe16.8,' = comprimento domínio de cálculo',/, &
+	!			 1pe16.8,' = viscosidade absoluta do fluido',/, &
+	!			 1pe16.8,' = massa específica do fluido',/,     &
+	!			 1pe16.8,' = fator de atrito de Dárcy',/,   &
+	!			 1pe16.8,' = velocidade inicial no duto',/, &  
+	!			 1pe16.8,' = coeficiente angular do diâmetro ',/)
 				 
 
-  end subroutine mostra_dados
+  !end subroutine mostra_dados
 
 !-------------------------------------------------
 

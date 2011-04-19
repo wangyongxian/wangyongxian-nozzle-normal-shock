@@ -13,8 +13,8 @@ contains
 
 	integer :: it
     
-    write(10,15) 
-	15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
+   ! write(10,15) 
+	!15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
 
     !call calcula_fluxo_massa
 	
@@ -41,7 +41,7 @@ contains
 	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
 	!   	write(8,16) it, R
-	   16 format (i11,5x,1pe20.13)
+	 !  16 format (i11,5x,1pe20.13)
 	   
 	!   call norma (N,apu,awu,aeu,bpu,u,R)
 	!   R = R/R_o	   
@@ -101,10 +101,10 @@ contains
 	tcpu = timef()
 	
 	! escrita dos coeficientes e fontes velocidade 
-	call lista_coeficientes_velocidade
+	!call lista_coeficientes_velocidade
 
 	! escrita dos coeficientes e fontes pressão 
-	call lista_coeficientes_pressao
+	!call lista_coeficientes_pressao
    
     ! escrita da variável primária e sua visualização
     call escreve
@@ -119,8 +119,8 @@ contains
 
   subroutine escreve
 
-    integer :: j
-	real*8  :: Pref        
+    !integer :: j
+	!real*8  :: Pref        
 	
     ! Antes das tabelas um Pós-processamento
     !arrumar uin
@@ -134,50 +134,50 @@ contains
 	!   p(i) = p(i) - Pref
 	!end do
 	
-   ! call calcula_empuxo
-    !call calcula_coeficiente_descarga
-    call calcula_fluxo_massa
-    
-	write(10,14) 
-	14 format(//,4x,'OUTROS RESULTADOS RELEVANTES',/)
-
-	write(10,1)
-    1 format(/,t4,'volume',t13,'x versus velocidades u (nodais)',/)
-
-	! abertura de arquivo para gravar resultados de u (numérico)
-    open(7,file='U.dat')
-
-	do i = 1, N
-	  write( 7,2) i, x(i), u(i)
-	  write(10,2) i, x(i), u(i)
-      2 format(i4,4x,2(1pe21.11))
-	end do
+   !! call calcula_empuxo
+   ! !call calcula_coeficiente_descarga
+  !  call calcula_fluxo_massa
+ !   
+!	write(10,14) 
+!	14 format(//,4x,'OUTROS RESULTADOS RELEVANTES',/)
+!
+!	write(10,1)
+ !   1 format(/,t4,'volume',t13,'x versus velocidades u (nodais)',/)
+!
+!	! abertura de arquivo para gravar resultados de u (numérico)
+ !   open(7,file='U.dat')
+!
+!	do i = 1, N
+!	  write( 7,2) i, x(i), u(i)
+!	  write(10,2) i, x(i), u(i)
+ !     2 format(i4,4x,2(1pe21.11))
+!	end do
 	
-	close(7)
+!	close(7)
 
-	write(10,3)
-    3 format(//,t4,'volume',t13,'x versus velocidades u (faces)',/)
+!	write(10,3)
+ !   3 format(//,t4,'volume',t13,'x versus velocidades u (faces)',/)
 
-	do i = 1, N
-	  if (i == N) then
-	     xe(N) = xe(N-1)
-		 ue(N) = ue(N-1)
-	  end if
-	  write(10,4) i, xe(i), ue(i)
-      4 format(i4,4x,2(1pe21.11))
-	end do
+!	do i = 1, N
+!	  if (i == N) then
+!	     xe(N) = xe(N-1)
+!		 ue(N) = ue(N-1)
+!	  end if
+!	  write(10,4) i, xe(i), ue(i)
+ !     4 format(i4,4x,2(1pe21.11))
+!	end do
 
-	write(10,5)
-    5 format(//,t4,'volume',t13,'x versus fluxo de massa',/)
+!	write(10,5)
+  !  5 format(//,t4,'volume',t13,'x versus fluxo de massa',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
-	do i = 1, N 
-	  write(10,7) i, x(i), M(i)
-      7 format(i4,4x,2(1pe21.11))
-	end do
+!	do i = 1, N 
+!	  write(10,7) i, x(i), M(i)
+   !   7 format(i4,4x,2(1pe21.11))
+!	end do
 
-	write(10,8)
-    8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
+	!write(10,8)
+  !  8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
     !open(11,file='p.dat')

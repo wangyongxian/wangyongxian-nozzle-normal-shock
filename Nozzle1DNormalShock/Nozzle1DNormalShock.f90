@@ -42,7 +42,7 @@ integer ::  comp1
 
   comp1 = len(trim(adjustl(title)))
 
-  call mostra_dados 
+  !call mostra_dados 
   ! calcula a area e outras inicializacoes
   call inicializacao
 
