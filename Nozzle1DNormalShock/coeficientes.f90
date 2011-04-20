@@ -111,14 +111,14 @@ contains
     aeT(1) = 1.0d0
     apT(1) = 1.0d0
     !arrumar o u(1) q eh uin
-    bpT(1) = 2.0d0*(T0-1.0d0*(gama-1.0d0)*(u(1)**2)/(2.0d0*gama*Rgases))
+    bpT(1) = 2.0d0*(T0-(gama-1.0d0)*(u(1)**2)/(2.0d0*gama*Rgases))
 	
 	! volumes internos
     do i = 2, N-1
 	   awT(i)  = -cp*roe(i-1)*ue(i-1)*Ae(i-1)
 	   aeT(i)  = 0 
        apT(i)  = cp*A(i)*rop(i)*deltax/deltat-(awT(i)+aeT(i))
-       bUDS = cp*A(i)*rop_o(i)*T(i)*deltax/deltat+A(i)*(p(i)-p_o(i))*deltax/deltat+1.0d0*(A(i)*u(i)*(p(i+1)-p(i-1)))/2.0d0+Pi*fator*rop(i)*deltax*u(i)**3
+       bUDS = cp*A(i)*rop_o(i)*T_o(i)*deltax/deltat+A(i)*(p(i)-p_o(i))*deltax/deltat+(A(i)*u(i)*(p(i+1)-p(i-1)))/2.0d0+Pi*fator*rop(i)*deltax*u(i)**3
        bBeta = beta*cp*(roe(i-1)*ue(i-1)*Ae(i-1)*(T(i)-T(i-1))-roe(i)*ue(i)*Ae(i)*(T(i+1)-T(i)))/2.0d0
 	   bpT(i)  = bUDS + bBeta
 	end do

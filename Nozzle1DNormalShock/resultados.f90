@@ -35,7 +35,7 @@ contains
 	   call coeficientes_e_fontes_qml
 	   
 	   ! solução do sistema de equações
-	   !call tdma (N,aPu,-awu,-aeu,bPu,u)	
+	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
 	!   	write(8,16) it, R
 	 !  16 format (i11,5x,1pe20.13)
@@ -57,36 +57,37 @@ contains
 	  ! solução do sistema de equações
 	  call tdma (N,apT,-awT,-aeT,bpT,T)
 	  
-	!  call calculo_massa_especifica
+	  call calculo_massa_especifica
 	  
-	!  call calculo_massa_especifica_nas_faces
+	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
       call coeficientes_fontes_massa
 	  
       ! solução do sistema de equações
-     ! call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
+      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
       
       ! atualizando plinha fictícios da massa
-    !  call atualizar_ficticios_massa
+      call atualizar_ficticios_massa
 	  
       ! corrigir a pressao e obter p(p)
-    !  call corrigir_pressao
+      call corrigir_pressao
 	  
-    !  call corrigir_massa_especifica
+      call corrigir_massa_especifica
       
       ! corrigir velocidades e obter u(p)
-    !  call corrigir_velocidades
+      call corrigir_velocidades
 	  
       ! corrigir velocidades das faces
-     ! call corrigir_velocidades_faces
+     call corrigir_velocidades_faces
       
-    !  call calculo_massa_especifica_nas_faces
+      call calculo_massa_especifica_nas_faces
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
-	  ! ue_o = ue
+	   ue_o = ue
 	   p_o = p
+	   T_o = T
 	   rop_o = rop
 
 	end do

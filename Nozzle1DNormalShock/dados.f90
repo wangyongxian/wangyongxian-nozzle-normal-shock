@@ -82,7 +82,8 @@ contains
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
-  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N))
+  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N))
+  	T_o=0
   	Ta = 0.0d0
   	ropA = 0.0d0
   	Cd = 0.0d0
@@ -213,6 +214,7 @@ contains
     ue_o = ue
     ropA = rop
     Ta = T    
+    T_o=T
     
   end subroutine inicializacao
 
