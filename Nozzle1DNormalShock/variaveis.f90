@@ -39,7 +39,7 @@ real*8,dimension(:),allocatable :: ue     ! solução numérica
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
 real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
-real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA
+real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta
 
 real*8,dimension(:),allocatable :: x, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
@@ -76,5 +76,10 @@ character*70 :: note_caso ! notepad + caso
 character*2  :: aux1,aux2
 character*4  :: aux3
 character*50 :: aux
+
+
+!graficos
+integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
+
 
 end

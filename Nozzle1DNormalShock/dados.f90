@@ -34,6 +34,15 @@ contains
 	read(7,*) Ln
 	read(7,*) Beta
     read(7,*) title
+    read(7,*) ! graficos
+    read(7,*) graf_m ! fluxo de massa
+    read(7,*) graf_t ! temperatura
+    read(7,*) graf_v ! velocidade
+    read(7,*) graf_ro ! massa especifica
+    read(7,*) graf_p ! pressao
+    read(7,*) graf_e ! empuxo
+    read(7,*) graf_cdesc ! coeficiente de descarga
+    read(7,*) graf_dom ! coeficiente de descarga
     close(7)
 
   end subroutine le_dados
@@ -73,7 +82,8 @@ contains
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
-  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N))
+  	allocate (awplinha(N),aPplinha(N),aeplinha(N),bPplinha(N), Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N))
+  	Ta = 0.0d0
   	ropA = 0.0d0
   	Cd = 0.0d0
   	Ua = 0.0d0
@@ -202,7 +212,7 @@ contains
     u_o = u
     ue_o = ue
     ropA = rop
-    
+    Ta = T    
     
   end subroutine inicializacao
 

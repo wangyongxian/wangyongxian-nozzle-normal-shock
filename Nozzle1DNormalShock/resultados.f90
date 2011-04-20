@@ -28,17 +28,14 @@ contains
 	!open(8,file='Norma.dat')
 
 	tcpu = timef() ! zera cronômetro
-   !u=0
-   !ue = 0
-   !u_o=0
-   !ue_o=0
+    
     do it = 1, iteracao
 	
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
 	   
 	   ! solução do sistema de equações
-	   call tdma (N,aPu,-awu,-aeu,bPu,u)	
+	   !call tdma (N,aPu,-awu,-aeu,bPu,u)	
 	   
 	!   	write(8,16) it, R
 	 !  16 format (i11,5x,1pe20.13)
@@ -49,23 +46,23 @@ contains
 	   !write(8,16) it, R
      
        ! cálculo dos coeficientes do método SIMPLEC
-	 !  call coeficientes_simplec
+	   call coeficientes_simplec
 	   
        ! cálculos das velocidades na face leste
-	   !call calculo_velocidades_face
+	   call calculo_velocidades_face
 !-----------------------------------------------------		  
 	  ! cálculo dos coef e fontes da energia
-	!  call coeficientes_e_fontes_energia
+	  call coeficientes_e_fontes_energia
 	  
 	  ! solução do sistema de equações
-	!  call tdma (N,apT,-awT,-aeT,bpT,T)
+	  call tdma (N,apT,-awT,-aeT,bpT,T)
 	  
 	!  call calculo_massa_especifica
 	  
 	!  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-   !   call coeficientes_fontes_massa
+      call coeficientes_fontes_massa
 	  
       ! solução do sistema de equações
      ! call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
@@ -88,9 +85,9 @@ contains
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
-	   !ue_o = ue
-	   !p_o = p
-	   !rop_o = rop
+	  ! ue_o = ue
+	   p_o = p
+	   rop_o = rop
 
 	end do
 
@@ -110,7 +107,7 @@ contains
     call escreve
 
    ! write(10,1) tcpu
-    1 format(/, f14.3, ' = tempo de processamento (segundos)')
+    !1 format(/, f14.3, ' = tempo de processamento (segundos)')
 
   end subroutine solucao_numerica
 
@@ -215,18 +212,10 @@ contains
     !ver = system('wgnuplot p.gnu')
 
     ! mostra o dominio de calculo
-    open(22,file='dominio.dat')
-	do i = 1, N
-	  write(22,*) x(i), raio(i)
-	end do
-	close(22)
+
 
     !ver = system('wgnuplot dominio.gnu')
     
-    write(10,*)
-    write(10,*)
-    !write(10,*) 'empuxo=',Empuxo
-   ! write(10,*) 'coeficiente descarga=', Cd
     
     open(23, file='fm.dat')
     do i = 1, N
@@ -238,7 +227,7 @@ contains
     
     open(23, file='u.dat')
     do i = 1, N
-	  write(23,48) x(i), Ua(i), U(i), raio(i)
+	  write(23,48) x(i), Ua(i), U(i), raio(i)*10000.d0
 	  48 format(4(1pe27.18))
 	end do
 	
@@ -255,10 +244,47 @@ contains
 	end do
 	
     close(23)
+    open(22,file='dominio.dat')
+	do i = 1, N
+	  write(22,*) x(i), raio(i)
+	end do
+	close(22)
+	
+    open(22,file='T.dat')
+	do i = 1, N
+	  write(22,48) x(i), Ta(i), T(i), raio(i)*10000
+	end do
+	close(22)
     
-    ver = system('wgnuplot U.gnu')
-    ver = system('wgnuplot fm.gnu')
-    ver = system('wgnuplot ro.gnu')
+    if (graf_p) then
+    
+    end if
+    if (graf_cdesc) then
+    
+    end if
+    if (graf_e) then
+    
+    end if
+    if (graf_dom) then
+        ver = system('wgnuplot dominio.gnu')
+    end if
+    if (graf_ro) then
+        ver = system('wgnuplot ro.gnu')
+    end if
+    if (graf_m) then
+        ver = system('wgnuplot fm.gnu')
+    end if
+    if (graf_v) then
+        ver = system('wgnuplot U.gnu')
+    end if
+    if (graf_t) then
+       ver = system('wgnuplot T.gnu')
+    end if
+    
+ 
+    
+    
+    
   
   end subroutine escreve
 
