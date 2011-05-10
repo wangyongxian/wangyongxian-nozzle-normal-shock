@@ -54,13 +54,25 @@ contains
 	
 	! volumes internos
     do i = 2, N-1
-	   awu(i)  = -roe(i-1)*ue(i-1)*Ae(i-1)
+    !aw(i) = - rom(i-1) * um(i-1) * se(i-1)
+	   awu(i)  = -rop(i-1)*u(i-1)*Ae(i-1)
 	   aeu(i)  = 0.0d0
-       aPu(i)  = rop_o(i)*A(i)*deltax/deltat - (awu(i) + aeu(i))
-	   
-	   bpUDS = rop_o(i)*A(i)*u_o(i)*deltax/deltat - A(i)*(p(i+1)-p(i-1))/2.0d0 ! - Pi*fator*rop(i)*(u(i)**2)*raio(i)*deltax/4.0d0
-	   bpB = beta*(roe(i-1)*ue(i-1)*Ae(i-1)*(u(i)-u(i-1))-roe(i)*ue(i)*Ae(i)*(u(i+1)-u(i)))/2.0d0
-	   bpu(i) = bpUDS ! + bpB
+	   !ap(i) = roa(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
+       aPu(i)  = rop_o(i)*A(i)*dx/dt - (awu(i) + aeu(i))
+	   !bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * rp(i) * dx / 4   
+	   !bp(i) = roa(i) * sp(i) * dx * ua(i) / dt + bf(i)   &
+       !      + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
+	   bpUDS = rop_o(i)*A(i)*u_o(i)*dx/dt &
+	                - 0.5d0*A(i)*(p(i+1)-p(i-1))  &
+	                - 0.25d0*Pi*fator*rop(i)*(u(i)**2)*raio(i)*dx
+        
+       !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
+       !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
+       !bc(i) = 0.5d0 * beta * ( oeste - leste )
+       	                
+	   bpB = 0.5d0*beta*(rop(i-1)*u(i-1)*Ae(i-1)*(u(i)-u(i-1)) &
+	            -rop(i)*u(i)*Ae(i)*(u(i+1)-u(i)))
+	   bpu(i) = bpUDS + bpB
 	end do
       
     ! Fictício direito P = N
@@ -77,19 +89,19 @@ contains
 
     real*8  :: sigmap, sigmaE, bcP, bcE, bfP, bfE ! auxiliar
    
-	! Calculando ue no passo deltat+1
+	! Calculando ue no passo dt+1
 	ue(1) = (u(1)+u(2))/2.0d0
 	
 	do i = 2, N-2
 	   bcP = beta*((roe(i-1)*Ae(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
 	   bcE = beta*((roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Ae(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
 	   ! arrumar o raio hidraulico do volume de controle
-	   bfP = 0 !-Pi*fator*rop(i)*u(i)*raio(i)*deltax/4.0d0
-	   bfE = 0 !-Pi*fator*rop(i+1)*u(i+1)*raio(i+1)*deltax/4.0d0
+	   bfP = 0 !-Pi*fator*rop(i)*u(i)*raio(i)*dx/4.0d0
+	   bfE = 0 !-Pi*fator*rop(i+1)*u(i+1)*raio(i+1)*dx/4.0d0
 	   sigmap = awu(i)*u(i-1) + aeu(i)*u(i+1)
 	   sigmaE = awu(i+1)*u(i) + aeu(i+1)*u(i+2)
-	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)/deltat)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
-	   ue(i) = (-sigmap-sigmaE+(rop_o(i)*A(i)*deltax+rop_o(i+1)*A(i+1)*deltax)*ue_o(i)/(deltat*2.0d0) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((rop_o(i)*A(i)*dx+rop_o(i+1)*A(i+1)*dx)/dt)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   ue(i) = (-sigmap-sigmaE+(rop_o(i)*A(i)*dx+rop_o(i+1)*A(i+1)*dx)*ue_o(i)/(dt*2.0d0) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
 	end do
 	
 	ue(N-1) = (u(N-1)+u(N))/2.0d0
@@ -115,11 +127,32 @@ contains
 	
 	! volumes internos
     do i = 2, N-1
-	   awT(i)  = -cp*roe(i-1)*ue(i-1)*Ae(i-1)
+	   awT(i)  = -cp*rop(i-1)*u(i-1)*Ae(i-1)
 	   aeT(i)  = 0 
-       apT(i)  = cp*A(i)*rop(i)*deltax/deltat-(awT(i)+aeT(i))
-       bUDS = cp*A(i)*rop_o(i)*T_o(i)*deltax/deltat+A(i)*(p(i)-p_o(i))*deltax/deltat+(A(i)*u(i)*(p(i+1)-p(i-1)))/2.0d0+Pi*fator*rop(i)*deltax*u(i)**3
-       bBeta = beta*cp*(roe(i-1)*ue(i-1)*Ae(i-1)*(T(i)-T(i-1))-roe(i)*ue(i)*Ae(i)*(T(i+1)-T(i)))/2.0d0
+       apT(i)  = cp*A(i)*rop_o(i)*dx/dt - (awT(i)+aeT(i))
+!       aw(i) = - cp(i) * rom(i-1) * um(i-1) * se(i-1)       
+!       ap(i) = cp(i) * roa(i) * sp(i) * dx / dt - ( aw(i) + ae(i) ) &
+!             + h(i) * C_rec(i) * sn(i)                              &
+!             + epsilon_cte * sigma * sn(i) * ( T(i) ** 3 )    
+
+!       bp(i) = cp(i) * roa(i) * sp(i) * dx * Ta(i) / dt        &
+!             + sp(i) * dx * ( p(i) - pa(i) ) / dt              &
+!             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0      &
+!             + pi * f(i) * ro(i) * (u(i)**3) * rp(i) * dx / 4  &
+!             + h(i) * T_wall(i) * sn(i)                        &
+!             + epsilon_cte * sigma * sn(i) * ( T_wall(i) ** 4 )
+       
+       bUDS = cp*A(i)*rop_o(i)*T_o(i)*dx/dt &
+                +A(i)*(p(i)-p_o(i))*dx/dt &
+                +A(i)*u(i)*(p(i+1)-p(i-1))*0.5d0 &
+                +0.25d0*Pi*fator*rop(i)*raio(i)*dx*u(i)**3
+       !oeste = rom(i-1) * um(i-1) * se(i-1) * ( T(i) - T(i-1) )
+       !leste = rom(i) * um(i) * se(i) * ( T(i+1) - T(i) )
+       !bc(i) = 0.5d0 * beta * cp(i) * ( oeste - leste )
+       	   
+	   bBeta = 0.5d0*beta*cp*(rop(i-1)*u(i-1)*Ae(i-1)*(T(i)-T(i-1)) &
+	                -rop(i)*u(i)*Ae(i)*(T(i+1)-T(i)))
+	                
 	   bpT(i)  = bUDS + bBeta
 	end do
       
@@ -145,11 +178,35 @@ contains
 
     ! Calculando os volumes internos
     do i = 2, N-1
-       awplinha(i) = -ue(i-1)*Ae(i-1)/(rgases*T(i-1)) -roe(i-1)*Ae(i-1)*de(i-1)
-	   aeplinha(i) = -roe(i)*Ae(i)*de(i)
-	   aPplinha(i) = A(i)*deltax/(deltat*rgases*T(i))+ue(i)*Ae(i)/(rgases*T(i))+roe(i)*Ae(i)*de(i)+roe(i-1)*Ae(i-1)*de(i-1)
-	   bUDS = -(A(i)*deltax*rop(i)/deltat-A(i)*deltax*rop_o(i)/deltat+rop(i)*Ae(i)*ue(i)-rop(i-1)*Ae(i-1)*ue(i-1))
-	   bBeta = -beta*(Ae(i)*ue(i)*(rop(i+1)-rop(i))-Ae(i-1)*ue(i-1)*(rop(i)-rop(i-1)))/2.0d0
+    
+      ! aw(i) = - rom(i-1) * de(i-1) * se(i-1)          &
+      !        - um(i-1)  * se(i-1) / ( Rg(i-1) * T(i-1) )
+
+      ! ae(i) = - rom(i) * de(i) * se(i)
+
+      ! ap(i) = ( sp(i) * dx / dt + um(i) * se(i) ) / ( Rg(i) * T(i) )   &
+      !       + rom(i-1) * de(i-1) * se(i-1)                              &
+      !       + rom(i)   * de(i)   * se(i)
+
+      ! bp(i) = - ( ( ro(i) - roa(i) ) * sp(i) * dx / dt              &
+      !       + ro(i) * um(i) * se(i) - ro(i-1) * um(i-1) * se(i-1) )
+             
+             
+       awplinha(i) = -rop(i-1)*Ae(i-1)*de(i-1) &
+                        -u(i-1)*Ae(i-1)/(rgases*T(i-1)) 
+	   aeplinha(i) = -rop(i)*Ae(i)*de(i)
+	   aPplinha(i) = (A(i)*dx/dt+u(i)*Ae(i))/(rgases*T(i)) &
+	                    +rop(i-1)*de(i-1)*Ae(i-1) &
+	                    +rop(i)*de(i)*Ae(i) 
+	                    
+	   bUDS = -(A(i)*dx*(rop(i)-rop_o(i))/dt &
+	            +rop(i)*Ae(i)*u(i) &
+	            -rop(i-1)*Ae(i-1)*u(i-1))
+       !oeste = se(i-1) * ( ro(i) - ro(i-1) ) * um(i-1)
+       !leste = se(i)   * ( ro(i+1) - ro(i) ) * um(i)
+       !bc(i) = 0.5d0 * beta * ( oeste - leste )
+	   bBeta = 0.5d0*beta*(Ae(i-1)*(rop(i)-rop(i-1))*u(i-1)-Ae(i)*(rop(i+1)-rop(i))*u(i))
+	   
 	   bpplinha(i) = bUDS+bBeta
     end do
   
@@ -165,17 +222,22 @@ contains
 
   subroutine coeficientes_simplec
 
+    ds(1) = 0.0d0
+    ds(N) = 0.0d0
+    
     do i = 2, N-1
 	   ds(i) = A(i)/(apu(i)+awu(i)+aeu(i))
     end do
 
+    ! Calculando nos contornos
+	de(1) = ds(2)
+	de(N-1) = ds(N-1)
+	
 	do i = 2, N-2
-	   de(i) = (ds(i) + ds(i+1))/2.0d0
+	   de(i) = 0.5d0*(ds(i) + ds(i+1))
 	end do
 
-	! Calculando nos contornos
-	de(1) = ds(1+1)
-	de(N-1) = ds(N-1)
+	
 
   end subroutine coeficientes_simplec
 

@@ -22,7 +22,7 @@ contains
 	read(7,*) P0
 	read(7,*) T0
     read(7,*) N
-    read(7,*) deltat
+    read(7,*) dt
 	read(7,*) iteracao
 	read(7,*) Lt
 	read(7,*) fator
@@ -55,7 +55,7 @@ contains
 
   !  comp = len(trim(adjustl(caso)))
 
-    !write(10,1) trim(adjustl(caso)),N,deltat,iteracao,Lt,fator
+    !write(10,1) trim(adjustl(caso)),N,dt,iteracao,Lt,fator
 
    ! 1 format(/,2x,'DADOS',//,  &
      !            a<comp>,' = caso',/, &	 
@@ -124,8 +124,8 @@ contains
     Mache = 0.0d0
     Ma = 0.0d0
    
-    ! Cálculo do deltax 2 ficticios
-    deltax = Lt/(N-2.0d0)
+    ! Cálculo do dx 2 ficticios
+    dx = Lt/(N-2.0d0)
 	
 	! Cálculo do Pi
 	Pi = dacos (-1.0d0)
@@ -133,13 +133,13 @@ contains
     ! Cálculo xp internos e nos contornos
     x(1) = 0.0d0
     do i = 2, N-1
-       x(i) = (i-2.0d0)*deltax + (deltax/2.0d0)
+       x(i) = (i-2.0d0)*dx + (dx/2.0d0)
     end do
     x(N) = Lt
 
     ! Calculando xe da face leste
     do i = 1, N-1 
-       xe(i) = (i-(1.0d0))*deltax
+       xe(i) = (i-(1.0d0))*dx
 	end do
     xe(N) = 0.0d0
     ! Cálculo do raio

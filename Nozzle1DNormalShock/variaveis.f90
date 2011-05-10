@@ -20,9 +20,9 @@ real*8  :: fator  ! Fator de atrito e velocidade inicial
 
 real*8  :: T0, P0 
 
-real*8  :: Lt, deltax   ! Comprimento domínio de cálculo e do volume de controle
+real*8  :: Lt, dx   ! Comprimento domínio de cálculo e do volume de controle
 
-real*8  :: deltat, Pi  ! Número de avanços no tempo
+real*8  :: dt, Pi  ! Número de avanços no tempo
 
 real*8  :: Fat, R_o, R ! Coeficiente correção velocidade na face
 
