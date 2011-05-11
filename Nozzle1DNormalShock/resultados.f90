@@ -74,7 +74,7 @@ contains
 	   call coeficientes_e_fontes_qml
 	   
 	   ! solução do sistema de equações
-	   call tdma (N,aPu,awu,aeu,bPu,u)	
+	   call tdma (N,ap,aw,ae,bp,u)	
 	   
 	!   	write(8,16) it, R
 	 !  16 format (i11,5x,1pe20.13)
@@ -96,7 +96,7 @@ contains
 	  call coeficientes_e_fontes_energia
 	  
 	  ! solução do sistema de equações
-	  call tdma (N,apT,awT,aeT,bpT,T)
+	  call tdma (N,ap,aw,ae,bp,T)
 	  
 	  ! cálculo da massa específica
       ro = p / ( Rg * T )
@@ -109,7 +109,7 @@ contains
       call coeficientes_fontes_massa
 	  
       ! solução do sistema de equações
-      call tdma (N,aPplinha,awplinha,aeplinha,bPplinha,pl)
+      call tdma (N,ap,aw,ae,bp,pl)
       
       ! atualizando pl fictícios da massa
       !call atualizar_ficticios_massa

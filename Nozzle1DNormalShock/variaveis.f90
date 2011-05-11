@@ -39,7 +39,7 @@ real*8,dimension(:),allocatable :: ro_o    ! solução numérica inicial
 real*8,dimension(:),allocatable :: p_o    ! solução numérica inicial
 real*8,dimension(:),allocatable :: T_o    ! solução numérica inicial
 
-real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
+real*8,dimension(:),allocatable :: Sp, Se  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
 real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta 
 
@@ -66,11 +66,11 @@ real*8 :: p_ex  ! pressão na saída da tubeira (Pa)
 real*8 :: T_ex  ! temperatura na saída da tubeira (K)
 real*8 :: ro_ex ! massa específica na saída da tubeira (m/s)
 
-real*8,dimension(:),allocatable :: aPu, aPplinha, aPt ! coeficiente central de u e p
-real*8,dimension(:),allocatable :: aWu, aWplinha, aWt ! coeficiente esquerdo de u e p
-real*8,dimension(:),allocatable :: aEu, aEplinha, aEt ! coeficiente direito de u	e p
+real*8,dimension(:),allocatable :: ap, aw, ae, bp ! coeficiente central de u e p
+!real*8,dimension(:),allocatable :: aWu, aWplinha, aWt ! coeficiente esquerdo de u e p
+!real*8,dimension(:),allocatable :: aEu, aEplinha, aEt ! coeficiente direito de u	e p
 									   
-real*8,dimension(:),allocatable :: bPu, bPplinha, bPt ! termo fonte de u e p
+!real*8,dimension(:),allocatable :: bPu, bPplinha, bPt ! termo fonte de u e p
 
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC

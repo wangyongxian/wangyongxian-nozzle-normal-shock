@@ -54,32 +54,32 @@ contains
     !bp(1) = -fator * ( u(3) - u(2) )
     !bf(1) = 0.0d0
     
-    awu(1) = 0.0d0
-    aeu(1) = -1.0d0
-    aPu(1) = 1.0d0
-    bPu(1) = -(2.0d0*xp(2)/(xp(3)-xp(2)))*(u(3)-u(2))
+    aw(1) = 0.0d0
+    ae(1) = -1.0d0
+    ap(1) = 1.0d0
+    bp(1) = -(2.0d0*xp(2)/(xp(3)-xp(2)))*(u(3)-u(2))
 	
 	! volumes internos
     do i = 2, N-1
     !aw(i) = - rom(i-1) * um(i-1) * se(i-1)
-	   awu(i)  = -roe(i-1)*ue(i-1)*Ae(i-1)
-	   aeu(i)  = 0.0d0
+	   aw(i)  = -roe(i-1)*ue(i-1)*Se(i-1)
+	   ae(i)  = 0.0d0
 	   !ap(i) = roa(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
-       aPu(i)  = ro_o(i)*A(i)*dx/dt - (awu(i) + aeu(i))
+       ap(i)  = ro_o(i)*Sp(i)*dx/dt - (aw(i) + ae(i))
 	   !bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * rp(i) * dx / 4   
 	   !bp(i) = roa(i) * sp(i) * dx * ua(i) / dt + bf(i)   &
        !      + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
-	   bpUDS = ro_o(i)*A(i)*u_o(i)*dx/dt &
-	                + 0.5d0*A(i)*(p(i+1)-p(i-1))  &
+	   bpUDS = ro_o(i)*Sp(i)*u_o(i)*dx/dt &
+	                + 0.5d0*Sp(i)*(p(i+1)-p(i-1))  &
 	                - 0.25d0*Pi*fator*ro(i)*(u(i)**2)*raio(i)*dx
         
        !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
        !bc(i) = 0.5d0 * beta * ( oeste - leste )
        	                
-	   bpB = 0.5d0*beta*(roe(i-1)*ue(i-1)*Ae(i-1)*(u(i)-u(i-1)) &
-	            -roe(i)*ue(i)*Ae(i)*(u(i+1)-u(i)))
-	   bpu(i) = bpUDS + bpB
+	   bpB = 0.5d0*beta*(roe(i-1)*ue(i-1)*Se(i-1)*(u(i)-u(i-1)) &
+	            -roe(i)*ue(i)*Se(i)*(u(i+1)-u(i)))
+	   bp(i) = bpUDS + bpB
 	end do
       
     ! Fictício direito P = N
@@ -90,10 +90,10 @@ contains
     !bp(n) =  fator * ( u(n-1) - u(n-2) )
     !bf(n) =  0.0d0
     
-    awu(N) = -1.0d0
-    aeu(N) = 0.0d0
-    aPu(N) = 1.0d0
-    bPu(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(u(N-1)-u(N-2))
+    aw(N) = -1.0d0
+    ae(N) = 0.0d0
+    ap(N) = 1.0d0
+    bp(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(u(N-1)-u(N-2))
     
   end subroutine coeficientes_e_fontes_qml
 
@@ -116,22 +116,22 @@ contains
        !      + (massa_p+massa_e)*uma(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
        !      / (ap(i)+ap(i+1))
 
-	   bcP = beta*((roe(i-1)*Ae(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
-	   bcE = beta*((roe(i)*Ae(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Ae(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
+	   bcP = beta*((roe(i-1)*Se(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Se(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
+	   bcE = beta*((roe(i)*Se(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Se(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
 	   ! arrumar o raio hidraulico do volume de controle
 	   bfP = 0 !-Pi*fator*ro(i)*u(i)*raio(i)*dx/4.0d0
 	   bfE = 0 !-Pi*fator*ro(i+1)*u(i+1)*raio(i+1)*dx/4.0d0
-	   sigmap = awu(i)*u(i-1) + aeu(i)*u(i+1)
-	   sigmaE = awu(i+1)*u(i) + aeu(i+1)*u(i+2)
-	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((ro_o(i)*A(i)*dx+ro_o(i+1)*A(i+1)*dx)/dt)*ue_o(i) - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
-	   ue(i) = (-sigmap-sigmaE+(ro_o(i)*A(i)*dx+ro_o(i+1)*A(i+1)*dx)*ue_o(i)/dt - 2.0d0*Ae(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   sigmap = aw(i)*u(i-1) + ae(i)*u(i+1)
+	   sigmaE = aw(i+1)*u(i) + ae(i+1)*u(i+2)
+	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)/dt)*ue_o(i) - 2.0d0*Se(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
+	   ue(i) = (-sigmap-sigmaE+(ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)*ue_o(i)/dt - 2.0d0*Se(i)*(p(i+1)-p(i)))/(ap(i)+ap(i+1))
 	end do
 	
 	
     !um(n-1) = 0.5d0 * ( u(n) + u(n-1) )
 	ue(N-1) = 2.0d0*(u(N-1)+u(N))
 	!arrumar o uin u(1)>uin
-	!Fat = (u(1)*Ae(1))/(ue(N-1)*Ae(N-1))
+	!Fat = (u(1)*Se(1))/(ue(N-1)*Se(N-1))
   	!ue(N-1) = Fat*ue(N-1)
  
   end subroutine calculo_velocidades_face
@@ -149,16 +149,16 @@ contains
     !ae(1) = 1.0d0
     !bp(1) = 2.0d0 * T_in
     
-    awT(1) = 0.0d0
-    aeT(1) = 1.0d0
-    apT(1) = 1.0d0
-    bpT(1) = 2.0d0*T_in
+    aw(1) = 0.0d0
+    ae(1) = 1.0d0
+    ap(1) = 1.0d0
+    bp(1) = 2.0d0*T_in
 	
 	! volumes internos
     do i = 2, N-1
-	   awT(i)  = -cp*roe(i-1)*ue(i-1)*Ae(i-1)
-	   aeT(i)  = 0 
-       apT(i)  = cp*A(i)*ro_o(i)*dx/dt - (awT(i)+aeT(i))
+	   aw(i)  = -cp*roe(i-1)*ue(i-1)*Se(i-1)
+	   ae(i)  = 0 
+       ap(i)  = cp*Sp(i)*ro_o(i)*dx/dt - (aw(i)+ae(i))
 !       aw(i) = - cp(i) * rom(i-1) * um(i-1) * se(i-1)       
 !       ap(i) = cp(i) * roa(i) * sp(i) * dx / dt - ( aw(i) + ae(i) ) &
 !             + h(i) * C_rec(i) * sn(i)                              &
@@ -171,18 +171,18 @@ contains
 !             + h(i) * T_wall(i) * sn(i)                        &
 !             + epsilon_cte * sigma * sn(i) * ( T_wall(i) ** 4 )
        
-       bUDS = cp*A(i)*ro_o(i)*T_o(i)*dx/dt &
-                +A(i)*(p(i)-p_o(i))*dx/dt &
-                +A(i)*u(i)*(p(i+1)-p(i-1))*0.5d0 &
+       bUDS = cp*Sp(i)*ro_o(i)*T_o(i)*dx/dt &
+                +Sp(i)*(p(i)-p_o(i))*dx/dt &
+                +Sp(i)*u(i)*(p(i+1)-p(i-1))*0.5d0 &
                 +0.25d0*Pi*fator*ro(i)*raio(i)*dx*u(i)**3
        !oeste = rom(i-1) * um(i-1) * se(i-1) * ( T(i) - T(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( T(i+1) - T(i) )
        !bc(i) = 0.5d0 * beta * cp(i) * ( oeste - leste )
        	   
-	   bBeta = 0.5d0*beta*cp*(roe(i-1)*ue(i-1)*Ae(i-1)*(T(i)-T(i-1)) &
-	                -roe(i)*ue(i)*Ae(i)*(T(i+1)-T(i)))
+	   bBeta = 0.5d0*beta*cp*(roe(i-1)*ue(i-1)*Se(i-1)*(T(i)-T(i-1)) &
+	                -roe(i)*ue(i)*Se(i)*(T(i+1)-T(i)))
 	                
-	   bpT(i)  = bUDS + bBeta
+	   bp(i)  = bUDS + bBeta
 	end do
      
     !fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
@@ -192,10 +192,10 @@ contains
     !bp(n) =  fator * ( T(n-1) - T(n-2) )
     
     ! Fictício direito P = N
-    awT(N) = -1.0d0
-    aeT(N) = 0.0d0
-    apT(N) = 1.0d0
-    bpT(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(T(N-1)-T(N-2))
+    aw(N) = -1.0d0
+    ae(N) = 0.0d0
+    ap(N) = 1.0d0
+    bp(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(T(N-1)-T(N-2))
 
   end subroutine coeficientes_e_fontes_energia
   
@@ -210,11 +210,11 @@ contains
     !bp(1) = 2.0d0 * pl_in
     
     ! Calculando fictício P = 1	
-    awplinha(1) = 0.0d0
-    aeplinha(1) = 1.0d0
-    aPplinha(1) = 1.0d0
+    aw(1) = 0.0d0
+    ae(1) = 1.0d0
+    ap(1) = 1.0d0
     !arrumar
-    bpplinha(1) = 2.0d0*pl_in
+    bp(1) = 2.0d0*pl_in
 
     ! Calculando os volumes internos
     do i = 2, N-1
@@ -232,22 +232,22 @@ contains
       !       + ro(i) * um(i) * se(i) - ro(i-1) * um(i-1) * se(i-1) )
              
              
-       awplinha(i) = -roe(i-1)*Ae(i-1)*de(i-1) &
-                        -ue(i-1)*Ae(i-1)/(rgases*T(i-1)) 
-	   aeplinha(i) = -roe(i)*Ae(i)*de(i)
-	   aPplinha(i) = (A(i)*dx/dt + ue(i)*Ae(i))/(rgases*T(i)) &
-	                    +roe(i-1)*de(i-1)*Ae(i-1) &
-	                    +roe(i)*de(i)*Ae(i) 
+       aw(i) = -roe(i-1)*Se(i-1)*de(i-1) &
+                        -ue(i-1)*Se(i-1)/(rgases*T(i-1)) 
+	   ae(i) = -roe(i)*Se(i)*de(i)
+	   ap(i) = (Sp(i)*dx/dt + ue(i)*Se(i))/(rgases*T(i)) &
+	                    +roe(i-1)*de(i-1)*Se(i-1) &
+	                    +roe(i)*de(i)*Se(i) 
 	                    
-	   bUDS = -((ro(i)-ro_o(i))*A(i)*dx/dt &
-	            +ro(i)*Ae(i)*ue(i) &
-	            -ro(i-1)*Ae(i-1)*ue(i-1))
+	   bUDS = -((ro(i)-ro_o(i))*Sp(i)*dx/dt &
+	            +ro(i)*Se(i)*ue(i) &
+	            -ro(i-1)*Se(i-1)*ue(i-1))
        !oeste = se(i-1) * ( ro(i) - ro(i-1) ) * um(i-1)
        !leste = se(i)   * ( ro(i+1) - ro(i) ) * um(i)
        !bc(i) = 0.5d0 * beta * ( oeste - leste )
-	   bBeta = 0.5d0*beta*(Ae(i-1)*(ro(i)-ro(i-1))*ue(i-1)-Ae(i)*(ro(i+1)-ro(i))*ue(i))
+	   bBeta = 0.5d0*beta*(Se(i-1)*(ro(i)-ro(i-1))*ue(i-1)-Se(i)*(ro(i+1)-ro(i))*ue(i))
 	   
-	   bpplinha(i) = bUDS+bBeta
+	   bp(i) = bUDS+bBeta
     end do
   
     !fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
@@ -257,10 +257,10 @@ contains
     !bp(n) =  fator * ( pl(n-1) - pl(n-2) )
     
     ! Calculando fictício P = N 
-    awplinha(N) = -1.0d0
-    aeplinha(N) = 0.0d0
-    aPplinha(N) = 1.0d0
-    bpplinha(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(pl(N-1)-pl(N-2))
+    aw(N) = -1.0d0
+    ae(N) = 0.0d0
+    ap(N) = 1.0d0
+    bp(N) = (2.0d0*(xp(N)-xp(N-1))/(xp(N-1)-xp(N-2)))*(pl(N-1)-pl(N-2))
 
   end subroutine coeficientes_fontes_massa
 
@@ -272,7 +272,7 @@ contains
     ds(N) = 0.0d0
     
     do i = 2, N-1
-	   ds(i) = A(i)/(apu(i)+awu(i)+aeu(i))
+	   ds(i) = Sp(i)/(ap(i)+aw(i)+ae(i))
     end do
 
     ! Calculando nos contornos
@@ -370,7 +370,7 @@ end subroutine calculo_massa_especifica_nas_faces
 
 subroutine calcula_fluxo_massa
     do i=1,N
-        m(i) = ro(i)*u(i)*A(i)
+        m(i) = ro(i)*u(i)*Sp(i)
     end do
 end subroutine calcula_fluxo_massa
 
@@ -387,7 +387,7 @@ end subroutine calcula_coeficiente_descarga
 
 subroutine calcula_empuxo
     do i=1, N
-        Empuxo(i) = ro(i)*u(i)*A(i)*u(i)
+        Empuxo(i) = ro(i)*u(i)*Sp(i)*u(i)
     end do
 end subroutine calcula_empuxo
 
