@@ -70,15 +70,15 @@ contains
 	   !bp(i) = roa(i) * sp(i) * dx * ua(i) / dt + bf(i)   &
        !      + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
 	   bpUDS = ro_o(i)*Sp(i)*u_o(i)*dx/dt &
-	                + 0.5d0*Sp(i)*(p(i+1)-p(i-1))  &
+	                + 0.5d0*Sp(i)*(p(i-1)-p(i+1))  &
 	                - 0.25d0*Pi*fator*ro(i)*(u(i)**2)*raio(i)*dx
         
        !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
        !bc(i) = 0.5d0 * beta * ( oeste - leste )
        	                
-	   bpB = 0.5d0*beta*(roe(i-1)*ue(i-1)*Se(i-1)*(u(i)-u(i-1)) &
-	            -roe(i)*ue(i)*Se(i)*(u(i+1)-u(i)))
+	   bpB = 0 !0.5d0*beta*(roe(i-1)*ue(i-1)*Se(i-1)*(u(i)-u(i-1)) &
+	        !    -roe(i)*ue(i)*Se(i)*(u(i+1)-u(i)))
 	   bp(i) = bpUDS + bpB
 	end do
       
@@ -106,25 +106,31 @@ contains
 	! Calculando ue no passo dt+1
 	!um(1) = 0.5d0 * ( u(1) + u(2) )
 	ue(1) = 0.5d0*(u(1)+u(2))
-	
+	!bc(1) = 0.0d0
+	!bc(n) = 0.0d0
+	!bf(1) = 0.0d0
+	!bf(n) =  0.0d0
 	do i = 2, N-2
-	   !massa_p = roa(i) * sp(i) * (xe(i) - xe(i-1))
-       !massa_e = roa(i+1) * sp(i+1) * (xe(i+1) - xe(i))
-       !somap = aw(i)*u(i-1) + ae(i)*u(i+1)
-       !somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
-       !um(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
+	   !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
+       !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
+       !bc(i) = 0.5d0 * beta * ( oeste - leste )
+	   bcP = 0.5d0*beta*((roe(i-1)*Se(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Se(i)*ue(i))*(u(i+1)-u(i)))
+	   bcE = 0.5d0*beta*((roe(i)*Se(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Se(i+1)*ue(i+1))*(u(i+2)-u(i+1)))
+	   ! arrumar o raio hidraulico do volume de controle
+	   !bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * rp(i) * dx / 4
+	   bfP = -Pi*fator*ro(i)*u(i)*raio(i)*dx/4.0d0
+	   bfE = -Pi*fator*ro(i+1)*u(i+1)*raio(i+1)*dx/4.0d0
+	   !somap = aw(i)*u(i-1) + ae(i)*u(i+1)
+	   sigmap = aw(i)*u(i-1) + ae(i)*u(i+1)
+	   !somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
+	   sigmaE = aw(i+1)*u(i) + ae(i+1)*u(i+2)
+	   !um(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
        !      + (massa_p+massa_e)*uma(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
        !      / (ap(i)+ap(i+1))
-
-	   bcP = beta*((roe(i-1)*Se(i-1)*ue(i-1))*(u(i)-u(i-1))-(roe(i)*Se(i)*ue(i))*(u(i+1)-u(i)))/2.0d0
-	   bcE = beta*((roe(i)*Se(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Se(i+1)*ue(i+1))*(u(i+2)-u(i+1)))/2.0d0
-	   ! arrumar o raio hidraulico do volume de controle
-	   bfP = 0 !-Pi*fator*ro(i)*u(i)*raio(i)*dx/4.0d0
-	   bfE = 0 !-Pi*fator*ro(i+1)*u(i+1)*raio(i+1)*dx/4.0d0
-	   sigmap = aw(i)*u(i-1) + ae(i)*u(i+1)
-	   sigmaE = aw(i+1)*u(i) + ae(i+1)*u(i+2)
+       !massa_p = roa(i) * sp(i) * (xe(i) - xe(i-1))
+       !massa_e = roa(i+1) * sp(i+1) * (xe(i+1) - xe(i))
 	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)/dt)*ue_o(i) - 2.0d0*Se(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
-	   ue(i) = (-sigmap-sigmaE+(ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)*ue_o(i)/dt - 2.0d0*Se(i)*(p(i+1)-p(i)))/(ap(i)+ap(i+1))
+	   ue(i) = (-sigmap-sigmaE+bcP+bcE+bfE+bfP+(ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)*ue_o(i)/dt - 2.0d0*Se(i)*(p(i+1)-p(i)))/(ap(i)+ap(i+1))
 	end do
 	
 	

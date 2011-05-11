@@ -15,20 +15,6 @@ contains
     real*8 :: k    ! auxiliar
     real*8 :: M_in ! número de Mach na entrada
     
-   ! write(10,15) 
-	!15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
-
-    !call calcula_fluxo_massa
-	
-	! cálculo dos coeficientes e termos fontes
-	!call coeficientes_e_fontes_qml
-	
-    
-	!call norma (N,apu,-awu,-aeu,bpu,u,R)
-	!R_o = R
-	
-	!open(8,file='Norma.dat')
-
 	tcpu = timef() ! zera cronômetro
 
     p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
@@ -57,8 +43,8 @@ contains
     u(n)  = 2.0d0*u(n-1) - u(n-2)
     T(n)  = 2.0d0*T(n-1) - T(n-2)
     ro(n) = p(n) / ( Rgases * T(n) )
-    
-    
+    de = 0.0d0
+    ds = 0.0d0
     do it = 1, iteracao
 	
 	   ! atualização da pressão na entrada da tubeira
@@ -76,14 +62,6 @@ contains
 	   ! solução do sistema de equações
 	   call tdma (N,ap,aw,ae,bp,u)	
 	   
-	!   	write(8,16) it, R
-	 !  16 format (i11,5x,1pe20.13)
-	   
-	!   call norma (N,apu,awu,aeu,bpu,u,R)
-	!   R = R/R_o	   
-	   
-	   !write(8,16) it, R
-     
        ! cálculo dos coeficientes do método SIMPLEC
 	   call coeficientes_simplec
 	   
@@ -99,7 +77,7 @@ contains
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
 	  ! cálculo da massa específica
-      ro = p / ( Rg * T )
+      ro = p / ( Rgases * T )
        
 	  !call calculo_massa_especifica
 	  
@@ -111,22 +89,8 @@ contains
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
       
-      ! atualizando pl fictícios da massa
-      !call atualizar_ficticios_massa
-	  
-      ! corrigir a pressao e obter p(p)
-      !call corrigir_pressao
-	  
-      !call corrigir_massa_especifica
-      
-      ! corrigir velocidades e obter u(p)
-      !call corrigir_velocidades
-	  
-      ! corrigir velocidades das faces
-     !call corrigir_velocidades_faces
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
-      !call calculo_massa_especifica_nas_faces
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
@@ -137,10 +101,6 @@ contains
 
 	end do
 
-	!close(8)
-
-	!write(10,16) it, R
-	
 	tcpu = timef()
 	
 	! escrita dos coeficientes e fontes velocidade 
@@ -179,7 +139,7 @@ contains
 	
    !! call calcula_empuxo
    ! !call calcula_coeficiente_descarga
-  !  call calcula_fluxo_massa
+    call calcula_fluxo_massa
  !   
 !	write(10,14) 
 !	14 format(//,4x,'OUTROS RESULTADOS RELEVANTES',/)
@@ -259,9 +219,7 @@ contains
 
     ! mostra o dominio de calculo
 
-
     !ver = system('wgnuplot dominio.gnu')
-    
     
     open(23, file='fm.dat')
     do i = 1, N
@@ -327,11 +285,6 @@ contains
        ver = system('wgnuplot T.gnu')
     end if
     
- 
-    
-    
-    
-  
   end subroutine escreve
 
 !-------------------------------------------------

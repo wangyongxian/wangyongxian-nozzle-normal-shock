@@ -173,13 +173,28 @@ contains
             MachN = Mach(j) - Machx/Machlx
             Mach(j) = MachN
         end do
-    
-        p(j) = P_cam*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-gama/(gama-1.0d0))
-        T(j) = T_cam*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1)
-        ro(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-        u(j) = Mach(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1))**(0.5d0)
-        Ma(j) = ro(j)*Sp(j)*u(j)
+        !exp = gama / (gama - 1.0d0)
+        !cte = 1.0d0 + (gama - 1.0d0) * (M(i)**2) / 2.0d0
+        !p(i) = p_cam / (cte ** exp)
+        !p(j) = P_cam/(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(gama/(gama-1.0d0))
+        
+        !cte = 1.0d0 + (gama - 1.0d0) * (M(i)**2) / 2.0d0
+        !T(i) = T_cam / cte
+        !T(j) = T_cam/(1.0d0+(gama-1.0d0)*(Mach(j)**2)*0.5d0)
+        
+        !ro = p / ( Rg * T )
+        !ro(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        
+        !u = M * dsqrt ( gama * Rg * T )
+        !u(j) = Mach(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1))**(0.5d0)
+        !Ma(j) = ro(j)*Sp(j)*u(j)
     end do
+    
+    p = P_cam/(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0))
+    T = T_cam/(1.0d0+(gama-1.0d0)*(Mach**2)*0.5d0)
+    ro = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+    u = Mach*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
+    Ma = ro*Sp*u
     
     do j=1, N-1
         if (xe(j) < (lc+ln/2.0d0)) then
