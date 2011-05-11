@@ -19,8 +19,8 @@ contains
     open(7,file='dados_entrada.ent')
 
 	read(7,*) caso
-	read(7,*) P0
-	read(7,*) T0
+	read(7,*) P_cam
+	read(7,*) T_cam
     read(7,*) N
     read(7,*) dt
 	read(7,*) iteracao
@@ -77,8 +77,8 @@ contains
   subroutine inicializacao
     real*8 :: MachN, Machx, Machlx, razao
     ! alocação de memória
-    allocate (x(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), rop(N))
-    allocate (plinha(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), rop_o(N), roe(N), ropA(N))
+    allocate (xp(N),xe(N),A(N),Ae(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), ro(N))
+    allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N), ropA(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (awu(N),aPu(N),aeu(N),bPu(N))
 	allocate (awt(N),aPt(N),aet(N),bPt(N))
@@ -107,18 +107,18 @@ contains
     bPplinha = 0.0d0
     p = 0.0d0
     p_o = 0.0d0
-    plinha = 0.0d0
+    pl = 0.0d0
     u = 0.0d0 
     u_o = 0.0d0
     ue = 0.0d0
     ue_o = 0.0d0
     roe = 0.0d0
-    rop = 0.0d0
-    rop_o = 0.0d0
+    ro = 0.0d0
+    ro_o = 0.0d0
     T = 0.0d0
     A = 0.0d0
     Ae = 0.0d0
-    x = 0.0d0
+    xp = 0.0d0
     xe = 0.0d0
     Mach = 0.0d0
     Mache = 0.0d0
@@ -131,11 +131,11 @@ contains
 	Pi = dacos (-1.0d0)
 
     ! Cálculo xp internos e nos contornos
-    x(1) = 0.0d0
+    xp(1) = 0.0d0
     do i = 2, N-1
-       x(i) = (i-2.0d0)*dx + (dx/2.0d0)
+       xp(i) = (i-2.0d0)*dx + (dx/2.0d0)
     end do
-    x(N) = Lt
+    xp(N) = Lt
 
     ! Calculando xe da face leste
     do i = 1, N-1 
@@ -144,8 +144,8 @@ contains
     xe(N) = 0.0d0
     ! Cálculo do raio
     do i = 1, N
-        if(x(i) >= Lc) then
-           Raio(i) = rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(x(i)-Lc)/Ln))
+        if(xp(i) >= Lc) then
+           Raio(i) = rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(xp(i)-Lc)/Ln))
         else
            Raio(i) = rin
         end if
@@ -170,7 +170,7 @@ contains
     cp = gama*Rgases/(gama-1.0d0)
     
     do j=1, N
-        if (x(j) < (lc+ln/2.0d0)) then
+        if (xp(j) < (lc+ln/2.0d0)) then
             Mach(j) = 0.1d0
         else
             Mach(j) = 2.0d0
@@ -183,11 +183,11 @@ contains
             Mach(j) = MachN
         end do
     
-        p(j) = P0*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-gama/(gama-1.0d0))
-        T(j) = T0*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1)
-        rop(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-        u(j) = Mach(j)*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1))**(0.5d0)
-        Ma(j) = rop(j)*A(j)*u(j)
+        p(j) = P_in*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-gama/(gama-1.0d0))
+        T(j) = T_in*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1)
+        ro(j) = (P_in/(T_in*rgases))*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        u(j) = Mach(j)*(gama*rgases*T_in*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1))**(0.5d0)
+        Ma(j) = ro(j)*A(j)*u(j)
     end do
     
     do j=1, N-1
@@ -204,15 +204,15 @@ contains
             Mache(j) = MachN
         end do
     
-        roe(j) = (P0/(T0*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-        ue(j) = Mache(j)*(gama*rgases*T0*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
+        roe(j) = (P_in/(T_in*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        ue(j) = Mache(j)*(gama*rgases*T_in*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
     end do
     Ua = u
-    rop_o = rop
+    ro_o = ro
     p_o = p
     u_o = u
     ue_o = ue
-    ropA = rop
+    ropA = ro
     Ta = T    
     T_o=T
     

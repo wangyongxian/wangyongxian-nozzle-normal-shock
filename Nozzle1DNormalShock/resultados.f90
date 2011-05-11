@@ -12,6 +12,8 @@ contains
   subroutine solucao_numerica
 
 	integer :: it
+    real*8 :: k    ! auxiliar
+    real*8 :: M_in ! número de Mach na entrada
     
    ! write(10,15) 
 	!15 format (/,t4,'Iteração',6x,'Norma L1(n)/L1(0)',/)
@@ -28,8 +30,45 @@ contains
 	!open(8,file='Norma.dat')
 
 	tcpu = timef() ! zera cronômetro
+
+    p     = p_cam/((1.0d0+(gama-1.0d0)*(M**2)/2.0d0)**(gama/(gama-1.0d0)))
+    ro    = p / ( Rgases * T )
+    ue    = u(1:n-1)
+    pl    = 0.0d0
+    roe   = ro(1:n-1)
+    pl_in = 0.0d0
+    !bc    = 0.0d0
+    
+    ! inicialização na entrada da tubeira
+    u_in  = ue(1)
+    T_in  = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*Rgases)
+    
+    M_in = u_in / dsqrt ( gama * Rgases * T_in )
+    k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
+    p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+    
+    p(1)  = 2.0d0*p_in - p(2)
+    u(1)  = 2*u(2) - u(3)
+    T(1)  = -T(2) + 2*T_in
+    ro(1) = p(1) / ( Rgases * T(1) )
+    
+    ! inicialização na saída da tubeira
+    p(n)  = 2.0d0*p(n-1) - p(n-2)
+    u(n)  = 2.0d0*u(n-1) - u(n-2)
+    T(n)  = 2.0d0*T(n-1) - T(n-2)
+    ro(n) = p(n) / ( Rgases * T(n) )
+    
     
     do it = 1, iteracao
+	
+	   ! atualização da pressão na entrada da tubeira
+       p_ia = p_in
+       M_in = u_in / dsqrt ( gama * Rgases * T_in )
+       k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
+       p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+       p(1) = 2.0d0*p_in - p(2)
+       pl_in = p_in - p_ia
+	
 	
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
@@ -51,13 +90,18 @@ contains
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
 !-----------------------------------------------------		  
+      T_in = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*Rgases)
+    
 	  ! cálculo dos coef e fontes da energia
 	  call coeficientes_e_fontes_energia
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,apT,-awT,-aeT,bpT,T)
 	  
-	  call calculo_massa_especifica
+	  ! cálculo da massa específica
+      ro = p / ( Rg * T )
+       
+	  !call calculo_massa_especifica
 	  
 	  call calculo_massa_especifica_nas_faces
 	  
@@ -65,30 +109,31 @@ contains
       call coeficientes_fontes_massa
 	  
       ! solução do sistema de equações
-      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,plinha)
+      call tdma (N,aPplinha,-awplinha,-aeplinha,bPplinha,pl)
       
-      ! atualizando plinha fictícios da massa
-      call atualizar_ficticios_massa
+      ! atualizando pl fictícios da massa
+      !call atualizar_ficticios_massa
 	  
       ! corrigir a pressao e obter p(p)
-      call corrigir_pressao
+      !call corrigir_pressao
 	  
-      call corrigir_massa_especifica
+      !call corrigir_massa_especifica
       
       ! corrigir velocidades e obter u(p)
-      call corrigir_velocidades
+      !call corrigir_velocidades
 	  
       ! corrigir velocidades das faces
-     call corrigir_velocidades_faces
-      
+     !call corrigir_velocidades_faces
+      call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
+      !call calculo_massa_especifica_nas_faces
 !-----------------------------------------------------	      
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
 	   ue_o = ue
 	   p_o = p
 	   T_o = T
-	   rop_o = rop
+	   ro_o = ro
 
 	end do
 
@@ -140,21 +185,21 @@ contains
 !	14 format(//,4x,'OUTROS RESULTADOS RELEVANTES',/)
 !
 !	write(10,1)
- !   1 format(/,t4,'volume',t13,'x versus velocidades u (nodais)',/)
+ !   1 format(/,t4,'volume',t13,'xp versus velocidades u (nodais)',/)
 !
 !	! abertura de arquivo para gravar resultados de u (numérico)
  !   open(7,file='U.dat')
 !
 !	do i = 1, N
-!	  write( 7,2) i, x(i), u(i)
-!	  write(10,2) i, x(i), u(i)
+!	  write( 7,2) i, xp(i), u(i)
+!	  write(10,2) i, xp(i), u(i)
  !     2 format(i4,4x,2(1pe21.11))
 !	end do
 	
 !	close(7)
 
 !	write(10,3)
- !   3 format(//,t4,'volume',t13,'x versus velocidades u (faces)',/)
+ !   3 format(//,t4,'volume',t13,'xp versus velocidades u (faces)',/)
 
 !	do i = 1, N
 !	  if (i == N) then
@@ -166,23 +211,23 @@ contains
 !	end do
 
 !	write(10,5)
-  !  5 format(//,t4,'volume',t13,'x versus fluxo de massa',/)
+  !  5 format(//,t4,'volume',t13,'xp versus fluxo de massa',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
 !	do i = 1, N 
-!	  write(10,7) i, x(i), M(i)
+!	  write(10,7) i, xp(i), M(i)
    !   7 format(i4,4x,2(1pe21.11))
 !	end do
 
 	!write(10,8)
-  !  8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
+  !  8 format(//,t4,'volume',t13,'xp versus pressões (p e pl)',/)
 
 	! abertura de arquivo para gravar resultados de u (numérico)
     !open(11,file='p.dat')
 
 	!!do i = 1, N
-	!  write(11,9) i, x(i), p(i), plinha(i)
-	!  write(10,9) i, x(i), p(i), plinha(i)
+	!  write(11,9) i, xp(i), p(i), pl(i)
+	!  write(10,9) i, xp(i), p(i), pl(i)
     !  9 format(i4,4x,3(1pe21.11))
 	!end do
 
@@ -220,7 +265,7 @@ contains
     
     open(23, file='fm.dat')
     do i = 1, N
-	  write(23,*) x(i), Ma(i), M(i)
+	  write(23,*) xp(i), Ma(i), M(i)
 	end do
 	
     close(23)
@@ -228,7 +273,7 @@ contains
     
     open(23, file='u.dat')
     do i = 1, N
-	  write(23,48) x(i), Ua(i), U(i), raio(i)*10000.d0
+	  write(23,48) xp(i), Ua(i), U(i), raio(i)*10000.d0
 	  48 format(4(1pe27.18))
 	end do
 	
@@ -236,24 +281,24 @@ contains
     
     open(23, file='ro.dat')
     do i = 1, N
-	  write(23,48) x(i), ropA(i), rop(i), raio(i)
+	  write(23,48) xp(i), ropA(i), ro(i), raio(i)
 	end do
 	
 	open(23, file='p.dat')
     do i = 1, N
-	  write(23,48) x(i), p(i), p(i), raio(i)
+	  write(23,48) xp(i), p(i), p(i), raio(i)
 	end do
 	
     close(23)
     open(22,file='dominio.dat')
 	do i = 1, N
-	  write(22,*) x(i), raio(i)
+	  write(22,*) xp(i), raio(i)
 	end do
 	close(22)
 	
     open(22,file='T.dat')
 	do i = 1, N
-	  write(22,48) x(i), Ta(i), T(i), raio(i)*10000
+	  write(22,48) xp(i), Ta(i), T(i), raio(i)*10000
 	end do
 	close(22)
     

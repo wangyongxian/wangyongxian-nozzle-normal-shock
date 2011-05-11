@@ -18,8 +18,6 @@ real*8  :: Beta
 
 real*8  :: fator  ! Fator de atrito e velocidade inicial
 
-real*8  :: T0, P0 
-
 real*8  :: Lt, dx   ! Comprimento domínio de cálculo e do volume de controle
 
 real*8  :: dt, Pi  ! Número de avanços no tempo
@@ -28,20 +26,24 @@ real*8  :: Fat, R_o, R ! Coeficiente correção velocidade na face
 
 real*8,dimension(:),allocatable :: u      ! solução numérica
 real*8,dimension(:),allocatable :: p      ! solução numérica
-real*8,dimension(:),allocatable :: rop      ! solução numérica
-real*8,dimension(:),allocatable :: roe      ! solução numérica
-real*8,dimension(:),allocatable :: plinha ! solução numérica
 real*8,dimension(:),allocatable :: T ! solução numérica
-real*8,dimension(:),allocatable :: u_o    ! solução numérica inicial
-real*8,dimension(:),allocatable :: rop_o    ! solução numérica inicial
-real*8,dimension(:),allocatable :: p_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: ro      ! solução numérica
+
 real*8,dimension(:),allocatable :: ue     ! solução numérica
+real*8,dimension(:),allocatable :: roe      ! solução numérica
+real*8,dimension(:),allocatable :: pl ! solução numérica
+
 real*8,dimension(:),allocatable :: ue_o   ! solução numérica inicial
+real*8,dimension(:),allocatable :: u_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: ro_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: p_o    ! solução numérica inicial
+real*8,dimension(:),allocatable :: T_o    ! solução numérica inicial
+
 real*8,dimension(:),allocatable :: A, Ae  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
-real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta, T_o
+real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta 
 
-real*8,dimension(:),allocatable :: x, xe  ! coordenada espacial nodal
+real*8,dimension(:),allocatable :: xp, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
 
 real*8 :: Rgases      ! constante dos gases
@@ -51,6 +53,18 @@ real*8 :: rin      ! rin
 real*8 :: rg      ! rg
 real*8 :: Lc      ! Lc
 real*8 :: Ln      ! Ln
+
+real*8 :: u_in  ! velocidade na entrada da tubeira (m/s)
+real*8 :: p_in  ! pressão na entrada da tubeira que satisfaz QM (Pa)
+real*8 :: T_in  ! temperatura na entrada da tubeira (K)
+real*8 :: ro_in ! massa específica na entrada da tubeira (m/s)
+real*8 :: p_cam   ! pressão na câmara de combustão (Pa)
+real*8 :: T_cam   ! temperatura na câmara de combustão (K)
+real*8 :: p_ia  ! pressão antiga na entrada da tubeira (Pa)
+real*8 :: pl_in ! variação da pressão na entrada da tubeira (Pa)
+real*8 :: p_ex  ! pressão na saída da tubeira (Pa)
+real*8 :: T_ex  ! temperatura na saída da tubeira (K)
+real*8 :: ro_ex ! massa específica na saída da tubeira (m/s)
 
 real*8,dimension(:),allocatable :: aPu, aPplinha, aPt ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: aWu, aWplinha, aWt ! coeficiente esquerdo de u e p
