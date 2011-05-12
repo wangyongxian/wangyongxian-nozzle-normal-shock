@@ -61,7 +61,6 @@ contains
 	   p_o = p
 	   T_o = T
 	   ro_o = ro
-	   
        
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
@@ -86,8 +85,6 @@ contains
 	  ! cálculo da massa específica
       ro = p / ( Rgases * T )
        
-	  !call calculo_massa_especifica
-	  
 	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
@@ -98,24 +95,33 @@ contains
       
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
+      
+      T_ex   = 0.5d0 * ( T(n-1) + T(n) )
 !-----------------------------------------------------	      
-	   
 
 	end do
+    
+    ! entrada da tubeira
+    u(1)  = u_in
+    p(1)  = p_in
+    T(1)  = T_in
+
+    ! saída da tubeira
+    T_ex  = 0.5d0 * ( T(n-1) + T(n) )
+    p_ex  = 0.5d0 * ( p(n-1) + p(n) )
+    u(n)  = ue(n-1)
+    p(n)  = p_ex
+    T(n)  = T_ex
+    ro_in = p_in / ( Rgases * T_in )
+    ro(1) = ro_in
+    ro_ex = p_ex / ( Rgases * T_ex )
+    ro(n) = ro_ex
+
 
 	tcpu = timef()
 	
-	! escrita dos coeficientes e fontes velocidade 
-	!call lista_coeficientes_velocidade
-
-	! escrita dos coeficientes e fontes pressão 
-	!call lista_coeficientes_pressao
-   
     ! escrita da variável primária e sua visualização
     call escreve
-
-   ! write(10,1) tcpu
-    !1 format(/, f14.3, ' = tempo de processamento (segundos)')
 
   end subroutine solucao_numerica
 
