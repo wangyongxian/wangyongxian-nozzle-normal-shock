@@ -55,7 +55,14 @@ contains
        p(1) = 2.0d0*p_in - p(2)
        pl_in = p_in - p_ia
 	
-	
+       ! Atualizando campos para novo avanço
+	   u_o  = u
+	   ue_o = ue
+	   p_o = p
+	   T_o = T
+	   ro_o = ro
+	   
+       
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
 	   
@@ -92,12 +99,7 @@ contains
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
 !-----------------------------------------------------	      
-	   ! Atualizando campos para novo avanço
-	   u_o  = u
-	   ue_o = ue
-	   p_o = p
-	   T_o = T
-	   ro_o = ro
+	   
 
 	end do
 

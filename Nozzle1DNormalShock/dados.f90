@@ -80,7 +80,7 @@ contains
     allocate (xp(N),xe(N),Sp(N),Se(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), ro(N))
     allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N), ropA(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
-	allocate (aw(N),ap(N),ae(N),bp(N))
+	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N))
   	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N))
   	T_o=0.0d0
   	Ta = 0.0d0
@@ -114,6 +114,8 @@ contains
     Mach = 0.0d0
     Mache = 0.0d0
     Ma = 0.0d0
+    bc = 0.0d0
+    bf = 0.0d0
    
     ! Cálculo do dx 2 ficticios
     dx = Lt/(N-2.0d0)

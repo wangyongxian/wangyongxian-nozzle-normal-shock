@@ -45,6 +45,7 @@ real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta
 
 real*8,dimension(:),allocatable :: xp, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
+real*8,dimension(:),allocatable :: bf, bc
 
 real*8 :: Rgases      ! constante dos gases
 real*8 :: cp      ! cp

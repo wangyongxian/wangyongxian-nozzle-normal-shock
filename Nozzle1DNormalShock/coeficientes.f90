@@ -52,7 +52,7 @@ contains
     !ap(1) =  1.0d0
     !ae(1) = -1.0d0
     !bp(1) = -fator * ( u(3) - u(2) )
-    !bf(1) = 0.0d0
+    bf(1) = 0.0d0
     
     aw(1) = 0.0d0
     ae(1) = -1.0d0
@@ -67,6 +67,7 @@ contains
 	   !ap(i) = roa(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
        ap(i)  = ro_o(i)*Sp(i)*dx/dt - (aw(i) + ae(i))
 	   !bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * rp(i) * dx / 4   
+	   bf(i) = - pi * fator * ro(i) * (u(i)**2) * raio(i) * dx *0.25d0   
 	   !bp(i) = roa(i) * sp(i) * dx * ua(i) / dt + bf(i)   &
        !      + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
 	   bpUDS = ro_o(i)*Sp(i)*u_o(i)*dx/dt &
@@ -76,7 +77,8 @@ contains
        !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
        !bc(i) = 0.5d0 * beta * ( oeste - leste )
-       	                
+       bc(i) = 0.5d0 * beta * ( roe(i-1) * ue(i-1) * Se(i-1) * ( u(i) - u(i-1) ) &
+        - roe(i) * ue(i) * Se(i) * ( u(i+1) - u(i) ) )
 	   bpB = 0 !0.5d0*beta*(roe(i-1)*ue(i-1)*Se(i-1)*(u(i)-u(i-1)) &
 	        !    -roe(i)*ue(i)*Se(i)*(u(i+1)-u(i)))
 	   bp(i) = bpUDS + bpB
@@ -88,8 +90,9 @@ contains
     !ap(n) =  1.0d0
     !ae(n) =  0.0d0
     !bp(n) =  fator * ( u(n-1) - u(n-2) )
-    !bf(n) =  0.0d0
-    
+    bf(n) =  0.0d0
+    bc(1) = 0.0d0
+	bc(n) = 0.0d0
     aw(N) = -1.0d0
     ae(N) = 0.0d0
     ap(N) = 1.0d0
@@ -102,14 +105,12 @@ contains
   subroutine calculo_velocidades_face
 
     real*8  :: sigmap, sigmaE, bcP, bcE, bfP, bfE ! auxiliar
-   
+   real*8 :: massa_e, massa_p
 	! Calculando ue no passo dt+1
-	!um(1) = 0.5d0 * ( u(1) + u(2) )
-	ue(1) = 0.5d0*(u(1)+u(2))
 	!bc(1) = 0.0d0
 	!bc(n) = 0.0d0
-	!bf(1) = 0.0d0
-	!bf(n) =  0.0d0
+	bf(1) = 0.0d0
+	bf(n) =  0.0d0
 	do i = 2, N-2
 	   !oeste = rom(i-1) * um(i-1) * se(i-1) * ( u(i) - u(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( u(i+1) - u(i) )
@@ -118,6 +119,7 @@ contains
 	   bcE = 0.5d0*beta*((roe(i)*Se(i)*ue(i))*(u(i+1)-u(i))-(roe(i+1)*Se(i+1)*ue(i+1))*(u(i+2)-u(i+1)))
 	   ! arrumar o raio hidraulico do volume de controle
 	   !bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * rp(i) * dx / 4
+	   bf(i) = - pi * fator * ro(i) * (u(i)**2) * raio(i) * dx *0.25d0
 	   bfP = -Pi*fator*ro(i)*u(i)*raio(i)*dx/4.0d0
 	   bfE = -Pi*fator*ro(i+1)*u(i+1)*raio(i+1)*dx/4.0d0
 	   !somap = aw(i)*u(i-1) + ae(i)*u(i+1)
@@ -128,14 +130,19 @@ contains
        !      + (massa_p+massa_e)*uma(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
        !      / (ap(i)+ap(i+1))
        !massa_p = roa(i) * sp(i) * (xe(i) - xe(i-1))
+       massa_p = ro_o(i) * Sp(i) * dx
        !massa_e = roa(i+1) * sp(i+1) * (xe(i+1) - xe(i))
+       massa_e = ro_o(i+1) * Sp(i+1) * dx
 	   !ue(i) = (-sigmap-sigmaE+bcP+bcE+bfP+bfE+((ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)/dt)*ue_o(i) - 2.0d0*Se(i)*(p(i+1)-p(i)))/(apu(i)+apu(i+1))
-	   ue(i) = (-sigmap-sigmaE+bcP+bcE+bfE+bfP+(ro_o(i)*Sp(i)*dx+ro_o(i+1)*Sp(i+1)*dx)*ue_o(i)/dt - 2.0d0*Se(i)*(p(i+1)-p(i)))/(ap(i)+ap(i+1))
+	   ue(i) = (-sigmap - sigmae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
+             + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*Se(i)*(p(i+1)-p(i)))  &
+             / (ap(i)+ap(i+1))
 	end do
 	
 	
     !um(n-1) = 0.5d0 * ( u(n) + u(n-1) )
-	ue(N-1) = 2.0d0*(u(N-1)+u(N))
+    ue(1) = 0.5d0 * ( u(1) + u(2) )
+    ue(N-1) = 0.5d0 * ( u(N) + u(N-1) )
 	!arrumar o uin u(1)>uin
 	!Fat = (u(1)*Se(1))/(ue(N-1)*Se(N-1))
   	!ue(N-1) = Fat*ue(N-1)
@@ -180,7 +187,7 @@ contains
        bUDS = cp*Sp(i)*ro_o(i)*T_o(i)*dx/dt &
                 +Sp(i)*(p(i)-p_o(i))*dx/dt &
                 +Sp(i)*u(i)*(p(i+1)-p(i-1))*0.5d0 &
-                +0.25d0*Pi*fator*ro(i)*raio(i)*dx*u(i)**3
+                +Pi*fator*ro(i)*raio(i)*dx*(u(i)**3)*0.25d0
        !oeste = rom(i-1) * um(i-1) * se(i-1) * ( T(i) - T(i-1) )
        !leste = rom(i) * um(i) * se(i) * ( T(i+1) - T(i) )
        !bc(i) = 0.5d0 * beta * cp(i) * ( oeste - leste )
