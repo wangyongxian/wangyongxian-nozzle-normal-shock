@@ -7,7 +7,7 @@
       0.5d+0          Lt        = comprimento do domínio de cálculo
       0.0d+0          fator     = fator de atrito de Dárcy
       526.97d+0	     Rgases    = R
-      1.19509344229442d+0       gama      = gama
+      1.1956d+0       gama      = gama
       0.3d+0	         rin       = rin
       0.1d+0	         rg        = rg
       0.1d+0	         Lc        = Lc

@@ -48,13 +48,13 @@
 		<Filter Name="Header Files" Filter="fi;fd"/>
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
-		<File RelativePath=".\coeficientes.f90"/>
-		<File RelativePath=".\Compressivel.F90"/>
-		<File RelativePath=".\dados.f90"/>
+		<File RelativePath=".\Coeficientes.f90"/>
+		<File RelativePath=".\NormalShock1D.F90"/>
+		<File RelativePath=".\Dados.f90"/>
 		<File RelativePath=".\Nozzle1DNormalShock.f90"/>
-		<File RelativePath=".\resultados.f90"/>
-		<File RelativePath=".\Richardson.F90"/>
-		<File RelativePath=".\solvers.f90"/>
-		<File RelativePath=".\variaveis.f90"/></Filter>
+		<File RelativePath=".\Resultados.f90"/>
+		<File RelativePath=".\CriaArqRichadson.F90"/>
+		<File RelativePath=".\Solvers.f90"/>
+		<File RelativePath=".\Variaveis.f90"/></Filter>
 		<File RelativePath=".\ReadMe.txt"/></Files>
 	<Globals/></VisualStudioProject>

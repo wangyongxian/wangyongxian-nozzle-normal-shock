@@ -16,7 +16,7 @@ contains
     real*8 :: M_in ! número de Mach na entrada
     
 	tcpu = timef() ! zera cronômetro
-
+ue=0.0d0
     p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
     ro    = p / ( Rgases * T )
     ue    = u(1:n-1)
