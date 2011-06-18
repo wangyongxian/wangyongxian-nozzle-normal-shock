@@ -6,8 +6,6 @@ implicit none
 
 integer :: N           ! número total de nós
 
-integer :: i,j           ! número do nó e contador
-
 real*8  :: tcpu        ! tempo de CPU em segundos
 
 integer :: ver         ! auxílio do comando System 
@@ -18,7 +16,7 @@ real*8  :: Beta
 
 real*8  :: fator  ! Fator de atrito e velocidade inicial
 
-real*8  :: Lt, dx   ! Comprimento domínio de cálculo e do volume de controle
+real*8  :: Lt   ! Comprimento domínio de cálculo e do volume de controle
 
 real*8  :: dt, Pi  ! Número de avanços no tempo
 
@@ -41,11 +39,11 @@ real*8,dimension(:),allocatable :: T_o    ! solução numérica inicial
 
 real*8,dimension(:),allocatable :: Sp, Se  ! solução numérica da Área
 real*8,dimension(:),allocatable :: M, Ma, Me  ! fluxo de massa na face leste fluxo de massa analitico
-real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta 
+real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, ropA, Ta , Pa, Roa
 
 real*8,dimension(:),allocatable :: xp, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
-real*8,dimension(:),allocatable :: bf, bc
+real*8,dimension(:),allocatable :: bf, bc, f
 
 real*8 :: Rgases      ! constante dos gases
 real*8 :: cp      ! cp

@@ -10,7 +10,6 @@ contains
 !-------------------------------------------------
 
   ! método direto Tri-Diagonal Matrix Algorithm (TDMA)
-!subroutine SOLVERS_tdma ( n, aw, ap, ae, bp, T )
 subroutine TDMA (N,ap,aw,ae,bp,T)
 
     implicit none

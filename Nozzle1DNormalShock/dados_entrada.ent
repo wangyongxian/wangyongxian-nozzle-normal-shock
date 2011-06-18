@@ -3,11 +3,11 @@
       3420.33d+0     T0        = temperatura de estagnacao
       12             N         = número de volumes de controle
       1.0d-6         deltat    = número de avanços no tempo
-      1000          iteracao  = número de iterações (ciclo total)
+      50000          iteracao  = número de iterações (ciclo total)
       0.5d+0          Lt        = comprimento do domínio de cálculo
       0.0d+0          fator     = fator de atrito de Dárcy
       526.97d+0	     Rgases    = R
-      1.1956d+0       gama      = gama
+      1.19509344229442d+0       gama      = gama
       0.3d+0	         rin       = rin
       0.1d+0	         rg        = rg
       0.1d+0	         Lc        = Lc
@@ -15,7 +15,7 @@
       1.0d+0          beta      = esquema CDS - 1 UDS - 0            
 'Resultado para N=12'  ! título: máximo 50 caracteres
 +Graficos 1 - para ligar 0 para desligar
-1    = fluxo de massa
+0    = fluxo de massa
 0    = temperatura
 0    = velocidade
 0    = massa especifica

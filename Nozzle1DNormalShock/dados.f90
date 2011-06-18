@@ -14,7 +14,7 @@ contains
 
   subroutine le_dados
 
-    ver = system('notepad dados_entrada.ent') ! lista dados
+   ! ver = system('notepad dados_entrada.ent') ! lista dados
 
     open(7,file='dados_entrada.ent')
 
@@ -75,13 +75,15 @@ contains
 !-------------------------------------------------
 
   subroutine inicializacao
-    real*8 :: MachN, Machx, Machlx, razao
+    real*8 :: MachN, Machx, Machlx, razao, dx
+    integer ::i, j
     ! alocação de memória
     allocate (xp(N),xe(N),Sp(N),Se(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), ro(N))
     allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N), ropA(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N))
-  	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N))
+  	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N))
+  	f = 0.0d0
   	T_o=0.0d0
   	Ta = 0.0d0
   	ropA = 0.0d0
@@ -97,6 +99,7 @@ contains
     ae = 0.0d0
     bp = 0.0d0
     p = 0.0d0
+    pa = 0.0d0
     p_o = 0.0d0
     pl = 0.0d0
     u = 0.0d0 
@@ -106,6 +109,7 @@ contains
     roe = 0.0d0
     ro = 0.0d0
     ro_o = 0.0d0
+    roa = 0.0d0
     T = 0.0d0
     Sp = 0.0d0
     Se = 0.0d0
@@ -118,7 +122,7 @@ contains
     bf = 0.0d0
    
     ! Cálculo do dx 2 ficticios
-    dx = Lt/(N-2.0d0)
+    dx = Lt/(N-2)
 	
 	! Cálculo do Pi
 	Pi = dacos (-1.0d0)
@@ -161,7 +165,7 @@ contains
 	end do  
 
     cp = gama*Rgases/(gama-1.0d0)
-    
+    !solucao analitica para o no
     do j=1, N
         if (xp(j) < (lc+ln/2.0d0)) then
             Mach(j) = 0.1d0
@@ -175,21 +179,6 @@ contains
             MachN = Mach(j) - Machx/Machlx
             Mach(j) = MachN
         end do
-        !exp = gama / (gama - 1.0d0)
-        !cte = 1.0d0 + (gama - 1.0d0) * (M(i)**2) / 2.0d0
-        !p(i) = p_cam / (cte ** exp)
-        !p(j) = P_cam/(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(gama/(gama-1.0d0))
-        
-        !cte = 1.0d0 + (gama - 1.0d0) * (M(i)**2) / 2.0d0
-        !T(i) = T_cam / cte
-        !T(j) = T_cam/(1.0d0+(gama-1.0d0)*(Mach(j)**2)*0.5d0)
-        
-        !ro = p / ( Rg * T )
-        !ro(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-        
-        !u = M * dsqrt ( gama * Rg * T )
-        !u(j) = Mach(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach(j)**2)/2.0d0)**(-1))**(0.5d0)
-        !Ma(j) = ro(j)*Sp(j)*u(j)
     end do
     
     p = P_cam/(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0))
@@ -197,7 +186,7 @@ contains
     ro = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
     u = Mach*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
     Ma = ro*Sp*u
-    
+    !solucao analitica para as faces
     do j=1, N-1
         if (xe(j) < (lc+ln/2.0d0)) then
             Mache(j) = 0.1d0
@@ -216,12 +205,14 @@ contains
         ue(j) = Mache(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
     end do
     Ua = u
+    roa = ro
     ro_o = ro
     p_o = p
     u_o = u
     ue_o = ue
     ropA = ro
     Ta = T    
+    Pa = p
     T_o=T
     
   end subroutine inicializacao

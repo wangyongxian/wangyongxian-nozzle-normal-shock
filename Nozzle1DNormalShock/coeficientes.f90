@@ -11,12 +11,12 @@ contains
 
 
   subroutine coeficientes_e_fontes_qml
-	real*8  :: fator ! auxiliar
+	real*8  :: fator, dx ! auxiliar
 	real*8 :: oeste, leste ! auxiliares
-	
+	integer ::i
 	! volume 1 (fictício)
 
-    fator = 2 * xp(2) / ( xp(3) - xp(2) )
+    fator = 2.0d0 * xp(2) / ( xp(3) - xp(2) )
     aw(1) =  0.0d0
     ap(1) =  1.0d0
     ae(1) = -1.0d0
@@ -35,9 +35,9 @@ contains
 
        ap(i) = ro_o(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
 
-       bf(i) = - pi * fator * ro(i) * (u(i)**2) * raio(i) * dx / 4   
+       bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * raio(i) * dx / 4.0d0   
 
-       bp(i) = ro_o(i) * sp(i) * dx * ua(i) / dt + bf(i)   &
+       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt + bf(i)   &
              + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
              
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )
@@ -50,7 +50,7 @@ contains
 
     ! volume n (fictício)
 
-    fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
@@ -68,7 +68,7 @@ contains
 	real*8 :: massa_e ! massa do volume E
     real*8 :: massa_p ! massa do volume P
     real*8 :: somap, somae
-
+    integer ::i
     ! média antiga
 
     do i = 2, n-2
@@ -97,8 +97,9 @@ contains
 
 
   subroutine coeficientes_e_fontes_energia
-	real*8  :: fator ! auxiliar
+	real*8  :: fator, dx ! auxiliar
 	real*8 :: oeste, leste ! auxiliares
+	integer ::i
 	! volume 1 (fictício)
 
     aw(1) = 0.0d0
@@ -121,7 +122,7 @@ contains
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
              + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0      &
-             + pi * fator * ro(i) * (u(i)**3) * raio(i) * dx / 4  
+             + pi * f(i) * ro(i) * (u(i)**3) * raio(i) * dx / 4  
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i) - T(i-1) )
 
        leste = roe(i) * ue(i) * se(i) * ( T(i+1) - T(i) )
@@ -131,7 +132,7 @@ contains
 
     ! volume n (fictício)
 
-    fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
@@ -149,9 +150,9 @@ contains
 
   subroutine coeficientes_fontes_massa
 
-    real*8 :: fator ! auxiliar
+    real*8 :: fator, dx ! auxiliar
     real*8 :: oeste, leste ! auxiliares
-
+    integer ::i 
     ! volume 1 (fictício)
 
     bc(1) = 0.0d0
@@ -187,7 +188,7 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
  ! volume n (fictício)
 
     bc(n) = 0.0d0
-    fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
@@ -200,7 +201,8 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
 
   subroutine coeficientes_simplec
-
+    integer ::i
+    
     ds(1) = 0.0d0
     ds(n) = 0.0d0
 
@@ -234,7 +236,7 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
 
   subroutine corrigir_pressao
-    
+    integer ::i
 	do i = 1, N
 	   p(i) = p(i) + pl(i)
 	end do 
@@ -244,6 +246,7 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
   
   subroutine corrigir_velocidades
+    integer ::i
      !arrumar
 	u(1) = - u(2) + 2.0d0*u(1)
    
@@ -260,7 +263,8 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
 
   subroutine corrigir_velocidades_faces
-
+    integer ::i
+    
     do i = 2, N-2
 	   ue(i) = ue(i) - de(i)*(pl(i+1)-pl(i))
 	end do 
@@ -270,7 +274,8 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
 
   subroutine corrigir_massa_especifica
-
+    integer ::i
+    
     do i = 1, N
 	   ro(i) = ro(i) + pl(i)/(Rgases*T(i))
 	end do 
@@ -280,7 +285,8 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 !-------------------------------------------------
 
 subroutine calculo_massa_especifica
-
+    integer ::i
+    
     do i=1, N
         ro(i) = p(i)/(Rgases*T(i))
     end do    
@@ -290,7 +296,7 @@ end subroutine calculo_massa_especifica
 !-------------------------------------------------
 
 subroutine calculo_massa_especifica_nas_faces
-    
+    integer ::i
     do i = 1, n-1
 
        roe(i) = ro(i) + beta * 0.5d0 * ( ro(i+1) - ro(i) )
@@ -302,6 +308,8 @@ end subroutine calculo_massa_especifica_nas_faces
 !-------------------------------------------------
 
 subroutine calcula_fluxo_massa
+    integer ::i
+    
     do i=1,N
     !rom(1) * u_in * se(1)
         m(i) = roe(i)*ue(i)*Se(i)
@@ -311,6 +319,8 @@ end subroutine calcula_fluxo_massa
 !-------------------------------------------------
 
 subroutine calcula_coeficiente_descarga
+    integer ::i
+    
     call calcula_fluxo_massa
     do i=1,N
         Cd(i) = m(i)/Ma(i)
@@ -320,6 +330,8 @@ end subroutine calcula_coeficiente_descarga
 !-------------------------------------------------
 
 subroutine calcula_empuxo
+    integer ::i
+
     do i=1, N
         Empuxo(i) = ro(i)*u(i)*Sp(i)*u(i)
     end do
@@ -330,7 +342,8 @@ end subroutine calcula_empuxo
 subroutine correcoes_com_plinha
 
     real*8 :: fator ! auxiliar
-
+    integer ::i
+    
     ! pressão
     p = p + pl
 
@@ -350,10 +363,10 @@ subroutine correcoes_com_plinha
        u(i) = u(i) - 0.5d0 * ds(i) * ( pl(i+1) - pl(i-1) )
     end do
 
-    fator = 2 * xp(2) / ( xp(3) - xp(2) )
+    fator = 2.0d0 * xp(2) / ( xp(3) - xp(2) )
 	u(1) = u(2) - fator * ( u(3) - u(2) )
 
-    fator = 2 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
 	u(n) = u(n-1) + fator * ( u(n-1) - u(n-2) )
 	
 end subroutine correcoes_com_plinha
