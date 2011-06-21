@@ -1,0 +1,1 @@
+  (arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)

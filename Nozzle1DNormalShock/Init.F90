@@ -1,5 +1,7 @@
 module Initialization
 
+use variaveis
+
 implicit none
 
 
