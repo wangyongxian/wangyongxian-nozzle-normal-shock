@@ -1,58 +1,73 @@
 program Nozzle1DNormalShock
-
+!
+!A = 1.0d0+2.2d0*(x-1.5d0)**2 0<=x<=3
 ! -----------------------------------------------
 
 use dados
 
 use resultados
 
+use NormalShock1D
+
 ! -----------------------------------------------
 
 implicit none
 
-integer ::  comp1
-
 !-------------------------------------------------
 
-  call date_and_time(vardate,vartime,varzone,var)
 
-  write(aux,*) var(3)
-  aux1 = trim(adjustl(aux))
-  write(aux,*) var(2)
-  aux2 = trim(adjustl(aux))
-  write(aux,*) var(1)
-  aux3 = trim(adjustl(aux))
-  dia = '('//trim(aux1)//'/'//trim(aux2)//'/'//aux3//')'
+!  call le_dados
 
-  write(aux,*) var(5)
-  aux1 = trim(adjustl(aux))
-  write(aux,*) var(6)
-  aux2 = trim(adjustl(aux))
-  write(aux,*) var(7)
-  aux3 = trim(adjustl(aux))
-  hora = trim(aux1)//':'//trim(aux2)//':'//aux3
+ ! call inicializacao
 
-  call le_dados
+  !call solucao_numerica
 
-  head = trim(title)//" "//trim(dia)//"'"
-
-  open(10,file=caso)
-
-!  comp = len(trim(adjustl(nome)))
-
-  comp1 = len(trim(adjustl(title)))
-
-  !call mostra_dados 
-  ! calcula a area e outras inicializacoes
-  call inicializacao
-
-  call solucao_numerica
-
-  close (10)
-
-  note_caso = 'notepad '//caso
-  !ver = system(note_caso) ! lista arquivo de resultados
-
+    call teste
 ! -----------------------------------------------
 
+contains
+subroutine teste
+
+real*8 ::mach1, mach2, gama, P1,P2,T1,T2, U1, U2, AA, mach
+
+    gama = 1.4d0
+    mach1 = 3.0d0 
+    mach2 = 0.0d0
+    P1 = 0.5d0
+    T1 = 200.d0
+!call PrandtRelation(mach1, mach2)
+    call Mach2Calc(gama, Mach1, Mach2)
+!Mach1Calc
+    call P2Calc(gama, Mach1, p1, p2)
+!RO2Calc
+    call T2Calc(gama, Mach1, T1, T2)
+    
+    !call U2Calc(gama, Mach1, U1, U2)
+!ShockLocationCalc
+!P0Calc
+!T0Calc
+!Ro0Calc
+    Mach = 3.368d0
+    call AARatioCalc(gama, Mach, AA)
+!call ACalc
+!UCalc
+
+write(*,*), 'a'
+end subroutine teste
+
+
+
 end program
+
+
+!FUNCTION ROOT(A)
+!  X  = 1.0
+!  DO
+!    EX = EXP(X)
+!    EMINX = 1./EX
+!    ROOT  = X - ((EX+EMINX)*.5+COS(X)-A)/((EX-EMINX)*.5-SIN(X))
+!    IF (ABS((X-ROOT)/ROOT) .LT. 1E-6) RETURN
+!    X = ROOT
+!  END DO
+!END
+    

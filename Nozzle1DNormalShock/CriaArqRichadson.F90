@@ -1,10 +1,15 @@
 Module CriaArqRichadson
 
 implicit none
+!modelo1.txt
+!modelo2.txt
+type ::ArqConf
+character(90)   ::arq_dados
+end type ArqConf
 
 type :: ArqRichard
 integer         ::variavel
-character(90)   :: caso
+character(90)   ::caso
 integer         ::com_solucao_analitica
 character(90)   ::arq_exato
 integer         ::pl
@@ -23,7 +28,10 @@ end type ArqRichard
 contains
 
 
-
+!subroutine 
+!open(3,file="modelo1.txt")
+!open(4,file="Richardson_3p0.in", )
+!close(3,4)
 
 
 !"D:\Projects\Richardson_3p0"
