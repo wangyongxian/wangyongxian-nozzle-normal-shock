@@ -67,8 +67,10 @@ real*8,dimension(:),allocatable :: ap, aw, ae, bp ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 
-character*20 :: caso      ! nome do arquivo de saída
-character*50 :: title     ! título do gráfico
+character*50 :: caso      ! nome do arquivo de saída
+character*50 :: richardson_1      ! nome do arquivo para o programa Richardson
+character*50 :: richardson_2      ! nome do arquivo para o programa Richardson
+character*50 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
 

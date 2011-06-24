@@ -18,7 +18,6 @@ contains
 
     open(7,file='dados_entrada.ent')
 
-	read(7,*) caso
 	read(7,*) P_cam
 	read(7,*) T_cam
     read(7,*) N
@@ -33,8 +32,14 @@ contains
 	read(7,*) Lc
 	read(7,*) Ln
 	read(7,*) Beta
+	read(7,*) ! +Saida
     read(7,*) title
-    read(7,*) ! graficos
+    read(7,*) caso
+    read(7,*) ! +Saida para o programa Richardson
+    read(7,*) richardson_1
+    read(7,*) richardson_2
+    read(7,*) ! 012345   1         2         3         4         5         6         7         8         9
+    read(7,*) ! +Graficos 1 - para ligar 0 para desligar
     read(7,*) graf_m ! fluxo de massa
     read(7,*) graf_t ! temperatura
     read(7,*) graf_v ! velocidade

@@ -8,7 +8,7 @@ use dados
 use resultados
 
 use NormalShock1D
-
+use CriaArqRichadson
 ! -----------------------------------------------
 
 implicit none
@@ -29,35 +29,39 @@ contains
 subroutine teste
 
 real*8 ::mach1, mach2, gama, P1,P2,T1,T2, U1, U2, AA, mach
-
+integer ::ver
     gama = 1.4d0
     mach1 = 3.0d0 
     mach2 = 0.0d0
     P1 = 0.5d0
-    T1 = 200.d0
+    !T1 = 200.d0
 !call PrandtRelation(mach1, mach2)
-    call Mach2Calc(gama, Mach1, Mach2)
+    !call Mach2Calc(gama, Mach1, Mach2)
 !Mach1Calc
-    call P2Calc(gama, Mach1, p1, p2)
+    !call P2Calc(gama, Mach1, p1, p2)
 !RO2Calc
-    call T2Calc(gama, Mach1, T1, T2)
+    !call T2Calc(gama, Mach1, T1, T2)
     
     !call U2Calc(gama, Mach1, U1, U2)
 !ShockLocationCalc
 !P0Calc
 !T0Calc
 !Ro0Calc
-    Mach = 3.368d0
+    !Mach = 3.368d0
     
 !call ACalc
 !UCalc
     !ROOT(gama, P01, P02,m)
-    mach2 = 0.0d0
-    mach = ROOT(gama,1000.0d0,910.4277d0,mach2)
-    AA = 0.0d0
-    call AARatioCalc(gama, Mach, AA)
-    call Mach2Calc(gama,mach,mach2)
+    !mach2 = 0.0d0
+    !mach = ROOT(gama,1000.0d0,910.4277d0,mach2)
+    !AA = 0.0d0
+    !call AARatioCalc(gama, Mach, AA)
+    !call Mach2Calc(gama,mach,mach2)
     
+    !call WriteConfFile(richardson_1)
+    call CreateMeshFile(richardson_2)
+    
+    ver = system('teste.txt')
 write(*,*), 'a'
 end subroutine teste
 
