@@ -14,13 +14,11 @@ integer :: iteracao	   !	Número de iterações
 
 real*8  :: Beta
 
-real*8  :: fator  ! Fator de atrito e velocidade inicial
+real*8  :: fDarcy  ! Fator de atrito e velocidade inicial
 
 real*8  :: Lt   ! Comprimento domínio de cálculo e do volume de controle
 
 real*8  :: dt, Pi  ! Número de avanços no tempo
-
-real*8  :: Fat, R_o, R ! Coeficiente correção velocidade na face
 
 real*8,dimension(:),allocatable :: u      ! solução numérica
 real*8,dimension(:),allocatable :: p      ! solução numérica
@@ -66,31 +64,11 @@ real*8 :: T_ex  ! temperatura na saída da tubeira (K)
 real*8 :: ro_ex ! massa específica na saída da tubeira (m/s)
 
 real*8,dimension(:),allocatable :: ap, aw, ae, bp ! coeficiente central de u e p
-!real*8,dimension(:),allocatable :: aWu, aWplinha, aWt ! coeficiente esquerdo de u e p
-!real*8,dimension(:),allocatable :: aEu, aEplinha, aEt ! coeficiente direito de u	e p
-									   
-!real*8,dimension(:),allocatable :: bPu, bPplinha, bPt ! termo fonte de u e p
-
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 
 character*20 :: caso      ! nome do arquivo de saída
-
 character*50 :: title     ! título do gráfico
-character*62 :: head      ! título do gráfico + dia
-
-character*12 :: dia       ! data da simulação
-character*8  :: hora      ! horário da simulação
-integer*4    :: var(8)    ! data e hora
-character*20 :: vardate   ! data e hora
-character*20 :: vartime   ! data e hora
-character*20 :: varzone   ! data e hora
-character*70 :: note_caso ! notepad + caso
-character*2  :: aux1,aux2
-character*4  :: aux3
-character*50 :: aux
-
-
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
 

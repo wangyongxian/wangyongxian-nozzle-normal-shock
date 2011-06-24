@@ -25,7 +25,7 @@ contains
     read(7,*) dt
 	read(7,*) iteracao
 	read(7,*) Lt
-	read(7,*) fator
+	read(7,*) fDarcy
 	read(7,*) Rgases
 	read(7,*) gama
 	read(7,*) rin
@@ -46,31 +46,6 @@ contains
     close(7)
 
   end subroutine le_dados
-
-!-------------------------------------------------
-
-!  subroutine mostra_dados
-
- !   integer :: comp
-
-  !  comp = len(trim(adjustl(caso)))
-
-    !write(10,1) trim(adjustl(caso)),N,dt,iteracao,Lt,fator
-
-   ! 1 format(/,2x,'DADOS',//,  &
-     !            a<comp>,' = caso',/, &	 
-	!			 8x,i8,  ' = número de volumes de controle',/, &
-	!			 1pe16.8,' = número de avanços no tempo',/,    &
-	!			 8x,i8,  ' = número de iterações externas',/,  & 
-	!			 1pe16.8,' = comprimento domínio de cálculo',/, &
-	!			 1pe16.8,' = viscosidade absoluta do fluido',/, &
-	!			 1pe16.8,' = massa específica do fluido',/,     &
-	!			 1pe16.8,' = fator de atrito de Dárcy',/,   &
-	!			 1pe16.8,' = velocidade inicial no duto',/, &  
-	!			 1pe16.8,' = coeficiente angular do diâmetro ',/)
-				 
-
-  !end subroutine mostra_dados
 
 !-------------------------------------------------
 
@@ -165,7 +140,7 @@ contains
 	end do  
 
     cp = gama*Rgases/(gama-1.0d0)
-    !solucao analitica para o no
+    
     do j=1, N
         if (xp(j) < (lc+ln/2.0d0)) then
             Mach(j) = 0.1d0
@@ -187,29 +162,29 @@ contains
     u = Mach*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
     Ma = ro*Sp*u
     !solucao analitica para as faces
-    do j=1, N-1
-        if (xe(j) < (lc+ln/2.0d0)) then
-            Mache(j) = 0.1d0
-        else
-            Mache(j) = 2.0d0
-        end if
-        razao = Se(j)/(Pi*(rg**2))
-        do i=1, 50
-            Machlx = (-1.0/(Mache(j)*Mache(j)))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
-            Machx = -razao + (1.0d0/Mache(j))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mache(j)*Mache(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
-            MachN = Mache(j) - Machx/Machlx
-            Mache(j) = MachN
-        end do
-    
-        roe(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-        ue(j) = Mache(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
-    end do
+    !do j=1, N-1
+    !    if (xe(j) < (lc+ln/2.0d0)) then
+    !        Mache(j) = 0.1d0
+    !    else
+    !        Mache(j) = 2.0d0
+    !    end if
+    !    razao = Se(j)/(Pi*(rg**2))
+    !    do i=1, 50
+    !        Machlx = (-1.0/(Mache(j)*Mache(j)))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
+    !        Machx = -razao + (1.0d0/Mache(j))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mache(j)*Mache(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
+    !        MachN = Mache(j) - Machx/Machlx
+    !        Mache(j) = MachN
+    !    end do
+    !    roe(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
+    !    ue(j) = Mache(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
+    !end do
     Ua = u
     roa = ro
     ro_o = ro
+    roe = ro
     p_o = p
     u_o = u
-    ue_o = ue
+    ue_o = u
     ropA = ro
     Ta = T    
     Pa = p

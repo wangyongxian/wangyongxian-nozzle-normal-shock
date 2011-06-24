@@ -48,17 +48,20 @@ real*8 ::mach1, mach2, gama, P1,P2,T1,T2, U1, U2, AA, mach
 !T0Calc
 !Ro0Calc
     Mach = 3.368d0
-    call AARatioCalc(gama, Mach, AA)
+    
 !call ACalc
 !UCalc
-
+    !ROOT(gama, P01, P02,m)
+    mach2 = 0.0d0
+    mach = ROOT(gama,1000.0d0,910.4277d0,mach2)
+    AA = 0.0d0
+    call AARatioCalc(gama, Mach, AA)
+    call Mach2Calc(gama,mach,mach2)
+    
 write(*,*), 'a'
 end subroutine teste
 
-
-
 end program
-
 
 !FUNCTION ROOT(A)
 !  X  = 1.0
@@ -70,4 +73,3 @@ end program
 !    X = ROOT
 !  END DO
 !END
-    

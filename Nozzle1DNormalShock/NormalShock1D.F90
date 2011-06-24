@@ -65,7 +65,7 @@ subroutine U2Calc(gama, Mach1, U1, U2)
     real*8, intent(in) ::gama
     real*8, intent(in) ::Mach1
     real*8, intent(in) ::U1
-    real*8, intent(out) ::U2
+    real*8, intent( out) ::U2
 
     U2 = 1.0d0/((((gama+1.0d0)*Mach1**2.0d0)/(2.0d0+(gama-1.0d0)*Mach1**2.0d0))*U1)
 
@@ -78,18 +78,20 @@ subroutine ShockLocationCalc(Pe, P01, Ae, At, AA)
     real*8, intent(in) ::At
     real*8, intent(out)::AA
     real*8 ::Me
-    real*8 ::P0e
+    real*8 ::P02
     real*8 ::factor
     real*8 ::Mach
-    factor = pe*Ae/(p01*At)
     
+    factor = pe*Ae/(p01*At)
+    !Calcula o mach de saida
     Me = dsqrt(-1.0d0/(gama-1.0d0)+dsqrt(1.0d0/(gama-1.0d0)**2.0d0 + &
                                     (2.0d0/(gama-1.0d0))*((2.0d0/(gama+1.0d0))**((gama+1.0d0)/(gama-1.0d0)))* & 
                                     ((factor)**2.0d0)) )
     
-    call P0Calc(gama, Pe, Me, P0e)                           
-   ! (P0e/Pe)*(Pe/P01)
-    !Mach 
+    !calculo da pressao de estagnacao apos o choque
+    call P0Calc(gama, Pe, Me, P02)                           
+    
+    Mach = ROOT(gama, P01, P02, 1.0d0)
     
     call AARatioCalc(gama, Mach, AA)
 
@@ -152,5 +154,46 @@ subroutine UCalc(Mach, a, u)
     u = Mach*a
     
 end subroutine UCalc
+
+REAL*8 FUNCTION ROOT(gama, P01, P02, CHUTE)
+    REAL*8 ::F
+    REAL*8 ::CHUTE
+    REAL*8 ::FL
+    REAL*8 ::M
+    REAL*8 ::P01
+    REAL*8 ::P02
+    REAL*8 ::gama
+    REAL*8 ::D      !denominador
+    REAL*8 ::DL     !derivada do denominador
+    REAL*8 ::N      !numerador
+    REAL*8 ::NL     !derivada do numerador
+    REAL*8 ::M2     !mach2
+    REAL*8 ::M2_N   !mach2
+    REAL*8 ::M2_NL  !mach2
+    REAL*8 ::M2_D   !mach2
+    REAL*8 ::M2_DL  !mach2
+    REAL*8 ::P      !potencia
+  M  = CHUTE
+  DO
+    N = 1.0d0+0.5d0*(gama-1.0d0)*M**2.0d0
+    NL = M*(gama-1.0d0)
+    M2_N = (1.0d0+0.5d0*(gama-1.0d0)*M**2.0d0)
+    M2_NL = NL
+    M2_D = (gama*M**2.0d0-0.5d0*(gama-1.0d0)) 
+    M2_DL = 2.0d0*gama*M 
+    M2 = M2_N/M2_D
+    D = 1.0d0+0.5d0*(gama-1.0d0)*M2
+    DL = 0.5d0*(gama-1.0d0)*((M2_NL*M2_D - M2_DL*M2_N)/M2_D**2.0d0)
+    P = gama/(gama-1)
+    F = 1.0d0+2.0d0*gama*(M**2.0d0-1.0d0)/(gama+1.0d0) &
+        -(P02/P01)*(N/D)**P
+    FL = 4.0d0*gama*M/(gama+1.0d0)-(P02/P01)*(gama/(gama-1))* &
+        ((N/D)**(P-1.0d0))*((NL*D - DL*N)/D**2.0d0)
+    ROOT  = M - F/FL
+    IF (ABS((M-ROOT)/ROOT) .LT. 1E-06) RETURN
+    M = ROOT
+  END DO
+END FUNCTION
+
 
 end module NormalShock1D
