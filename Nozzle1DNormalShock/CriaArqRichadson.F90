@@ -27,18 +27,21 @@ end type ArqRichard
 
 contains
 
-subroutine WriteConfFile(filename)
-    character*50, intent(in) ::filename
-open(12, file="modelo1.txt", MODE = 'READ')
-read(12,*) linha
-close(12)
-open(12, file="Richardson_3p0.in")
-write(12,*) '12', linha
+subroutine WriteConfFile(filename1, filename2)
+    character*50, intent(in) ::filename1
+    character*50, intent(in) ::filename2
+open(12, file=filename1)
+25 format(A50,'(arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)',1/)
+write(12,25) filename2
 close(12)
 end subroutine WriteConfFile
 
-subroutine CreateMeshFile(filename)
-    character*50, intent(in) ::filename
+subroutine CreateMeshFile(filename1, filename2, filename3, nmalhas)
+    character*50, intent(in) ::filename1
+    character*50, intent(in) ::filename2
+    character*50, intent(in) ::filename3
+    integer     , intent(in)  ::nmalhas
+    
 26 format (I8,  T30, '(variavel) número da variável, nos arquivos de resultados, a analisar', 1/, &
            A30, T30, '(caso)     nome do arquivo de saída', 1/, &
            I8,  T30, '(com_solucao_analitica) com solução analítica?   1 = sim;   0 = não', 1/, &
@@ -54,9 +57,14 @@ subroutine CreateMeshFile(filename)
            I8,  T30, '(nm)  número de malhas', 1/)
            !'arq_numerico( 1) nome do arquivo com resultados numéricos na malha 1 (mais grossa)'
            !' arq_numerico( 2) nome do arquivo com resultados numéricos na malha 2'
-open(12, file="teste.txt")
-write(12,26) 5,"'Teste_030.txt'",0,"'Teste_analitico_001.Richardson_3p0'",1,1,&
+open(12, file=filename1)
+write(12,26) 5,'' // filename2 // '',0,'' // filename3 // '',1,1,&
                 3.0d0, 1, 500,1.0d-15,-10.0d0,100.0d0,5
+
+
+!'Teste_001.Richardson_3p0'  arq_numerico( 1) nome do arquivo com resultados numéricos na malha 1 (mais grossa)
+!'Teste_002.Richardson_3p0'  arq_numerico( 2) nome do arquivo com resultados numéricos na malha 2
+
 close(12)
 
 end subroutine CreateMeshFile

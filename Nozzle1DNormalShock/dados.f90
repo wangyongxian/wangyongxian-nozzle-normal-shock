@@ -16,8 +16,9 @@ contains
 
    ! ver = system('notepad dados_entrada.ent') ! lista dados
 
-    open(7,file='dados_entrada.ent')
+    open(7,file='entrada_dados.txt')
 
+	read(7,*) ! +Propriedades
 	read(7,*) P_cam
 	read(7,*) T_cam
     read(7,*) N
@@ -38,6 +39,8 @@ contains
     read(7,*) ! +Saida para o programa Richardson
     read(7,*) richardson_1
     read(7,*) richardson_2
+    read(7,*) richardson_3
+    read(7,*) richardson_4
     read(7,*) ! 012345   1         2         3         4         5         6         7         8         9
     read(7,*) ! +Graficos 1 - para ligar 0 para desligar
     read(7,*) graf_m ! fluxo de massa
@@ -48,6 +51,7 @@ contains
     read(7,*) graf_e ! empuxo
     read(7,*) graf_cdesc ! coeficiente de descarga
     read(7,*) graf_dom ! coeficiente de descarga
+    
     close(7)
 
   end subroutine le_dados

@@ -58,8 +58,8 @@ integer ::ver
     !call AARatioCalc(gama, Mach, AA)
     !call Mach2Calc(gama,mach,mach2)
     
-    !call WriteConfFile(richardson_1)
-    call CreateMeshFile(richardson_2)
+    call WriteConfFile(richardson_1, richardson_2)
+    !call CreateMeshFile(richardson_2,5)
     
     ver = system('teste.txt')
 write(*,*), 'a'

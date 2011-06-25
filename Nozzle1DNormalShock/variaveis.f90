@@ -68,8 +68,10 @@ real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e b
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 
 character*50 :: caso      ! nome do arquivo de saída
-character*50 :: richardson_1      ! nome do arquivo para o programa Richardson
-character*50 :: richardson_2      ! nome do arquivo para o programa Richardson
+character*50 :: richardson_1      ! nome do arquivo principal do programa Richardson
+character*50 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson
+character*50 :: richardson_3      ! nome do arquivo de saída
+character*50 :: richardson_4      ! nome do arquivo de entrada com a solução analítica exata
 character*50 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
