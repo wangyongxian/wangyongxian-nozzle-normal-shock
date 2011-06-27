@@ -2,6 +2,8 @@ module resultados
 
 use coeficientes
 use solvers_1D
+use NormalShock1D
+
 
 implicit none
 
@@ -16,9 +18,9 @@ contains
     real*8 :: M_in ! número de Mach na entrada
     
 	tcpu = timef() ! zera cronômetro
-ue=0.0d0
+    ue=0.0d0
     p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
-    ro    = p / ( Rgases * T )
+    ro    = p / ( R * T )
     ue    = u(1:n-1)
     pl    = 0.0d0
     roe   = ro(1:n-1)
@@ -27,29 +29,29 @@ ue=0.0d0
     
     ! inicialização na entrada da tubeira
     u_in  = ue(1)
-    T_in  = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*Rgases)
+    T_in  = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*R)
     
-    M_in = u_in / dsqrt ( gama * Rgases * T_in )
+    M_in = u_in / dsqrt ( gama * R * T_in )
     k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
     p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
     
     p(1)  = 2.0d0*p_in - p(2)
     u(1)  = 2*u(2) - u(3)
     T(1)  = -T(2) + 2*T_in
-    ro(1) = p(1) / ( Rgases * T(1) )
+    ro(1) = p(1) / ( R * T(1) )
     
     ! inicialização na saída da tubeira
     p(n)  = 2.0d0*p(n-1) - p(n-2)
     u(n)  = 2.0d0*u(n-1) - u(n-2)
     T(n)  = 2.0d0*T(n-1) - T(n-2)
-    ro(n) = p(n) / ( Rgases * T(n) )
+    ro(n) = p(n) / ( R * T(n) )
     de = 0.0d0
     ds = 0.0d0
     do it = 1, iteracao
 	
 	   ! atualização da pressão na entrada da tubeira
        p_ia = p_in
-       M_in = u_in / dsqrt ( gama * Rgases * T_in )
+       M_in = u_in / dsqrt ( gama * R * T_in )
        k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
        p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
        p(1) = 2.0d0*p_in - p(2)
@@ -74,7 +76,7 @@ ue=0.0d0
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
 !-----------------------------------------------------		  
-      T_in = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*Rgases)
+      T_in = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
 	  call coeficientes_e_fontes_energia
@@ -83,7 +85,7 @@ ue=0.0d0
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
 	  ! cálculo da massa específica
-      ro = p / ( Rgases * T )
+      ro = p / ( R * T )
        
 	  call calculo_massa_especifica_nas_faces
 	  
@@ -113,9 +115,9 @@ ue=0.0d0
     p(n)  = p_ex
     T(n)  = T_ex
     
-    ro_in = p_in / ( Rgases * T_in )
+    ro_in = p_in / ( R * T_in )
     ro(1) = ro_in
-    ro_ex = p_ex / ( Rgases * T_ex )
+    ro_ex = p_ex / ( R * T_ex )
     ro(n) = ro_ex
 
 
@@ -292,6 +294,22 @@ end subroutine escreve_dados
     end if
     
   end subroutine escreve
+
+subroutine solucao_analitica()
+
+
+!campo de temperatura
+!campo de velocidade
+!campo de pressao
+!campo de ro
+!posicao do choque
+
+    call AARatioCalc(gama, Mach, AA)
+    call Mach2Calc(gama,mach,mach2)
+    
+    
+end subroutine solucao_analitica
+
 
 !-------------------------------------------------
 

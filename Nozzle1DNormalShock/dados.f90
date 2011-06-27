@@ -26,13 +26,16 @@ contains
 	read(7,*) iteracao
 	read(7,*) Lt
 	read(7,*) fDarcy
-	read(7,*) Rgases
+	read(7,*) R
 	read(7,*) gama
 	read(7,*) rin
 	read(7,*) rg
 	read(7,*) Lc
 	read(7,*) Ln
 	read(7,*) Beta
+	read(7,*) ! +Razao de refino
+    read(7,*) RazaoRef
+    read(7,*) Niveis
 	read(7,*) ! +Saida
     read(7,*) title
     read(7,*) caso
@@ -58,7 +61,7 @@ contains
 
 !-------------------------------------------------
 
-  subroutine inicializacao
+  subroutine init
     real*8 :: MachN, Machx, Machlx, razao, dx
     integer ::i, j
     ! alocação de memória
@@ -136,19 +139,19 @@ contains
 
 	! Calculando a área no ponto p
 	do i = 1, N
-	   Sp(i) = Pi*(Raio(i)**2)
+	   Sp(i) = Pi*(Raio(i)**2.0d0)
 	end do
 
 	! Calculando a área na face leste
 	do i = 1, N-1
 	   if(xe(i) >= Lc) then
-	        Se(i) = Pi*((rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(xe(i)-Lc)/Ln)))**2)
+	        Se(i) = Pi*((rg + ((rin-rg)/2.0d0)*(1.0d0+cos(2.0d0*PI*(xe(i)-Lc)/Ln)))**2.0d0)
 	   else
-            Se(i) = Pi*(rin**2)
+            Se(i) = Pi*(rin**2.0d0)
        end if
 	end do  
 
-    cp = gama*Rgases/(gama-1.0d0)
+    cp = gama*R/(gama-1.0d0)
     
     do j=1, N
         if (xp(j) < (lc+ln/2.0d0)) then
@@ -156,19 +159,19 @@ contains
         else
             Mach(j) = 2.0d0
         end if
-        razao = Sp(j)/(Pi*(rg**2))
+        razao = Sp(j)/(Pi*(rg**2.0d0))
         do i=1, 50
-            Machlx = (-1.0/(Mach(j)*Mach(j)))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach(j)*Mach(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mach(j)*Mach(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
+            Machlx = (-1.0d0/(Mach(j)*Mach(j)))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))+((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)-1.0d0);
             Machx = -razao + (1.0d0/Mach(j))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
             MachN = Mach(j) - Machx/Machlx
             Mach(j) = MachN
         end do
     end do
     
-    p = P_cam/(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0))
-    T = T_cam/(1.0d0+(gama-1.0d0)*(Mach**2)*0.5d0)
-    ro = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-    u = Mach*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(-1))**(0.5d0)
+    p = P_cam/(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(gama/(gama-1.0d0))
+    T = T_cam/(1.0d0+(gama-1.0d0)*(Mach**2.0d0)*0.5d0)
+    ro = (P_cam/(T_cam*R))*(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(-1.0d0/(gama-1.0d0))
+    u = Mach*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
     Ma = ro*Sp*u
     !solucao analitica para as faces
     !do j=1, N-1
@@ -199,8 +202,16 @@ contains
     Pa = p
     T_o=T
     
-  end subroutine inicializacao
+  end subroutine init
 
 !-------------------------------------------------
+
+subroutine dealloc()
+    deallocate (xp,xe,Sp,Se,M,Me,Raio,u,p, T, ro)
+    deallocate (pl,u_o,ue,ue_o,ds,de, p_o, ro_o, roe, ropA)
+    deallocate (afu,atu,btu,bpru)
+	deallocate (aw,ap,ae,bp, bf, bc)
+  	deallocate (Empuxo, Mach, Mache, Ma, Ua, Cd, Ta, T_o, Pa, roa, f)
+end subroutine dealloc
 
 end module dados

@@ -168,11 +168,11 @@ contains
        dx = xe(i) - xe(i-1)
 
        aw(i) = - roe(i-1) * de(i-1) * se(i-1)          &
-               - ue(i-1)  * se(i-1) / ( Rgases * T(i-1) )
+               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
 
        ae(i) = - roe(i) * de(i) * se(i)
 
-       ap(i) = ( sp(i) * dx / dt + ue(i) * se(i) ) / ( Rgases * T(i) )   &
+       ap(i) = ( sp(i) * dx / dt + ue(i) * se(i) ) / ( R * T(i) )   &
              + roe(i-1) * de(i-1) * se(i-1)                              &
              + roe(i)   * de(i)   * se(i)
 
@@ -277,7 +277,7 @@ oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
     integer ::i
     
     do i = 1, N
-	   ro(i) = ro(i) + pl(i)/(Rgases*T(i))
+	   ro(i) = ro(i) + pl(i)/(R*T(i))
 	end do 
 
   end subroutine corrigir_massa_especifica
@@ -288,7 +288,7 @@ subroutine calculo_massa_especifica
     integer ::i
     
     do i=1, N
-        ro(i) = p(i)/(Rgases*T(i))
+        ro(i) = p(i)/(R*T(i))
     end do    
     
 end subroutine calculo_massa_especifica
@@ -348,7 +348,7 @@ subroutine correcoes_com_plinha
     p = p + pl
 
     ! massa específica nodal
-    ro = ro + pl / ( Rgases * T )
+    ro = ro + pl / ( R * T )
 
     ! velocidade média
     do i = 1, n-1

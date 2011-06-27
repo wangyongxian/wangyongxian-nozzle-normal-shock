@@ -6,16 +6,19 @@
       50000            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
-      526.97d+0	       Rgases    = R
+      526.97d+0	       R         = R constante do gas
       1.1956d+0        gama      = gama
       0.3d+0	       rin       = rin
       0.1d+0	       rg        = rg
       0.1d+0	       Lc        = Lc
       0.4d+0	       Ln        = Ln
-      1.0d+0           beta      = esquema CDS - 1 UDS - 0            
+      1.0d+0           beta      = esquema CDS - 1 UDS - 0
++Razao de refino
+      2                RazaoRef  = Razao de refino
+      1                Niveis    = Niveis
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
-'resultado_caso_001.txt'                    ! arquivo de saída (até 50 caracteres)
+'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
 +Entrada de dados para o programa de Richardson
 'Richardson_3p0.in'                    `         ! nome do arquivo principal do programa Richardson (nao modificar)
 'Richardson_3p0_Caso_001.in'                     ! nome do arquivo de entrada de dados para o programa Richardson (até 50 caracteres)

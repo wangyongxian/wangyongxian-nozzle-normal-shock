@@ -43,7 +43,7 @@ real*8,dimension(:),allocatable :: xp, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
 real*8,dimension(:),allocatable :: bf, bc, f
 
-real*8 :: Rgases      ! constante dos gases
+real*8 :: R      ! constante dos gases
 real*8 :: cp      ! cp
 real*8 :: gama      ! gama
 real*8 :: rin      ! rin
@@ -76,5 +76,6 @@ character*50 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
 
+integer :: RazaoRef, Niveis
 
 end

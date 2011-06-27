@@ -30,10 +30,10 @@ contains
 subroutine WriteConfFile(filename1, filename2)
     character*50, intent(in) ::filename1
     character*50, intent(in) ::filename2
-open(12, file=filename1)
+open(14, file=filename1)
 25 format(A50,'(arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)',1/)
-write(12,25) filename2
-close(12)
+write(14,25) "'" // trim(adjustl(filename2)) // "'"
+close(14)
 end subroutine WriteConfFile
 
 subroutine CreateMeshFile(filename1, filename2, filename3, nmalhas)
@@ -41,7 +41,7 @@ subroutine CreateMeshFile(filename1, filename2, filename3, nmalhas)
     character*50, intent(in) ::filename2
     character*50, intent(in) ::filename3
     integer     , intent(in)  ::nmalhas
-    
+    integer ::i
 26 format (I8,  T30, '(variavel) número da variável, nos arquivos de resultados, a analisar', 1/, &
            A30, T30, '(caso)     nome do arquivo de saída', 1/, &
            I8,  T30, '(com_solucao_analitica) com solução analítica?   1 = sim;   0 = não', 1/, &
@@ -61,10 +61,11 @@ open(12, file=filename1)
 write(12,26) 5,'' // filename2 // '',0,'' // filename3 // '',1,1,&
                 3.0d0, 1, 500,1.0d-15,-10.0d0,100.0d0,5
 
-
+do i=1, nmalhas
 !'Teste_001.Richardson_3p0'  arq_numerico( 1) nome do arquivo com resultados numéricos na malha 1 (mais grossa)
 !'Teste_002.Richardson_3p0'  arq_numerico( 2) nome do arquivo com resultados numéricos na malha 2
-
+write(12,*) 
+end do
 close(12)
 
 end subroutine CreateMeshFile

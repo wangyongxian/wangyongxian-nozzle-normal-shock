@@ -14,15 +14,19 @@ use CriaArqRichadson
 implicit none
 
 !-------------------------------------------------
+    integer ::i
 
-
-!  call le_dados
-
- ! call inicializacao
-
-  !call solucao_numerica
-
-    call teste
+    call le_dados
+    
+    !do i=1, Niveis
+    !  call init
+    !  call solucao_numerica
+    !  call dealloc
+      
+    !  N = RazaoRef*N
+    !end do
+    call solucao_analitica
+    !call teste
 ! -----------------------------------------------
 
 contains
@@ -58,10 +62,10 @@ integer ::ver
     !call AARatioCalc(gama, Mach, AA)
     !call Mach2Calc(gama,mach,mach2)
     
-    call WriteConfFile(richardson_1, richardson_2)
-    !call CreateMeshFile(richardson_2,5)
+    !call WriteConfFile(richardson_1, richardson_2)
+    !call CreateMeshFile(richardson_2,richardson_3,richardson_4,5)
     
-    ver = system('teste.txt')
+    !!ver = system('teste.txt')
 write(*,*), 'a'
 end subroutine teste
 
