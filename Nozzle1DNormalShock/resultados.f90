@@ -304,8 +304,8 @@ subroutine solucao_analitica()
 !campo de ro
 !posicao do choque
 
-    call AARatioCalc(gama, Mach, AA)
-    call Mach2Calc(gama,mach,mach2)
+ !   call AARatioCalc(gama, Mach, AA)
+!    call Mach2Calc(gama,mach,mach2)
     
     
 end subroutine solucao_analitica
