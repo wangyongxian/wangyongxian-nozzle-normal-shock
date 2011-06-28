@@ -178,7 +178,8 @@ contains
 
        bp(i) = - ( ( ro(i) - ro_o(i) ) * sp(i) * dx / dt              &
              + ro(i) * ue(i) * se(i) - ro(i-1) * ue(i-1) * se(i-1) )
-oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
+       
+       oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 
        leste = se(i)   * ( ro(i+1) - ro(i) ) * ue(i)
 

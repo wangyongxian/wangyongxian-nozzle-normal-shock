@@ -14,7 +14,7 @@ contains
 
   subroutine le_dados
 
-   ! ver = system('notepad dados_entrada.ent') ! lista dados
+    ver = system('notepad entrada_dados.txt') ! lista dados
 
     open(7,file='entrada_dados.txt')
 

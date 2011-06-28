@@ -18,15 +18,15 @@ implicit none
 
     call le_dados
     
-    !do i=1, Niveis
-    !  call init
-    !  call solucao_numerica
-    !  call dealloc
+    do i=1, Niveis
+      call init
+      call solucao_numerica
+      call dealloc
       
-    !  N = RazaoRef*N
-    !end do
-    !call solucao_analitica
-    call teste
+      N = RazaoRef*N
+    end do
+    call solucao_analitica
+    !call teste
 ! -----------------------------------------------
 
 contains
