@@ -1,8 +1,5 @@
 program Nozzle1DNormalShock
 !
-!A = 1.0d0+2.2d0*(x-1.5d0)**2 0<=x<=3
-! -----------------------------------------------
-
 use dados
 
 use resultados
@@ -47,7 +44,8 @@ integer ::ver
     !call T2Calc(gama, Mach1, T1, T2)
     
     !call U2Calc(gama, Mach1, U1, U2)
-!ShockLocationCalc
+
+
 !P0Calc
 !T0Calc
 !Ro0Calc

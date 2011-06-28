@@ -106,7 +106,7 @@ contains
     ap(1) = 1.0d0
     ae(1) = 1.0d0
     bp(1) = 2.0d0 * T_in
- bc(1) = 0.0d0
+    bc(1) = 0.0d0
     ! volumes internos
 
     do i = 2, n-1
@@ -236,16 +236,6 @@ contains
 
 !-------------------------------------------------
 
-  subroutine corrigir_pressao
-    integer ::i
-	do i = 1, N
-	   p(i) = p(i) + pl(i)
-	end do 
-
-  end subroutine corrigir_pressao
-
-!-------------------------------------------------
-  
   subroutine corrigir_velocidades
     integer ::i
      !arrumar
@@ -347,6 +337,7 @@ subroutine correcoes_com_plinha
     
     ! pressão
     p = p + pl
+    p(N) = P_out
 
     ! massa específica nodal
     ro = ro + pl / ( R * T )

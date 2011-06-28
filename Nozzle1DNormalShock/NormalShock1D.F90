@@ -71,27 +71,28 @@ subroutine U2Calc(gama, Mach1, U1, U2)
 
 end subroutine
 
-subroutine ShockLocationCalc(Pe, P01, Ae, At, AA)
+subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA)
+    real*8, intent(in) ::gama
     real*8, intent(in) ::Pe
     real*8, intent(in) ::P01
+    real*8, intent(inout) ::P02
     real*8, intent(in) ::Ae
-    real*8, intent(in) ::At
+    real*8, intent(in) ::A
     real*8, intent(out)::AA
     real*8 ::Me
-    real*8 ::P02
     real*8 ::factor
     real*8 ::Mach
     
-    factor = pe*Ae/(p01*At)
+    factor = pe*A/(p01)
     !Calcula o mach de saida
     Me = dsqrt(-1.0d0/(gama-1.0d0)+dsqrt(1.0d0/(gama-1.0d0)**2.0d0 + &
                                     (2.0d0/(gama-1.0d0))*((2.0d0/(gama+1.0d0))**((gama+1.0d0)/(gama-1.0d0)))* & 
-                                    ((factor)**2.0d0)) )
+                                    ((1.0d0/factor)**2.0d0)) )
     
     !calculo da pressao de estagnacao apos o choque
     call P0Calc(gama, Pe, Me, P02)                           
     
-    Mach = ROOT(gama, P01, P02, 1.0d0)
+    Mach = ROOT(gama, P01, P02, 10.0d0)
     
     call AARatioCalc(gama, Mach, AA)
 
@@ -183,8 +184,8 @@ REAL*8 FUNCTION ROOT(gama, P01, P02, CHUTE)
     M2_DL = 2.0d0*gama*M 
     M2 = M2_N/M2_D
     D = 1.0d0+0.5d0*(gama-1.0d0)*M2
-    DL = 0.5d0*(gama-1.0d0)*((M2_NL*M2_D - M2_DL*M2_N)/M2_D**2.0d0)
-    P = gama/(gama-1)
+    DL = 0.5d0*(gama-1.0d0)*((M2_NL*M2_D - M2_DL*M2_N)/(M2_D**2.0d0))
+    P = gama/(gama-1.0d0)
     F = 1.0d0+2.0d0*gama*(M**2.0d0-1.0d0)/(gama+1.0d0) &
         -(P02/P01)*(N/D)**P
     FL = 4.0d0*gama*M/(gama+1.0d0)-(P02/P01)*(gama/(gama-1))* &
@@ -195,5 +196,19 @@ REAL*8 FUNCTION ROOT(gama, P01, P02, CHUTE)
   END DO
 END FUNCTION
 
+subroutine ShockFinder(AA, N, pos)
+integer, intent(inout) ::pos
+real*8, intent(in)  ::AA
+!real*8 ::AAp
+integer ::N
+integer ::i
+do i=N-1, 1, -1
+    if (aap(i-1) < AA .and. AA < aap(i+1) ) then
+       pos = i 
+       exit
+    end if
+end do
+end subroutine ShockFinder
 
 end module NormalShock1D
+

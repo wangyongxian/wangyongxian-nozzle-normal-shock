@@ -62,8 +62,9 @@ real*8 :: pl_in ! variação da pressão na entrada da tubeira (Pa)
 real*8 :: p_ex  ! pressão na saída da tubeira (Pa)
 real*8 :: T_ex  ! temperatura na saída da tubeira (K)
 real*8 :: ro_ex ! massa específica na saída da tubeira (m/s)
+real*8 :: P_out
 
-real*8,dimension(:),allocatable :: ap, aw, ae, bp ! coeficiente central de u e p
+real*8,dimension(:),allocatable :: ap, aw, ae, bp, AAp ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 

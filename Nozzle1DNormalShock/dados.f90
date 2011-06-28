@@ -2,7 +2,7 @@ module dados
 
 
 use variaveis
-
+use NormalShock1D
 !-------------------------------------------------
 
 implicit none
@@ -20,6 +20,7 @@ contains
 
 	read(7,*) ! +Propriedades
 	read(7,*) P_cam
+	read(7,*) P_out
 	read(7,*) T_cam
     read(7,*) N
     read(7,*) dt
@@ -62,14 +63,15 @@ contains
 !-------------------------------------------------
 
   subroutine init
-    real*8 :: MachN, Machx, Machlx, razao, dx
-    integer ::i, j
+    real*8 :: MachN, Machx, Machlx, razao, dx, AA, P02
+    integer ::i, j, pos
     ! alocação de memória
     allocate (xp(N),xe(N),Sp(N),Se(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), ro(N))
     allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N), ropA(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N))
-  	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N))
+  	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N), AAp(N))
+  	AAp = 0.0d0
   	f = 0.0d0
   	T_o=0.0d0
   	Ta = 0.0d0
@@ -141,6 +143,7 @@ contains
 	do i = 1, N
 	   Sp(i) = Pi*(Raio(i)**2.0d0)
 	end do
+	   AAp = (Raio/rg)**2.0d0
 
 	! Calculando a área na face leste
 	do i = 1, N-1
@@ -153,8 +156,15 @@ contains
 
     cp = gama*R/(gama-1.0d0)
     
+    !localiza o choque
+    !ShockLocationCalc(gama, Pe, P01, Ae, A, AA)
+    call ShockLocationCalc(gama, P_out, P_cam, P02, 0.0d0,(rin/rg)**2.0d0, AA)
+    
+    call ShockFinder(AA, N, pos)
+    !call ShockLocationCalc(1.4d0,0.5d0, 1.0d0, 0.0d0, 3.0d0, AA)
+    
     do j=1, N
-        if (xp(j) < (lc+ln/2.0d0)) then
+        if (xp(j) < (lc+ln/2.0d0) .or. j >= pos ) then
             Mach(j) = 0.1d0
         else
             Mach(j) = 2.0d0
@@ -167,29 +177,24 @@ contains
             Mach(j) = MachN
         end do
     end do
-    
-    p = P_cam/(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(gama/(gama-1.0d0))
-    T = T_cam/(1.0d0+(gama-1.0d0)*(Mach**2.0d0)*0.5d0)
-    ro = (P_cam/(T_cam*R))*(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(-1.0d0/(gama-1.0d0))
-    u = Mach*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
+    ! arrumar arq d saida
+    ! variar o DT
+    !verificar a pressao com 1 iteracao
+    do i=1, N
+    if (i < pos) then
+        p(i) = P_cam/(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(gama/(gama-1.0d0))
+        T(i) = T_cam/(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)*0.5d0)
+        ro(i) = (P_cam/(T_cam*R))*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        u(i) = Mach(i)*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
+    else
+        p(i) = P02/(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(gama/(gama-1.0d0))
+        T(i) = T_cam/(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)*0.5d0)
+        ro(i) = (P02/(T_cam*R))*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0/(gama-1.0d0))
+        u(i) = Mach(i)*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
+    end if
+    end do
     Ma = ro*Sp*u
-    !solucao analitica para as faces
-    !do j=1, N-1
-    !    if (xe(j) < (lc+ln/2.0d0)) then
-    !        Mache(j) = 0.1d0
-    !    else
-    !        Mache(j) = 2.0d0
-    !    end if
-    !    razao = Se(j)/(Pi*(rg**2))
-    !    do i=1, 50
-    !        Machlx = (-1.0/(Mache(j)*Mache(j)))*(((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)))+((2.0/(gama+1.0))*(1.0+(gama-1.0)*Mache(j)*Mache(j)/2.0))**((gama+1.0)/(2.0*gama-2.0)-1.0);
-    !        Machx = -razao + (1.0d0/Mache(j))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mache(j)*Mache(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
-    !        MachN = Mache(j) - Machx/Machlx
-    !        Mache(j) = MachN
-    !    end do
-    !    roe(j) = (P_cam/(T_cam*rgases))*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1.0d0/(gama-1.0d0))
-    !    ue(j) = Mache(j)*(gama*rgases*T_cam*(1.0d0+(gama-1.0d0)*(Mache(j)**2)/2.0d0)**(-1))**(0.5d0)
-    !end do
+    
     Ua = u
     roa = ro
     ro_o = ro

@@ -252,7 +252,7 @@ end subroutine escreve_dados
 	
 	open(23, file='p.dat')
     do i = 1, N
-	  write(23,48) xp(i), p(i), p(i), raio(i)
+	  write(23,48) xp(i), pa(i), p(i), raio(i)
 	end do
 	
     close(23)
@@ -269,7 +269,7 @@ end subroutine escreve_dados
 	close(22)
     
     if (graf_p) then
-    
+        ver = system('wgnuplot p.gnu')
     end if
     if (graf_cdesc) then
     
