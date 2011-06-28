@@ -18,8 +18,8 @@ contains
     real*8 :: M_in ! número de Mach na entrada
     
 	tcpu = timef() ! zera cronômetro
-    ue=0.0d0
-    p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
+    ue = 0.0d0
+    !p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
     ro    = p / ( R * T )
     ue    = u(1:n-1)
     pl    = 0.0d0
@@ -123,9 +123,7 @@ contains
 
 	tcpu = timef()
 	
-    ! escrita da variável primária e sua visualização
-    call escreve
-    call escreve_dados
+
 
   end subroutine solucao_numerica
 
@@ -213,8 +211,6 @@ subroutine escreve_dados
 	  write(10,9) i, ro(i), roa(i), (roa(i) - ro(i))
 	end do
 
-	
-
 	close(10)
     ver = system('resultados.txt')
     
@@ -223,9 +219,9 @@ end subroutine escreve_dados
   subroutine escreve
     integer ::i
     
-    call calcula_empuxo
-    call calcula_coeficiente_descarga
-    call calcula_fluxo_massa
+    !call calcula_empuxo
+    !call calcula_coeficiente_descarga
+    !call calcula_fluxo_massa
 
     
     
@@ -233,7 +229,6 @@ end subroutine escreve_dados
     do i = 1, N
 	  write(23,*) xp(i), Ma(i), M(i)
 	end do
-	
     close(23)
    ! ver = system('wgnuplot fm.gnu')
     

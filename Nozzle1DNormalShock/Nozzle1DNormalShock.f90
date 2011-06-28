@@ -18,10 +18,15 @@ implicit none
     do i=1, Niveis
       call init
       call solucao_numerica
-      call dealloc
-      
-      N = RazaoRef*N
+      !call dealloc
+        ! escrita da variável primária e sua visualização
+
+    
+      !N = RazaoRef*N
     end do
+    
+    call escreve
+    call escreve_dados
     call solucao_analitica
     !call teste
 ! -----------------------------------------------

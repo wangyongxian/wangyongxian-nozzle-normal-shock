@@ -136,8 +136,6 @@ contains
            Raio(i) = rin
         end if
     end do
-  
-
 
 	! Calculando a área no ponto p
 	do i = 1, N
