@@ -63,11 +63,11 @@ contains
 !-------------------------------------------------
 
   subroutine init
-    real*8 :: MachN, Machx, Machlx, razao, dx, AA, P02
+    real*8 :: MachN, Machx, Machlx, razao, dx, AA, P02, At
     integer ::i, j, pos
     ! alocação de memória
     allocate (xp(N),xe(N),Sp(N),Se(N),M(N),Me(N),Raio(N),u(N),p(N), T(N), ro(N))
-    allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N), ropA(N))
+    allocate (pl(N),u_o(N),ue(N),ue_o(N),ds(N),de(N), p_o(N), ro_o(N), roe(N))
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N))
   	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N), AAp(N))
@@ -75,7 +75,6 @@ contains
   	f = 0.0d0
   	T_o=0.0d0
   	Ta = 0.0d0
-  	ropA = 0.0d0
   	Cd = 0.0d0
   	Ua = 0.0d0
   	Empuxo = 0.0d0
@@ -155,19 +154,22 @@ contains
     cp = gama*R/(gama-1.0d0)
     
     !localiza o choque
-    !ShockLocationCalc(gama, Pe, P01, Ae, A, AA)
-    call ShockLocationCalc(gama, P_out, P_cam, P02, 0.0d0,(rin/rg)**2.0d0, AA)
+    call ShockLocationCalc(gama, P_out, P_cam, P02, Se(N-1),(rin/rg)**2.0d0, AA, At)
     
     call ShockFinder(AA, N, pos)
     !call ShockLocationCalc(1.4d0,0.5d0, 1.0d0, 0.0d0, 3.0d0, AA)
     
     do j=1, N
-        if (xp(j) < (lc+ln/2.0d0) .or. j >= pos ) then
+        if (xp(j) < (lc+ln/2.0d0) ) then
             Mach(j) = 0.1d0
-        else
+            razao = Sp(j)/(Pi*(rg**2.0d0))
+        elseif ( j < pos) then
+            razao = Sp(j)/(Pi*(rg**2.0d0))
             Mach(j) = 2.0d0
+        else
+            razao = Sp(j)/At
+            Mach(j) = 0.1d0
         end if
-        razao = Sp(j)/(Pi*(rg**2.0d0))
         do i=1, 50
             Machlx = (-1.0d0/(Mach(j)*Mach(j)))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))+((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)-1.0d0);
             Machx = -razao + (1.0d0/Mach(j))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach(j)*Mach(j)/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
@@ -191,19 +193,18 @@ contains
         u(i) = Mach(i)*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
     end if
     end do
-    Ma = ro*Sp*u
+    !Ma = ro*Sp*u
     
     Ua = u
+    Ta = T    
+    Pa = p
     roa = ro
     ro_o = ro
     roe = ro
     p_o = p
     u_o = u
     ue_o = u
-    ropA = ro
-    Ta = T    
-    Pa = p
-    T_o=T
+    T_o = T
     
   end subroutine init
 
@@ -211,7 +212,7 @@ contains
 
 subroutine dealloc()
     deallocate (xp,xe,Sp,Se,M,Me,Raio,u,p, T, ro)
-    deallocate (pl,u_o,ue,ue_o,ds,de, p_o, ro_o, roe, ropA)
+    deallocate (pl,u_o,ue,ue_o,ds,de, p_o, ro_o, roe)
     deallocate (afu,atu,btu,bpru)
 	deallocate (aw,ap,ae,bp, bf, bc)
   	deallocate (Empuxo, Mach, Mache, Ma, Ua, Cd, Ta, T_o, Pa, roa, f)

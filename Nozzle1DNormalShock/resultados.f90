@@ -208,7 +208,7 @@ subroutine escreve_dados
 	write(10,16)
     16 format(//,t1,'volume',t13,'Mach(Analitico)',t34,'Mach(Numerico)',t55,'Erro')
 	do i = 1, N
-	  write(10,9) i, Ma(i), M(i), (Ma(i) - M(i))
+	  write(10,9) i, Mach(i), M(i), (Mach(i) - M(i))
 	end do
 	
 	!massa especifica
@@ -252,7 +252,7 @@ end subroutine escreve_dados
     
     open(23, file='ro.dat')
     do i = 1, N
-	  write(23,48) xp(i), ropA(i), ro(i), raio(i)
+	  write(23,48) xp(i), roa(i), ro(i), raio(i)
 	end do
 	
 	open(23, file='p.dat')

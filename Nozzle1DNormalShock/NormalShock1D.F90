@@ -71,7 +71,7 @@ subroutine U2Calc(gama, Mach1, U1, U2)
 
 end subroutine
 
-subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA)
+subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA, At)
     real*8, intent(in) ::gama
     real*8, intent(in) ::Pe
     real*8, intent(in) ::P01
@@ -79,6 +79,7 @@ subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA)
     real*8, intent(in) ::Ae
     real*8, intent(in) ::A
     real*8, intent(out)::AA
+    real*8, intent(out)::At
     real*8 ::Me
     real*8 ::factor
     real*8 ::Mach
@@ -95,7 +96,8 @@ subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA)
     Mach = ROOT(gama, P01, P02, 10.0d0)
     
     call AARatioCalc(gama, Mach, AA)
-
+    
+    call NewACalc(gama, Me, Ae, At)
 end subroutine
 
 subroutine P0Calc(gama, P, Mach, P0)
@@ -136,6 +138,16 @@ subroutine AARatioCalc(gama, Mach, AA)
     AA = dsqrt((1.0d0/Mach**2.0d0)*((2.0d0/(gama+1.0d0))*(1.0d0+((gama-1.0d0)/2.0d0)*Mach**2.0d0))**((gama+1.0d0)/(gama-1.0d0)))
 
 end subroutine AARatioCalc
+
+subroutine NewACalc(gama, Mach, A, At)
+    real*8, intent(in)  ::gama
+    real*8, intent(in)  ::Mach
+    real*8, intent(in)  ::A
+    real*8, intent(out) ::At
+    
+    At = A/dsqrt((1.0d0/Mach**2.0d0)*((2.0d0/(gama+1.0d0))*(1.0d0+((gama-1.0d0)/2.0d0)*Mach**2.0d0))**((gama+1.0d0)/(gama-1.0d0)))
+
+end subroutine NewACalc
 
 subroutine ACalc(gama, R, T, a)
     real*8, intent(in)  ::gama
