@@ -65,6 +65,9 @@ contains
 	
 	
 	open(8, file='norma_l1.txt')
+	write(8,4)
+	4 format(t1,'iteracao',t18 ,'Residuo T',t38 ,'Residuo U',t58,'Residuo Pl')
+	
     do it = 1, iteracao
 	
 	   ! atualização da pressão na entrada da tubeira
@@ -105,7 +108,7 @@ contains
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
-	  call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_T)
+	  call Norma_L1 (N,ap,aw,ae,bp,T,Residuo_T)
 	  Residuo_T = Residuo_T/Residuo_T_o
 	   
 	  ! cálculo da massa específica
@@ -119,14 +122,13 @@ contains
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
       
-      call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_P)
+      call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
 	  Residuo_P = Residuo_P/Residuo_P_o
 	   
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
       
       T_ex   = 0.5d0 * ( T(n-1) + T(n) )
-      
       
       write(8,16) it, Residuo_T, Residuo_U, Residuo_P
 	   16 format (i11,5x,3(1pe20.13))
@@ -235,8 +237,8 @@ subroutine escreve_dados
 	!Mach
 	write(10,16)
     16 format(//,t1,'volume',t13,'Mach(Analitico)',t34,'Mach(Numerico)',t55,'Erro')
-	do i = 1, N
-	  write(10,9) i, Mach(i), M(i), (Mach(i) - M(i))
+	do i = 1, N 
+	  write(10,9) i, Mach(i), (u(i)/dsqrt(gama*R*T(i))), (Mach(i) - (u(i)/dsqrt(gama*R*T(i))))
 	end do
 	
 	!massa especifica
@@ -277,7 +279,7 @@ end subroutine escreve_dados
     
     open(23, file='Mach.dat')
     do i = 1, N
-	  write(23,48) xp(i), Mach(i), M(i), raio(i)*10000.d0
+	  write(23,48) xp(i), Mach(i), (u(i)/dsqrt(gama*R*T(i))), raio(i)
 	end do
 	
 	close(23)

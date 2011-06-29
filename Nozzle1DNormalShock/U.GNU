@@ -5,5 +5,5 @@ replot 'u.dat' using 1:3 title 'numérica'
 replot 'u.dat' using 1:4 title 'geometria'
 set xlabel 'x (m)'
 set ylabel 'u (m/s)'
-set title 'Resultado para N='                              
+set title ''                              
 replot

@@ -5,5 +5,5 @@ replot 'mach.dat' using 1:3 title 'numérica'
 replot 'mach.dat' using 1:4 title 'geometria'
 set xlabel 'x (m)'
 set ylabel 'Mach'
-set title 'Resultado para N='                              
+set title ''                              
 replot
