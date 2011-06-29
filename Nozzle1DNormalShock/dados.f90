@@ -52,10 +52,13 @@ contains
     read(7,*) graf_v ! velocidade
     read(7,*) graf_ro ! massa especifica
     read(7,*) graf_p ! pressao
-    read(7,*) graf_mach ! pressao
+    read(7,*) graf_mach ! mach
     read(7,*) graf_e ! empuxo
     read(7,*) graf_cdesc ! coeficiente de descarga
     read(7,*) graf_dom ! coeficiente de descarga
+    read(7,*) ! +Resultados (1 - para mostrar 0 - para nao mostrar)
+    read(7,*) res_result ! coeficiente de descarga
+    read(7,*) res_iter ! coeficiente de descarga
     
     close(7)
 
@@ -72,6 +75,7 @@ contains
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N))
   	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N), AAp(N))
+  	
   	AAp = 0.0d0
   	f = 0.0d0
   	T_o=0.0d0

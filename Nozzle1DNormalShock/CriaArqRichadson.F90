@@ -21,7 +21,7 @@ subroutine CreateMeshFile(filename1, filename2, filename3, filename_template, nm
     character*100, intent(in) ::filename3
     character*100, intent(in) ::filename_template
     integer     , intent(in)  ::nmalhas
-    integer ::i, num
+    integer ::i
     character*100 ::form1
     character*100 ::form2
     character*100 ::arquivo

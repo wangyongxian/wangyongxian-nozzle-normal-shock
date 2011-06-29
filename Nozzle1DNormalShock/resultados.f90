@@ -1,5 +1,6 @@
 module resultados
 
+use variaveis
 use coeficientes
 use solvers_1D
 use NormalShock1D
@@ -49,6 +50,21 @@ contains
     de = 0.0d0
     ds = 0.0d0
     
+    !residuo
+    call coeficientes_e_fontes_qml
+    call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
+	Residuo_U_o = Residuo_U
+	
+	call coeficientes_fontes_massa
+	call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
+	Residuo_P_o = Residuo_P
+	
+	call coeficientes_e_fontes_energia
+	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
+	Residuo_T_o = Residuo_T
+	
+	
+	open(8, file='norma_l1.txt')
     do it = 1, iteracao
 	
 	   ! atualização da pressão na entrada da tubeira
@@ -71,7 +87,10 @@ contains
 	   
 	   ! solução do sistema de equações
 	   call tdma (N,ap,aw,ae,bp,u)	
-	   
+	  
+	   call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
+	   Residuo_U = Residuo_U/Residuo_U_o
+	    
        ! cálculo dos coeficientes do método SIMPLEC
 	   call coeficientes_simplec
 	   
@@ -86,6 +105,9 @@ contains
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
+	  call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_T)
+	  Residuo_T = Residuo_T/Residuo_T_o
+	   
 	  ! cálculo da massa específica
       ro = p / ( R * T )
        
@@ -97,14 +119,22 @@ contains
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
       
+      call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_P)
+	  Residuo_P = Residuo_P/Residuo_P_o
+	   
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
       
       T_ex   = 0.5d0 * ( T(n-1) + T(n) )
+      
+      
+      write(8,16) it, Residuo_T, Residuo_U, Residuo_P
+	   16 format (i11,5x,3(1pe20.13))
+	   
 !-----------------------------------------------------	      
 
 	end do
-    
+    close(8)
     ! entrada da tubeira
     u(1)  = u_in
     p(1)  = p_in
@@ -123,8 +153,6 @@ contains
     ro(n) = ro_ex
 
 	tcpu = timef()
-	
-
 
   end subroutine solucao_numerica
 
@@ -141,7 +169,6 @@ subroutine escreve_dados
     character*12 :: dia       ! data da simulação
     character*8  :: hora      ! horário da simulação
     character*62 :: head      ! título do gráfico + dia
-    integer :: comp, comp1
 
     open(10, file="resultados.txt")
         
@@ -223,25 +250,22 @@ subroutine escreve_dados
     10 format(/, f14.3, ' = tempo de processamento (segundos)')
     
 	close(10)
-    ver = system('resultados.txt')
+    
     
 end subroutine escreve_dados
 
   subroutine escreve
     integer ::i
     
-    !call calcula_empuxo
-    !call calcula_coeficiente_descarga
-    !call calcula_fluxo_massa
-
-    
+    call calcula_empuxo
+    call calcula_coeficiente_descarga
+    call calcula_fluxo_massa
     
     open(23, file='fm.dat')
     do i = 1, N
 	  write(23,*) xp(i), Ma(i), M(i)
 	end do
     close(23)
-   ! ver = system('wgnuplot fm.gnu')
     
     open(23, file='u.dat')
     do i = 1, N
@@ -251,6 +275,12 @@ end subroutine escreve_dados
 	
     close(23)
     
+    open(23, file='Mach.dat')
+    do i = 1, N
+	  write(23,48) xp(i), Mach(i), M(i), raio(i)*10000.d0
+	end do
+	
+	close(23)
     open(23, file='ro.dat')
     do i = 1, N
 	  write(23,48) xp(i), roa(i), ro(i), raio(i)
@@ -278,10 +308,10 @@ end subroutine escreve_dados
         ver = system('wgnuplot p.gnu')
     end if
     if (graf_cdesc) then
-    
+        ver = system('wgnuplot coef_descarga.gnu')
     end if
     if (graf_e) then
-    
+        ver = system('wgnuplot empuxo.gnu')
     end if
     if (graf_dom) then
         ver = system('wgnuplot dominio.gnu')
@@ -300,6 +330,14 @@ end subroutine escreve_dados
     end if
     if(graf_mach)then
        ver = system('wgnuplot Mach.gnu')
+    end if
+    
+    if (res_result) then
+        ver = system('resultados.txt')
+    end if
+    
+    if (res_iter) then
+        ver = system('norma_l1.txt')
     end if
     
   end subroutine escreve

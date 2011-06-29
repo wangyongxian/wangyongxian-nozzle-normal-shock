@@ -26,7 +26,7 @@
 'Caso_001.txt'                                   ! nome do arquivo de saída (até 50 caracteres)
 'Caso_Choque_Normal_Caso_001.Richardson_3p0'     ! nome do arquivo de entrada com a solução analítica exata (até 50 caracteres)
 12345    1         2         3         4         5         6         7         8         9
-+Graficos 1 - para ligar 0 para desligar
++Graficos (1 - para mostrar 0 - para nao mostrar)
 0    = fluxo de massa
 1    = temperatura
 1    = velocidade
@@ -36,3 +36,6 @@
 0    = empuxo
 0    = coeficiente de descarga
 0    = dominio
++Resultados (1 - para mostrar 0 - para nao mostrar)
+1    = txt de resultados
+1    = txt de iteracoes

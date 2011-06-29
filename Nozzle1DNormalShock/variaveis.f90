@@ -76,7 +76,10 @@ character*100 :: richardson_4      ! nome do arquivo de entrada com a solução an
 character*50 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom, graf_mach
+integer :: res_iter, res_result
 
 integer :: RazaoRef, Niveis
+!calculo do residuo
+real*8 ::Residuo_T, Residuo_T_o,Residuo_P, Residuo_P_o,Residuo_U, Residuo_U_o
 
 end

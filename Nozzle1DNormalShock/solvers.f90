@@ -50,12 +50,8 @@ subroutine TDMA (N,ap,aw,ae,bp,T)
 
   end subroutine TDMA
   
-
- 
 !-------------------------------------------------
-  
   ! calcula a norma l1 média do resíduo das equações
-
  subroutine Norma_L1 ( n, aw, ap, ae, bp, T, norma )
 
     implicit none
