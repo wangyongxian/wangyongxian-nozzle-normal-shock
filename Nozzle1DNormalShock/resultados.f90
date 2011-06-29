@@ -18,6 +18,7 @@ contains
     real*8 :: M_in ! número de Mach na entrada
     
 	tcpu = timef() ! zera cronômetro
+	
     ue = 0.0d0
     !p     = p_cam/((1.0d0+(gama-1.0d0)*(Mach**2)/2.0d0)**(gama/(gama-1.0d0)))
     ro    = p / ( R * T )
@@ -120,7 +121,6 @@ contains
     ro_ex = p_ex / ( R * T_ex )
     ro(n) = ro_ex
 
-
 	tcpu = timef()
 	
 
@@ -130,87 +130,97 @@ contains
 !-------------------------------------------------
 subroutine escreve_dados
     integer ::i
-    
+    integer*4    :: var(8)    ! data e hora
+    character*20 :: vardate   ! data e hora
+    character*20 :: vartime   ! data e hora
+    character*20 :: varzone   ! data e hora
+    character*2  :: aux1,aux2
+    character*4  :: aux3
+    character*50 :: aux
+    character*12 :: dia       ! data da simulação
+    character*8  :: hora      ! horário da simulação
+    character*62 :: head      ! título do gráfico + dia
+    integer :: comp, comp1
+
     open(10, file="resultados.txt")
+        
+    call date_and_time(vardate,vartime,varzone,var)
+    
+    write(aux,*) var(5)
+    aux1 = trim(adjustl(aux))
+    write(aux,*) var(6)
+    aux2 = trim(adjustl(aux))
+    write(aux,*) var(7)
+    aux3 = trim(adjustl(aux))
+    hora = trim(aux1)//':'//trim(aux2)//':'//aux3
+    
+    head = trim(title)//" "//trim(dia)//"'"
+    
+    !write(10,2) trim(adjustl(title)), dia, hora
+    !2 format(/,'Título = ', a<comp1>, &
+    !        //,5x,'Dia = ',a12,5x,'Hora = ',a8)
+    !comp = len(trim(adjustl(caso)))
 
-	write(10,1)
-    1 format(/,t4,'volume',t13,'x versus velocidades u (nodais)',/)
+    write(10,1)  P_cam, P_out, T_cam, N, dt, iteracao, Lt, fDarcy, R, Gama, rin, rg, Lc, Ln, Beta
 
-	do i = 1, N
-	  write(10,2) i, xp(i), u(i)
-      2 format(i4,4x,2(1pe21.11))
-	end do
+    1 format(/,2x,'DADOS',//,  &
+                ! a<comp>,  ' = caso',/, &	 
+				 1pe16.8,  ' = pressao de estagnacao',/, &
+				 1pe16.8,  ' = pressao da saida',/, &
+				 1pe16.8,  ' = temperatura de estagnacao',/, &
+				 8x,i8,    ' = número de volumes de controle',/, &
+				 1pe16.8,  ' = número de avanços no tempo',/, &
+				 8x,i8,    ' = número de iterações (ciclo total)',/, &
+				 1pe16.8,  ' = comprimento do domínio de cálculo',/, &
+				 1pe16.8,  ' = fator de atrito de Darcy',/, &
+				 1pe16.8,  ' = R constante do gas',/,    &
+				 1pe16.8,  ' = Gama',/,  & 
+				 1pe16.8,  ' = Rin',/,  & 
+				 1pe16.8,  ' = Rg',/,  & 
+				 1pe16.8,  ' = Lc',/,  & 
+				 1pe16.8,  ' = Ln',/,  & 
+				 1pe16.8,  ' = Beta',/)
+
+    9 format(i4,4x,4(1pe21.11))
 	
-	write(10,3)
-    3 format(//,t4,'volume',t13,'x versus velocidades u (faces)',/)
-
-	do i = 1, N
-	  if (i == N) then
-	     xe(N) = xe(N-1)
-		 ue(N) = ue(N-1)
-	  end if
-	  write(10,4) i, xe(i), ue(i)
-      4 format(i4,4x,2(1pe21.11))
-	end do
-
-	write(10,5)
-    5 format(//,t4,'volume',t13,'x versus fluxo de massa nas faces',/)
-
-	do i = 1, N 
-	  if (i == N) then
-	     xe(N) = xe(N-1)
-		 Me(N) = Me(N-1)
-	  end if
-	  write(10,7) i, xe(i), Me(i)
-      7 format(i4,4x,2(1pe21.11))
-	end do
-
-	close(9)
-
-	write(10,8)
-    8 format(//,t4,'volume',t13,'x versus pressões (p e plinha)',/)
-
-
-	do i = 1, N
-	  write(10,9) i, xp(i), p(i), pl(i)
-      9 format(i4,4x,3(1pe21.11))
-	end do
-    !velocudade nodal
 	write(10,13)
-    13 format(//,t4,'volume',t13,'xp',t13,'u',t13,'ua',t13,'erro',/)
+    13 format(//,t1,'volume',t2,'U(Analitica)',t2,'U(Numerica)',t2,'Erro',/)
 
 	do i = 1, N
-	  write(10,9) i, u(i), ua(i), (ua(i) - u(i))
+	  write(10,9) i, ua(i), u(i), (ua(i) - u(i))
 	end do
 	
 	!Temperarura
 	write(10,14)
-    14 format(//,t4,'volume',t13,'xp',t13,'u',t13,'ua',t13,'temperatura',/)
+    14 format(//,8x,'volume',t13,'T(Analitica)',t13,'T(Numerica)',t13,'Erro',/)
 	do i = 1, N
-	  write(10,9) i, T(i), Ta(i), (Ta(i) - T(i))
+	  write(10,9) i, Ta(i), T(i), (Ta(i) - T(i))
 	end do
 	
 	!pressao
 	write(10,15)
-    15 format(//,t4,'volume',t13,'xp',t13,'u',t13,'ua',t13,'pressao',/)
+    15 format(//,t4,'volume',t13,'P(Analitica)',t13,'P(Numerica)',t13,'Erro',/)
 	do i = 1, N
-	  write(10,9) i, P(i), Pa(i), (Pa(i) - p(i))
+	  write(10,9) i, Pa(i), P(i), (Pa(i) - p(i))
 	end do
 	
 	!Mach
-	!write(10,16)
-    !16 format(//,t4,'volume',t13,'xp',t13,'u',t13,'ua',t13,'mach',/)
-	!do i = 1, N
-	 ! write(10,9) i, M(i), Ma(i), (Ma(i) - M(i))
-!	end do
+	write(10,16)
+    16 format(//,t4,'volume',t13,'Mach(Analitico)',t13,'Mach(Numerico)',t13,'Erro',/)
+	do i = 1, N
+	  write(10,9) i, Ma(i), M(i), (Ma(i) - M(i))
+	end do
 	
 	!massa especifica
 	write(10,17)
-    17 format(//,t4,'volume',t13,'xp',t13,'u',t13,'ua',t13,'ro',/)
+    17 format(//,t4,'volume',t13,'RO(Analitico)',t13,'RO(Numerico)',t13,'Erro',/)
 	do i = 1, N
-	  write(10,9) i, ro(i), roa(i), (roa(i) - ro(i))
+	  write(10,9) i, roa(i), ro(i), (roa(i) - ro(i))
 	end do
 
+    write(10,10) tcpu
+    10 format(/, f14.3, ' = tempo de processamento (segundos)')
+    
 	close(10)
     ver = system('resultados.txt')
     

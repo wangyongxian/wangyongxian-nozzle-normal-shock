@@ -59,17 +59,3 @@ end subroutine CreateMeshFile
 
 end module CriaArqRichadson
 
-
-!26 format (I8,  20x, A10, 2/, &
-!           A10, 20x, A10, 2/, &
-!           I8,  20x, A10, 2/, &
-!           A50,  20x, A10, 2/, &
-!           I8,  20x, A10, 2/, &
-!           I8,  20x, A10, 2/, &
-!           D14.3,  20x, A10, 2/, &
-!           I8,  20x, A10, 2/, &
-!           I8,  20x, A10, 2/, &
-!           D14.3,  20x, A10, 2/, &
-!           D14.3,  20x, A10, 2/, &
-!           D14.3,  20x, A10, 2/, &
-!           I8,  20x, A10, 2/)

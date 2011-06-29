@@ -1,14 +1,14 @@
 +Propriedades
-      20.00d+5           P0        = pressao de estagnacao  20.00d+5
-      10.00d+5           P_out     = pressao de estagnacao  20.00d+5
-      3420.33d+0           T0        = temperatura de estagnacao  3420.33d+0
-      128               N         = número de volumes de controle
+      20.00d+5         P0        = pressao de estagnacao
+      10.00d+5         P_out     = pressao da saida
+      3420.33d+0       T0        = temperatura de estagnacao
+      128              N         = número de volumes de controle
       1.0d-8           deltat    = número de avanços no tempo
-      1000            iteracao  = número de iterações (ciclo total)
+      1000             iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
-      526.97d+0	       R         = R constante do gas 526.97d+0
-      1.4000d+0         gama      = gama 1.1956d+0 
+      526.97d+0	       R         = R constante do gas
+      1.4000d+0        gama      = gama
       0.3d+0	       rin       = rin
       0.1d+0	       rg        = rg
       0.1d+0	       Lc        = Lc
@@ -31,7 +31,7 @@
 0    = temperatura
 0    = velocidade
 0    = massa especifica
-1    = pressao
+0    = pressao
 0    = empuxo
 0    = coeficiente de descarga
 0    = dominio
