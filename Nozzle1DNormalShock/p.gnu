@@ -5,5 +5,5 @@ replot 'p.dat' using 1:3 title 'numérica'
 replot 'p.dat' using 1:4 title 'geometria'
 set xlabel 'x (m)'
 set ylabel 'p (Pa)'
-set title 'Resultado para N=12 (18/4/2011)'                              
+set title 'Resultado para N='                              
 replot

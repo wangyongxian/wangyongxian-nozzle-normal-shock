@@ -32,6 +32,7 @@
 1    = velocidade
 1    = massa especifica
 1    = pressao
+1    = mach
 0    = empuxo
 0    = coeficiente de descarga
 0    = dominio

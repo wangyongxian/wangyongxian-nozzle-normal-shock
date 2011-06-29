@@ -48,6 +48,7 @@ contains
     ro(n) = p(n) / ( R * T(n) )
     de = 0.0d0
     ds = 0.0d0
+    
     do it = 1, iteracao
 	
 	   ! atualização da pressão na entrada da tubeira
@@ -296,6 +297,9 @@ end subroutine escreve_dados
     end if
     if (graf_t) then
        ver = system('wgnuplot T.gnu')
+    end if
+    if(graf_mach)then
+       ver = system('wgnuplot Mach.gnu')
     end if
     
   end subroutine escreve

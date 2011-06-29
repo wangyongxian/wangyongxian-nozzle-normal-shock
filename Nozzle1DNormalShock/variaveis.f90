@@ -75,7 +75,7 @@ character*100 :: richardson_3      ! nome do arquivo de saída
 character*100 :: richardson_4      ! nome do arquivo de entrada com a solução analítica exata
 character*50 :: title     ! título do grafico
 !graficos
-integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom
+integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom, graf_mach
 
 integer :: RazaoRef, Niveis
 

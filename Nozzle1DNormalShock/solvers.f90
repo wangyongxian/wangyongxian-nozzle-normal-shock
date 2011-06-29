@@ -51,79 +51,46 @@ subroutine TDMA (N,ap,aw,ae,bp,T)
   end subroutine TDMA
   
 
- ! subroutine TDMA (N,ap,aw,ae,bp,Tp)
-
-  !  implicit none
-
-   ! integer :: i   ! número do nó
-    !integer,intent(in) :: N ! número de nós
-
-    !real*8,dimension(:),allocatable :: Pp ! coeficiente do tdma
-    !real*8,dimension(:),allocatable :: Qp ! coeficiente do tdma
-
-    !real*8,intent(in), dimension(N) :: ap ! coeficiente aP
-    !real*8,intent(in), dimension(N) :: aw ! coeficiente aW
-    !real*8,intent(in), dimension(N) :: ae ! coeficiente aE
-    !real*8,intent(in), dimension(N) :: bp ! termo fonte bP
-
-    !real*8,intent(out),dimension(N) :: Tp ! incógnita
-
-    !allocate(Pp(N),Qp(N))
-	
-	!Pp(1) = ae(1) / ap(1)
-    !Qp(1) = bp(1) / ap(1)
-	
-    !do i = 2, N
-    !  Pp(i) = ae(i) / (ap(i) - aw(i)*Pp(i-1))
-    !  Qp(i) = (bp(i) + aw(i)*Qp(i-1))/(ap(i) - aw(i)*Pp(i-1))
-    !end do
-	
-	!Tp(N) = Qp(N)
-   	
-   ! do i = N-1, 1, -1
-  !    Tp(i) = Pp(i)*Tp(i+1) + Qp(i)
- !   end do
-	
-!	deallocate(Pp,Qp)
-
-!  end subroutine TDMA
-
+ 
 !-------------------------------------------------
   
   ! calcula a norma l1 média do resíduo das equações
 
-  subroutine norma (N,a,b,c,d,T,R)
+ subroutine Norma_L1 ( n, aw, ap, ae, bp, T, norma )
 
     implicit none
 
-    integer :: i ! número do nó
+    integer,intent(in) :: n ! número de volumes de controle
 
-    integer,intent(in) :: N  ! número de nós
+    real*8,dimension(:),intent(in) :: aw ! coeficiente oeste
+    real*8,dimension(:),intent(in) :: ap ! coeficiente central
+    real*8,dimension(:),intent(in) :: ae ! coeficiente leste
+    real*8,dimension(:),intent(in) :: bp ! termo independente
+    real*8,dimension(:),intent(in) :: T  ! incógnita
 
-    real*8,intent(in), dimension(N) :: a ! coeficiente aP
-    real*8,intent(in), dimension(N) :: b ! coeficiente aW
-    real*8,intent(in), dimension(N) :: c ! coeficiente aE
+    real*8,intent(out) :: norma ! normal L1 do sistema linear
 
-	real*8,intent(in), dimension(N) :: d ! termo fonte bP
+    integer :: i ! número do volume de controle
 
-    real*8,intent(inout),dimension(N) :: T ! incógnita
+    norma = 0.0d0
 
-    real*8,intent(inout) :: R ! norma l1 média dos resíduos
+    ! volume 1
+    i = 1
+       norma = norma + dabs (                ap(i)*T(i) &
+                            + ae(i)*T(i+1) - bp(i)      )
 
-    R = 0.0d0
-
-	! Oeste
-   	R = R + dabs ( c(1)*T(2) + d(1) - a(1)*T(1) )
-
-	! Reais
-    do i = 2, N-1
-          R = R + dabs ( b(i)*T(i-1) + c(i)*T(i+1) + d(i) - a(i)*T(i) )
+    ! volumes internos
+    do i = 2, n-1
+       norma = norma + dabs ( aw(i)*T(i-1) + ap(i)*T(i) &
+                            + ae(i)*T(i+1) - bp(i)      )
     end do
 
-	! Leste
-    R = R + dabs ( b(N)*T(N-1) + d(N) - a(N)*T(N) )
+    ! volume n
+    i = n
+       norma = norma + dabs ( aw(i)*T(i-1) + ap(i)*T(i) &
+                                           - bp(i)      )
 
-  end subroutine norma
+  end subroutine Norma_L1
 
 !-------------------------------------------------
 

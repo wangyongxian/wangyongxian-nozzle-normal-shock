@@ -52,6 +52,7 @@ contains
     read(7,*) graf_v ! velocidade
     read(7,*) graf_ro ! massa especifica
     read(7,*) graf_p ! pressao
+    read(7,*) graf_mach ! pressao
     read(7,*) graf_e ! empuxo
     read(7,*) graf_cdesc ! coeficiente de descarga
     read(7,*) graf_dom ! coeficiente de descarga
