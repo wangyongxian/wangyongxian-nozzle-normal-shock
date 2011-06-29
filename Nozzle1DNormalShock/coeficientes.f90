@@ -264,23 +264,9 @@ contains
 
 !-------------------------------------------------
 
-  subroutine corrigir_massa_especifica
-    integer ::i
-    
-    do i = 1, N
-	   ro(i) = ro(i) + pl(i)/(R*T(i))
-	end do 
-
-  end subroutine corrigir_massa_especifica
-  
-!-------------------------------------------------
-
 subroutine calculo_massa_especifica
-    integer ::i
     
-    do i=1, N
-        ro(i) = p(i)/(R*T(i))
-    end do    
+    ro = p/(R*T)
     
 end subroutine calculo_massa_especifica
 
@@ -299,33 +285,26 @@ end subroutine calculo_massa_especifica_nas_faces
 !-------------------------------------------------
 
 subroutine calcula_fluxo_massa
-    integer ::i
-    
-    do i=1,N
-    !rom(1) * u_in * se(1)
-        m(i) = roe(i)*ue(i)*Se(i)
-    end do
+        
+        m = roe*ue*Se
+        
 end subroutine calcula_fluxo_massa
 
 !-------------------------------------------------
 
 subroutine calcula_coeficiente_descarga
-    integer ::i
     
     call calcula_fluxo_massa
-    do i=1,N
-        Cd(i) = m(i)/Ma(i)
-    end do
+    Cd = m/(dsqrt(gama*R*T))
+    
 end subroutine calcula_coeficiente_descarga
 
 !-------------------------------------------------
 
 subroutine calcula_empuxo
-    integer ::i
-
-    do i=1, N
-        Empuxo(i) = ro(i)*u(i)*Sp(i)*u(i)
-    end do
+        
+    Empuxo = ro*u*Sp*u
+        
 end subroutine calcula_empuxo
 
 !-------------------------------------------------
