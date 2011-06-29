@@ -184,7 +184,7 @@ subroutine escreve_dados
     9 format(i4,4x,4(1pe21.11))
 	
 	write(10,13)
-    13 format(//,t1,'volume',t2,'U(Analitica)',t2,'U(Numerica)',t2,'Erro',/)
+    13 format(//,t1,'volume',t13,'U(Analitica)',t34,'U(Numerica)',t55,'Erro')
 
 	do i = 1, N
 	  write(10,9) i, ua(i), u(i), (ua(i) - u(i))
@@ -192,28 +192,28 @@ subroutine escreve_dados
 	
 	!Temperarura
 	write(10,14)
-    14 format(//,8x,'volume',t13,'T(Analitica)',t13,'T(Numerica)',t13,'Erro',/)
+    14 format(//,t1,'volume',t13,'T(Analitica)',t34,'T(Numerica)',t55,'Erro')
 	do i = 1, N
 	  write(10,9) i, Ta(i), T(i), (Ta(i) - T(i))
 	end do
 	
 	!pressao
 	write(10,15)
-    15 format(//,t4,'volume',t13,'P(Analitica)',t13,'P(Numerica)',t13,'Erro',/)
+    15 format(//,t1,'volume',t13,'P(Analitica)',t34,'P(Numerica)',t55,'Erro')
 	do i = 1, N
 	  write(10,9) i, Pa(i), P(i), (Pa(i) - p(i))
 	end do
 	
 	!Mach
 	write(10,16)
-    16 format(//,t4,'volume',t13,'Mach(Analitico)',t13,'Mach(Numerico)',t13,'Erro',/)
+    16 format(//,t1,'volume',t13,'Mach(Analitico)',t34,'Mach(Numerico)',t55,'Erro')
 	do i = 1, N
 	  write(10,9) i, Ma(i), M(i), (Ma(i) - M(i))
 	end do
 	
 	!massa especifica
 	write(10,17)
-    17 format(//,t4,'volume',t13,'RO(Analitico)',t13,'RO(Numerico)',t13,'Erro',/)
+    17 format(//,t1,'volume',t13,'RO(Analitico)',t34,'RO(Numerico)',t55,'Erro')
 	do i = 1, N
 	  write(10,9) i, roa(i), ro(i), (roa(i) - ro(i))
 	end do
