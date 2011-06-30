@@ -182,9 +182,7 @@ contains
             Mach(j) = MachN
         end do
     end do
-    ! arrumar arq d saida
-    ! variar o DT
-    !verificar a pressao com 1 iteracao
+    
     do i=1, N
     if (i < pos) then
         p(i) = P_cam/(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(gama/(gama-1.0d0))
@@ -198,7 +196,7 @@ contains
         u(i) = Mach(i)*(gama*R*T_cam*(1.0d0+(gama-1.0d0)*(Mach(i)**2.0d0)/2.0d0)**(-1.0d0))**(0.5d0)
     end if
     end do
-    !Ma = ro*Sp*u
+    Ma = ro*Sp*u
     
     Ua = u
     Ta = T    

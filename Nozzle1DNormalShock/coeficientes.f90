@@ -35,7 +35,7 @@ contains
 
        ap(i) = ro_o(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
 
-       bf(i) = - pi * f(i) * ro(i) * (u(i)**2) * raio(i) * dx / 4.0d0   
+       bf(i) = 0.0d0 !- pi * f(i) * ro(i) * (u(i)**2) * raio(i) * dx / 4.0d0   
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt + bf(i)   &
              + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
@@ -121,22 +121,23 @@ contains
 
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
-             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0      &
-             + pi * f(i) * ro(i) * (u(i)**3) * raio(i) * dx / 4  
+             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0     ! &
+             !+ pi * f(i) * ro(i) * (u(i)**3) * raio(i) * dx / 4  
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i) - T(i-1) )
 
        leste = roe(i) * ue(i) * se(i) * ( T(i+1) - T(i) )
 
-       bc(i) = 0.5d0 * beta * cp * ( oeste - leste )
+       bc(i) = 0.5d0 *beta* cp * ( oeste - leste )
     end do
 
     ! volume n (fictício)
 
     fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
-    aw(n) = -1.0d0
+    aw(n) =  -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
     bp(n) =  fator * ( T(n-1) - T(n-2) )
+    !bp(n) =  2.0d0*T_out
 ! volume n (fictício)
 
     bc(n) = 0.0d0
@@ -189,11 +190,12 @@ contains
  ! volume n (fictício)
 
     bc(n) = 0.0d0
-    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
-    aw(n) = -1.0d0
+    !fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    aw(n) = 1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
-    bp(n) =  fator * ( pl(n-1) - pl(n-2) )
+    !bp(n) =  fator * ( pl(n-1) - pl(n-2) )
+    bp(n) =  2.0d0*pl_out
     ! atualiza o termo independente
 
     bp = bp + bc
@@ -316,7 +318,7 @@ subroutine correcoes_com_plinha
     
     ! pressão
     p = p + pl
-    p(N) = P_out
+    !p(N) = P_out
 
     ! massa específica nodal
     ro = ro + pl / ( R * T )

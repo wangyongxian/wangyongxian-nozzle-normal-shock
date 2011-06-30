@@ -31,11 +31,17 @@ contains
     
     ! inicialização na entrada da tubeira
     u_in  = ue(1)
+    u_out  = ue(N-1)
     T_in  = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*R)
+    T_out  = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
     M_in = u_in / dsqrt ( gama * R * T_in )
+    M_out = u_out / dsqrt ( gama * R * T_out )
+    
     k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
     p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+    k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
+    p_outN = p_out
     
     p(1)  = 2.0d0*p_in - p(2)
     u(1)  = 2*u(2) - u(3)
@@ -45,7 +51,8 @@ contains
     ! inicialização na saída da tubeira
     p(n)  = 2.0d0*p(n-1) - p(n-2)
     u(n)  = 2.0d0*u(n-1) - u(n-2)
-    T(n)  = 2.0d0*T(n-1) - T(n-2)
+   ! T(n)  = 2.0d0*T(n-1) - T(n-2)
+    T(N) = -T(N-1) + 2*T_out
     ro(n) = p(n) / ( R * T(n) )
     de = 0.0d0
     ds = 0.0d0
@@ -77,6 +84,13 @@ contains
        p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
        p(1) = 2.0d0*p_in - p(2)
        pl_in = p_in - p_ia
+       
+       p_outa = p_outN
+       M_out = u_out / dsqrt ( gama * R * T_out )
+       k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
+       p_outN = p_out / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+       p(N) = 2.0d0*p_outN - p(N-1)
+       pl_out = p_outN - p_outa
 	
        ! Atualizando campos para novo avanço
 	   u_o  = u
@@ -100,7 +114,12 @@ contains
        ! cálculos das velocidades na face leste
 	   call calculo_velocidades_face
 !-----------------------------------------------------		  
+     ! inicialização na entrada da tubeira
+    u_in  = ue(1)
+    u_out  = ue(N-1)
+
       T_in = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*R)
+      T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
 	  call coeficientes_e_fontes_energia
@@ -128,7 +147,7 @@ contains
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
       
-      T_ex   = 0.5d0 * ( T(n-1) + T(n) )
+      !T_ex   = 0.5d0 * ( T(n-1) + T(n) )
       
       write(8,16) it, Residuo_T, Residuo_U, Residuo_P
 	   16 format (i11,5x,3(1pe20.13))
@@ -224,6 +243,7 @@ subroutine escreve_dados
 	write(10,14)
     14 format(//,t1,'volume',t13,'T(Analitica)',t34,'T(Numerica)',t55,'Erro')
 	do i = 1, N
+	    
 	  write(10,9) i, Ta(i), T(i), (Ta(i) - T(i))
 	end do
 	
@@ -258,6 +278,7 @@ end subroutine escreve_dados
 
   subroutine escreve
     integer ::i
+    real*8 ::T0
     
     call calcula_empuxo
     call calcula_coeficiente_descarga
@@ -302,7 +323,9 @@ end subroutine escreve_dados
 	
     open(22,file='T.dat')
 	do i = 1, N
-	  write(22,48) xp(i), Ta(i), T(i), raio(i)*10000
+	    call T0Calc(gama,T(i), (u(i)/dsqrt(gama*R*T(i))), T0)
+	    !call T0Calc(gama,Ta(i), Mach(i), T0)
+	  write(22,48) xp(i), Ta(i), T(i), raio(i)
 	end do
 	close(22)
     

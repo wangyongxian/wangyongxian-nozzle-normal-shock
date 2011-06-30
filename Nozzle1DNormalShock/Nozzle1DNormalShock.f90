@@ -25,7 +25,9 @@ implicit none
       call dealloc
       N = RazaoRef*N
     end do
-    
+    !ESCREVER OS COEFICIENTES E TERMO FONTE TODOS
+    !PROPEIRDADES DA GARGANTA
+    !RICHARDSON DO ULTIMO
    
     !call teste
 ! -----------------------------------------------
