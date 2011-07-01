@@ -136,11 +136,10 @@ contains
     aw(n) =  -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
+    bc(n) = 0.0d0
     bp(n) =  fator * ( T(n-1) - T(n-2) )
     !bp(n) =  2.0d0*T_out
 ! volume n (fictício)
-
-    bc(n) = 0.0d0
 
     ! atualiza o termo independente
 

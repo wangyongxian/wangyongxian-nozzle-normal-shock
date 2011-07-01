@@ -15,19 +15,24 @@ implicit none
 
     call le_dados
     
+    
     do i=1, Niveis
       call init
+      call ThroatFinder
+        
       call solucao_numerica
       ! escrita da variável primária e sua visualização
-      call escreve
-      call escreve_dados
+      call gera_graficos
+      call gera_txt
+      
       call solucao_analitica
       call dealloc
       N = RazaoRef*N
     end do
-    !ESCREVER OS COEFICIENTES E TERMO FONTE TODOS
-    !PROPEIRDADES DA GARGANTA
+    !ESCREVER OS COEFICIENTES E TERMO FONTE TODOS ok
+    !propriedades DA GARGANTA
     !RICHARDSON DO ULTIMO
+    !gradiente pra localizar o choque
    
     !call teste
 ! -----------------------------------------------

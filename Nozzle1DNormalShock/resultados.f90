@@ -77,6 +77,13 @@ contains
 	
     do it = 1, iteracao
 	
+	   ! Atualizando campos para novo avanço
+	   u_o  = u
+	   ue_o = ue
+	   p_o = p
+	   T_o = T
+	   ro_o = ro
+	   
 	   ! atualização da pressão na entrada da tubeira
        p_ia = p_in
        M_in = u_in / dsqrt ( gama * R * T_in )
@@ -92,13 +99,7 @@ contains
        p(N) = 2.0d0*p_outN - p(N-1)
        pl_out = p_outN - p_outa
 	
-       ! Atualizando campos para novo avanço
-	   u_o  = u
-	   ue_o = ue
-	   p_o = p
-	   T_o = T
-	   ro_o = ro
-       
+
 	   ! cálculo dos coeficientes e termos fontes
 	   call coeficientes_e_fontes_qml
 	   
@@ -115,8 +116,8 @@ contains
 	   call calculo_velocidades_face
 !-----------------------------------------------------		  
      ! inicialização na entrada da tubeira
-    u_in  = ue(1)
-    u_out  = ue(N-1)
+      u_in  = ue(1)
+      u_out  = ue(N-1)
 
       T_in = T_cam - 0.5d0*(gama-1.0d0)*(u_in**2)/(gama*R)
       T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
@@ -150,12 +151,23 @@ contains
       !T_ex   = 0.5d0 * ( T(n-1) + T(n) )
       
       write(8,16) it, Residuo_T, Residuo_U, Residuo_P
-	   16 format (i11,5x,3(1pe20.13))
+	  16 format (i11,5x,3(1pe20.13))
 	   
 !-----------------------------------------------------	      
 
 	end do
     close(8)
+    
+    ! coeficiente da pressao
+    call coeficientes_fontes_massa
+    call gera_arq_coef(2)
+    !coeficiente da Energia
+    call coeficientes_e_fontes_energia
+    call gera_arq_coef(3)
+    !coeficiente da QML
+    call coeficientes_e_fontes_qml
+    call gera_arq_coef(4)
+    
     ! entrada da tubeira
     u(1)  = u_in
     p(1)  = p_in
@@ -178,7 +190,7 @@ contains
   end subroutine solucao_numerica
 
 !-------------------------------------------------
-subroutine escreve_dados
+subroutine gera_txt
     integer ::i
     integer*4    :: var(8)    ! data e hora
     character*20 :: vardate   ! data e hora
@@ -273,10 +285,9 @@ subroutine escreve_dados
     
 	close(10)
     
-    
-end subroutine escreve_dados
+end subroutine gera_txt
 
-  subroutine escreve
+subroutine gera_graficos
     integer ::i
     real*8 ::T0
     
@@ -356,7 +367,9 @@ end subroutine escreve_dados
     if(graf_mach)then
        ver = system('wgnuplot Mach.gnu')
     end if
-    
+    if(res_coef) then
+    ver = system('coeficientes.txt')
+    end if 
     if (res_result) then
         ver = system('resultados.txt')
     end if
@@ -365,20 +378,36 @@ end subroutine escreve_dados
         ver = system('norma_l1.txt')
     end if
     
-  end subroutine escreve
+end subroutine gera_graficos
 
+subroutine gera_arq_coef(prop)
+    integer, intent(in) ::prop
+    !prop 2 - PL
+    !prop 3 - Energia
+    !prop 4 - QML
+    integer ::i
+    open(14,file='coeficientes.txt')
+    2 format('Coeficientes de Pl', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
+    3 format('Coeficientes Energia', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
+    4 format('Coeficientes QML', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
+    5 format(i4, 4x, 5(1pe21.11))
+    select case(prop)
+        case(2)
+            write(14, 2)
+        case(3)
+            write(14, 3)
+        case(4)
+            write(14, 4)
+    end select
+    
+    do i=1,N
+        write(14, 5) i, xp(i), aw(i), ap(i), ae(i), bp(i)
+    end do
+    
+    close(14)
+end subroutine gera_arq_coef
 subroutine solucao_analitica()
 
-
-!campo de temperatura
-!campo de velocidade
-!campo de pressao
-!campo de ro
-!posicao do choque
-
- !   call AARatioCalc(gama, Mach, AA)
-!    call Mach2Calc(gama,mach,mach2)
-    
     
 end subroutine solucao_analitica
 

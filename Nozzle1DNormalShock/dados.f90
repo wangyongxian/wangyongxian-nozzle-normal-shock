@@ -59,6 +59,7 @@ contains
     read(7,*) ! +Resultados (1 - para mostrar 0 - para nao mostrar)
     read(7,*) res_result ! coeficiente de descarga
     read(7,*) res_iter ! coeficiente de descarga
+    read(7,*) res_coef ! abrir arquivo de coeficientes
     
     close(7)
 

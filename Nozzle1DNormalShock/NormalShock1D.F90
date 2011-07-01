@@ -222,5 +222,20 @@ do i=N-1, 1, -1
 end do
 end subroutine ShockFinder
 
+subroutine ThroatFinder()
+    
+    integer ::i
+integer :: count = -1
+    do i=1, N
+        if ( Raio(i) == rg ) then
+        count = i
+            exit
+        end if
+    end do
+    write(*,*) 'a'
+end subroutine
+
+
+
 end module NormalShock1D
 

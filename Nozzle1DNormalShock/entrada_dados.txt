@@ -28,7 +28,7 @@
 12345    1         2         3         4         5         6         7         8         9
 +Graficos (1 - para mostrar 0 - para nao mostrar)
 0    = fluxo de massa
-1    = temperatura
+0    = temperatura
 0    = velocidade
 0    = massa especifica
 0    = pressao
@@ -39,3 +39,4 @@
 +Resultados (1 - para mostrar 0 - para nao mostrar)
 1    = txt de resultados
 0    = txt de iteracoes
+1    = txt de coeficientes
