@@ -12,13 +12,13 @@ implicit none
 
 !-------------------------------------------------
     integer ::i
-
+integer a
     call le_dados
     
     
     do i=1, Niveis
       call init
-      !call ThroatFinder
+      a= ThroatFinder
         
       call solucao_numerica
       ! escrita da variável primária e sua visualização

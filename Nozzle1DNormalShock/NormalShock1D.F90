@@ -222,17 +222,16 @@ do i=N-1, 1, -1
 end do
 end subroutine ShockFinder
 
-subroutine ThroatFinder()
+function ThroatFinder()
     
     integer ::i
-integer :: count = -1
+    integer :: ThroatFinder = -1
     do i=1, N
-        if ( Raio(i) == rg ) then
-        count = i
+        if ( Se(i) == Pi*rg**2.0d0 ) then
+            ThroatFinder = i
             exit
         end if
     end do
-    write(*,*) 'a'
 end subroutine
 
 
