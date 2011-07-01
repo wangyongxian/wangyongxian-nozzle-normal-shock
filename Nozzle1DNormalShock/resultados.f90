@@ -49,7 +49,7 @@ contains
     ro(1) = p(1) / ( R * T(1) )
     
     ! inicialização na saída da tubeira
-    p(n)  = 2.0d0*p(n-1) - p(n-2)
+    p(n)  = 2.0d0*p_out - p(n-1)  !2.0d0*p(n-1) - p(n-2)
     u(n)  = 2.0d0*u(n-1) - u(n-2)
    ! T(n)  = 2.0d0*T(n-1) - T(n-2)
     T(N) = -T(N-1) + 2*T_out
@@ -76,6 +76,9 @@ contains
 	4 format(t1,'iteracao',t18 ,'Residuo T',t38 ,'Residuo U',t58,'Residuo Pl')
 	
     do it = 1, iteracao
+    
+        !if ((it > 5000).and.(it < 50000)) beta = 0.9d0
+        !if (it >= 50000 ) beta = 1.0d0
 	
 	   ! Atualizando campos para novo avanço
 	   u_o  = u
@@ -162,11 +165,11 @@ contains
     call coeficientes_fontes_massa
     call gera_arq_coef(2)
     !coeficiente da Energia
-    call coeficientes_e_fontes_energia
-    call gera_arq_coef(3)
+    !call coeficientes_e_fontes_energia
+    !call gera_arq_coef(3)
     !coeficiente da QML
-    call coeficientes_e_fontes_qml
-    call gera_arq_coef(4)
+    !call coeficientes_e_fontes_qml
+    !call gera_arq_coef(4)
     
     ! entrada da tubeira
     u(1)  = u_in

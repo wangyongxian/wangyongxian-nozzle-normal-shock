@@ -18,12 +18,12 @@ implicit none
     
     do i=1, Niveis
       call init
-      call ThroatFinder
+      !call ThroatFinder
         
       call solucao_numerica
       ! escrita da variável primária e sua visualização
-      call gera_graficos
       call gera_txt
+      call gera_graficos
       
       call solucao_analitica
       call dealloc
