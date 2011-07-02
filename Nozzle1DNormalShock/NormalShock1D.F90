@@ -234,6 +234,25 @@ function ThroatFinder()
     end do
 end function
 
+function MachAACalc(razao, Mach)
+    real*8 ::razao
+    real*8 ::MachN
+    real*8 ::Mach
+    real*8 ::Machlx
+    real*8 ::Machx
+    real*8 ::MachAACalc
+    integer ::i
+    
+    do i=1, 50
+        Machlx = (-1.0d0/(Mach*Mach))*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))+((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)-1.0d0);
+        Machx = -razao + (1.0d0/Mach)*(((2.0d0/(gama+1.0d0))*(1.0d0+(gama-1.0d0)*Mach*Mach/2.0d0))**((gama+1.0d0)/(2.0d0*gama-2.0d0)))
+        MachN = Mach - Machx/Machlx
+        Mach = MachN
+    end do
+    
+    MachAACalc = Mach        
+    
+end function
 
 
 end module NormalShock1D

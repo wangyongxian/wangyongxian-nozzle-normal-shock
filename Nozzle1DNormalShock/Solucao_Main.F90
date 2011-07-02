@@ -6,6 +6,7 @@ use variaveis
 use Solucao_CDS
 use Solucao_UDS
 use solvers_1D
+use Solucao_Analitica
 
 implicit none
 
@@ -187,10 +188,11 @@ subroutine solucao_numerica
     ro_ex = p_ex / ( R * T_ex )
     ro(n) = ro_ex
 
+    
     call calcula_empuxo
     call calcula_coeficiente_descarga
     call calcula_fluxo_massa
-    
+    call calcula_coeficiente_descarga
     
 	tcpu = timef()
 

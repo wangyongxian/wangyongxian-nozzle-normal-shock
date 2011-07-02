@@ -10,20 +10,20 @@ implicit none
 
 !-------------------------------------------------
     integer ::i
-integer a
+    
     call le_dados
     
     
     do i=1, Niveis
+      
       call init
-      a = ThroatFinder()
-        
+      call solucao_analitica_init
+      
       call solucao_numerica
       ! escrita da variável primária e sua visualização
       call gera_txt
       call gera_graficos
       
-      call solucao_analitica
       call mostra_dados
       call dealloc
       N = RazaoRef*N

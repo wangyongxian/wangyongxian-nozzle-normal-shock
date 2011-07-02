@@ -228,10 +228,6 @@ subroutine gera_arq_coef(prop)
     
     close(14)
 end subroutine gera_arq_coef
-subroutine solucao_analitica()
-
-    
-end subroutine solucao_analitica
 
 
 end module output
