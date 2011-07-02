@@ -1,13 +1,31 @@
 module Solucao_Analitica
 use variaveis
+use Initialization
 use NormalShock1D
 
 implicit none
 
 contains
 
-subroutine solucao_analitica_init
+subroutine GenerateSolutionFile(numeroNos)
+    integer, intent(in) ::numeroNos
+    integer ::i
+    call init_alloc(numeroNos)
+    call solucao_analitica_init(numeroNos)
+    !7 format(i4,4x,2(1pe21.11))
+    12 format(6(1pe21.11))
+    open(12,file='solucao_analitica.txt')
+    do i=1, numeroNos
+        write(12,12) xp, u, t, p, ro, Mach
+    end do
+    close(12)
+    call dealloc()
+    i = system('solucao_analitica.txt')
+end subroutine
 
+subroutine solucao_analitica_init(N)
+    integer, intent(in) ::N
+    
     real*8 :: MachN, Machx, Machlx, razao, AA, P02, At
     integer ::i, j, pos 
     

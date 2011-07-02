@@ -9,7 +9,7 @@ contains
 
 !-------------------------------------------------
 
-  subroutine le_dados
+  subroutine conf_file_read
 
     ver = system('notepad entrada_dados.txt') ! lista dados
 
@@ -57,14 +57,17 @@ contains
     read(7,*) res_result ! coeficiente de descarga
     read(7,*) res_iter ! coeficiente de descarga
     read(7,*) res_coef ! abrir arquivo de coeficientes
+    read(7,*) gerar_analitico ! gerar solucao analitica
+    read(7,*) numeroNos ! numero de nós para a malha da solucao analitica
     
     close(7)
 
-  end subroutine le_dados
+  end subroutine conf_file_read
 
 !-------------------------------------------------
 
-  subroutine init
+  subroutine init_alloc(N)
+    integer, intent(in)  ::N
     real*8 ::dx
     integer ::i
     ! alocação de memória
@@ -156,16 +159,16 @@ contains
 
 
     
-  end subroutine init
+  end subroutine init_alloc
 
 !-------------------------------------------------
 
 subroutine dealloc()
-    deallocate (xp,xe,Sp,Se,M,Me,Raio,u,p, T, ro)
+    deallocate (xp,xe,Sp,Se,M,Me,Raio,u,p,T,ro)
     deallocate (pl,u_o,ue,ue_o,ds,de, p_o, ro_o, roe)
     deallocate (afu,atu,btu,bpru)
 	deallocate (aw,ap,ae,bp, bf, bc)
-  	deallocate (Empuxo, Mach, Mache, Ma, Ua, Cd, Ta, T_o, Pa, roa, f)
+  	deallocate (Empuxo, Mach, Mache, Ma, Ua, Cd, Ta, T_o, Pa, roa, f, AAp)
 end subroutine dealloc
 
 

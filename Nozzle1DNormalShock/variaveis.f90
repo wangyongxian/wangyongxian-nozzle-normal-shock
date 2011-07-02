@@ -82,4 +82,6 @@ integer :: RazaoRef, Niveis
 !calculo do residuo
 real*8 ::Residuo_T, Residuo_T_o,Residuo_P, Residuo_P_o,Residuo_U, Residuo_U_o
 real*8 ::p_outa, p_outN, pl_out, M_out, u_out, T_out
+
+integer ::numeroNos, gerar_analitico
 end

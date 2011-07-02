@@ -1,5 +1,5 @@
 program Nozzle1DNormalShock
-!
+
 use main
 use output
 use NormalShock1D
@@ -11,13 +11,14 @@ implicit none
 !-------------------------------------------------
     integer ::i
     
-    call le_dados
+    call conf_file_read
     
+    if(gerar_analitico) call GenerateSolutionFile(numeroNos)
     
     do i=1, Niveis
       
-      call init
-      call solucao_analitica_init
+      call init_alloc(N)
+      call solucao_analitica_init(N)
       
       call solucao_numerica
       ! escrita da variável primária e sua visualização

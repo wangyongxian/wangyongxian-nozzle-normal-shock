@@ -229,5 +229,18 @@ subroutine gera_arq_coef(prop)
     close(14)
 end subroutine gera_arq_coef
 
+subroutine create_gnufile()
+
+!set data style linespoints
+!set grid
+!plot 'T.dat' using 1:2 title 'analítica' 
+!replot 'T.dat' using 1:3 title 'numérica' 
+!replot 'T.dat' using 1:4 title 'geometria'
+!set xlabel 'x (m)'
+!set ylabel 'T (K)'
+!set title ''                              
+!replot
+
+end subroutine create_gnufile
 
 end module output

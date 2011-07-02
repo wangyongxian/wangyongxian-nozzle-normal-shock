@@ -40,3 +40,5 @@
 1    = txt de resultados
 1    = txt de iteracoes
 0    = txt de coeficientes
+1    = gerar solucao analitica
+1000 = numero de nós para a malha da solucao analitica
