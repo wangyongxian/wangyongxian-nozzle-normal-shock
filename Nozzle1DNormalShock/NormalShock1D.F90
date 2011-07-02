@@ -223,16 +223,16 @@ end do
 end subroutine ShockFinder
 
 function ThroatFinder()
-    
+    integer :: ThroatFinder 
     integer ::i
-    integer :: ThroatFinder = -1
+    ThroatFinder = -1
     do i=1, N
         if ( Se(i) == Pi*rg**2.0d0 ) then
             ThroatFinder = i
             exit
         end if
     end do
-end subroutine
+end function
 
 
 

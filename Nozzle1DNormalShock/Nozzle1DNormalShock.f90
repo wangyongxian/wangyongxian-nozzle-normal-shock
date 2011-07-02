@@ -1,9 +1,7 @@
 program Nozzle1DNormalShock
 !
-use dados
-
-use resultados
-
+use main
+use output
 use NormalShock1D
 use CriaArqRichadson
 ! -----------------------------------------------
@@ -18,7 +16,7 @@ integer a
     
     do i=1, Niveis
       call init
-      a= ThroatFinder
+      a = ThroatFinder()
         
       call solucao_numerica
       ! escrita da variável primária e sua visualização
@@ -26,6 +24,7 @@ integer a
       call gera_graficos
       
       call solucao_analitica
+      call mostra_dados
       call dealloc
       N = RazaoRef*N
     end do
