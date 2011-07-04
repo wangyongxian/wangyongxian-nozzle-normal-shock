@@ -58,15 +58,15 @@ subroutine solucao_numerica
     ds = 0.0d0
     
     !residuo
-    call coeficientes_e_fontes_qml
+    call coeficientes_e_fontes_qml_cds
     call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
 	Residuo_U_o = Residuo_U
 	
-	call coeficientes_fontes_massa
+	call coeficientes_fontes_massa_cds
 	call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
 	Residuo_P_o = Residuo_P
 	
-	call coeficientes_e_fontes_energia
+	call coeficientes_e_fontes_energia_cds
 	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
 	Residuo_T_o = Residuo_T
 	
@@ -104,7 +104,7 @@ subroutine solucao_numerica
 	
 
 	   ! cálculo dos coeficientes e termos fontes
-	   call coeficientes_e_fontes_qml
+	   call coeficientes_e_fontes_qml_cds
 	   
 	   ! solução do sistema de equações
 	   call tdma (N,ap,aw,ae,bp,u)	
@@ -116,7 +116,7 @@ subroutine solucao_numerica
 	   call coeficientes_simplec
 	   
        ! cálculos das velocidades na face leste
-	   call calculo_velocidades_face
+	   call calculo_velocidades_face_cds
 !-----------------------------------------------------		  
      ! inicialização na entrada da tubeira
       u_in  = ue(1)
@@ -126,7 +126,7 @@ subroutine solucao_numerica
       T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
-	  call coeficientes_e_fontes_energia
+	  call coeficientes_e_fontes_energia_cds
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
@@ -140,7 +140,7 @@ subroutine solucao_numerica
 	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-      call coeficientes_fontes_massa
+      call coeficientes_fontes_massa_cds
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
@@ -162,13 +162,13 @@ subroutine solucao_numerica
     close(8)
     
     ! coeficiente da pressao
-    call coeficientes_fontes_massa
+    call coeficientes_fontes_massa_cds
     call gera_arq_coef(2)
     !coeficiente da Energia
-    !call coeficientes_e_fontes_energia
+    !call coeficientes_e_fontes_energia_cds
     !call gera_arq_coef(3)
     !coeficiente da QML
-    !call coeficientes_e_fontes_qml
+    !call coeficientes_e_fontes_qml_cds
     !call gera_arq_coef(4)
     
     ! entrada da tubeira

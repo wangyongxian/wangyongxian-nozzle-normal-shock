@@ -51,12 +51,13 @@
 		<File RelativePath=".\CriaArqRichadson.F90"/>
 		<File RelativePath=".\entrada_dados.txt"/>
 		<File RelativePath=".\Init.F90"/>
-		<File RelativePath=".\Solucao_Analitica.F90"/>
-		<File RelativePath=".\Solucao_Main.F90"/>
 		<File RelativePath=".\NormalShock1D.F90"/>
 		<File RelativePath=".\Nozzle1DNormalShock.f90"/>
 		<File RelativePath=".\Output.f90"/>
+		<File RelativePath=".\Solucao_Analitica.F90"/>
 		<File RelativePath=".\Solucao_CDS.F90"/>
+		<File RelativePath=".\Solucao_CDS_UDS.F90"/>
+		<File RelativePath=".\Solucao_Main.F90"/>
 		<File RelativePath=".\Solucao_UDS.F90"/>
 		<File RelativePath=".\Solvers.f90"/>
 		<File RelativePath=".\Variaveis.f90"/></Filter></Files>

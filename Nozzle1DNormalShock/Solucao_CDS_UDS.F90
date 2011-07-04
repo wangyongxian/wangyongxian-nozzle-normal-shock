@@ -1,4 +1,4 @@
-module Solucao_CDS
+module Solucao_CDS_UDS
   
 use variaveis  
 !use dados
@@ -10,7 +10,7 @@ contains
 !-------------------------------------------------
 
 
-  subroutine coeficientes_e_fontes_qml_cds
+  subroutine coeficientes_e_fontes_qml_cds_uds
 	real*8  :: fator, dx ! auxiliar
 	real*8 :: oeste, leste ! auxiliares
 	integer ::i
@@ -33,16 +33,16 @@ contains
 
        ae(i) = 0.0d0
 
-       ap(i) = ro_o(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
+       ap(i) = ro_o(i) * sp(i) * dx / dt !- ( aw(i) + ae(i) )
 
        bf(i) = 0.0d0 !- pi * f(i) * ro(i) * (u(i)**2) * raio(i) * dx / 4.0d0   
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt + bf(i)   &
-             + 0.5d0  * sp(i) * ( p(i-1) - p(i+1) )
+             - 0.5d0  * sp(i) * ( p(i+1) - p(i-1) )
              
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )
 
-       leste = roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
+       leste = -roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
 
        bc(i) = 0.5d0 * beta * ( oeste - leste )
 
@@ -59,11 +59,11 @@ contains
     bc(n) = 0.0d0
     bp = bp + bc
     
-  end subroutine coeficientes_e_fontes_qml_cds
+  end subroutine coeficientes_e_fontes_qml_cds_uds
 
 !-------------------------------------------------
   
-  subroutine calculo_velocidades_face_cds
+  subroutine calculo_velocidades_face_cds_uds
 
 	real*8 :: massa_e ! massa do volume E
     real*8 :: massa_p ! massa do volume P
@@ -91,12 +91,12 @@ contains
 
     ue(n-1) = 0.5d0 * ( u(n) + u(n-1) )
  
-  end subroutine calculo_velocidades_face_cds
+  end subroutine calculo_velocidades_face_cds_uds
 
 !-------------------------------------------------
 
 
-  subroutine coeficientes_e_fontes_energia_cds
+  subroutine coeficientes_e_fontes_energia_cds_uds
 	real*8  :: fator, dx ! auxiliar
 	real*8 :: oeste, leste ! auxiliares
 	integer ::i
@@ -113,11 +113,11 @@ contains
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = - cp * roe(i-1) * ue(i-1) * se(i-1)
+       aw(i) = cp * roe(i-1) * ue(i-1) * se(i-1)
 
        ae(i) = 0.0d0
 
-       ap(i) = cp * ro_o(i) * sp(i) * dx / dt - ( aw(i) + ae(i) )
+       ap(i) = cp * ro_o(i) * sp(i) * dx / dt !- ( aw(i) + ae(i) )
 
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
@@ -144,11 +144,11 @@ contains
     ! atualiza o termo independente
 
     bp = bp + bc
-  end subroutine coeficientes_e_fontes_energia_cds
+  end subroutine coeficientes_e_fontes_energia_cds_uds
   
 !-------------------------------------------------
 
-  subroutine coeficientes_fontes_massa_cds
+  subroutine coeficientes_fontes_massa_cds_uds
 
     real*8 :: fator, dx ! auxiliar
     real*8 :: oeste, leste ! auxiliares
@@ -198,9 +198,9 @@ contains
     ! atualiza o termo independente
 
     bp = bp + bc
-  end subroutine coeficientes_fontes_massa_cds
+  end subroutine coeficientes_fontes_massa_cds_uds
 
 !-------------------------------------------------
 
-end module Solucao_CDS
+end module Solucao_CDS_UDS
 

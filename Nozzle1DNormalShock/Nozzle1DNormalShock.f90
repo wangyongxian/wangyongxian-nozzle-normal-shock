@@ -32,8 +32,8 @@ implicit none
     !ESCREVER OS COEFICIENTES E TERMO FONTE TODOS ok
     !propriedades DA GARGANTA
     !RICHARDSON DO ULTIMO
+    !adicionar a entropia nos graficos
     !gradiente pra localizar o choque
-   
     !call teste
 ! -----------------------------------------------
 
