@@ -35,14 +35,12 @@ contains
 
        ap(i) = ro_o(i) * sp(i) * dx / dt !- ( aw(i) + ae(i) )
 
-       bf(i) = 0.0d0 !- pi * f(i) * ro(i) * (u(i)**2) * raio(i) * dx / 4.0d0   
-
-       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt + bf(i)   &
+       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0  * sp(i) * ( p(i+1) - p(i-1) )
              
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )
 
-       leste = -roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
+       leste = roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
 
        bc(i) = 0.5d0 * beta * ( oeste - leste )
 
@@ -81,9 +79,7 @@ contains
  
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
-       ue(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
-             + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
-             / (ap(i)+ap(i+1))
+       ue(i) = (somap + somae + (massa_p+massa_e)/dt - 2.0d0*se(i)*(p(i+1)-p(i))) / (ap(i)+ap(i+1))
 
     end do
 
@@ -117,12 +113,11 @@ contains
 
        ae(i) = 0.0d0
 
-       ap(i) = cp * ro_o(i) * sp(i) * dx / dt !- ( aw(i) + ae(i) )
+       ap(i) = cp * ro_o(i) * sp(i) * dx / dt 
 
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
-             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0     ! &
-             !+ pi * f(i) * ro(i) * (u(i)**3) * raio(i) * dx / 4  
+             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0 
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i) - T(i-1) )
 
        leste = roe(i) * ue(i) * se(i) * ( T(i+1) - T(i) )
