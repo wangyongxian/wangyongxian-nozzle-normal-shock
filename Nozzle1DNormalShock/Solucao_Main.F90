@@ -60,16 +60,16 @@ subroutine solucao_numerica
     
     !residuo
     call coeficientes_e_fontes_qml_cds_uds
-    call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
-	Residuo_U_o = Residuo_U
+    !call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
+	!Residuo_U_o = Residuo_U
 	
 	call coeficientes_fontes_massa_cds_uds
-	call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
-	Residuo_P_o = Residuo_P
+	!call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
+	!Residuo_P_o = Residuo_P
 	
 	call coeficientes_e_fontes_energia_cds_uds
-	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
-	Residuo_T_o = Residuo_T
+	!call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
+	!Residuo_T_o = Residuo_T
 	
 	
 	open(8, file='norma_l1.txt')
@@ -110,14 +110,14 @@ subroutine solucao_numerica
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	
 	  
-	  call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
-	  Residuo_U = Residuo_U/Residuo_U_o
+	  !call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
+	  !Residuo_U = Residuo_U/Residuo_U_o
 	    
       ! cálculo dos coeficientes do método SIMPLEC
 	  call coeficientes_simplec
 	   
       ! cálculos das velocidades na face leste
-	  call calculo_velocidades_face_cds_uds
+	  call calculo_velocidades_face_cds
 !-----------------------------------------------------		  
       ! inicialização na entrada da tubeira
       u_in  = ue(1)
@@ -132,8 +132,8 @@ subroutine solucao_numerica
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
-	  call Norma_L1 (N,ap,aw,ae,bp,T,Residuo_T)
-	  Residuo_T = Residuo_T/Residuo_T_o
+	  !call Norma_L1 (N,ap,aw,ae,bp,T,Residuo_T)
+	  !Residuo_T = Residuo_T/Residuo_T_o
 	   
 	  ! cálculo da massa específica
       ro = p / ( R * T )
@@ -146,16 +146,16 @@ subroutine solucao_numerica
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
       
-      call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
-	  Residuo_P = Residuo_P/Residuo_P_o
+      !call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
+	  !Residuo_P = Residuo_P/Residuo_P_o
 	   
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
       
       !T_ex   = 0.5d0 * ( T(n-1) + T(n) )
       
-      write(8,16) it, Residuo_T, Residuo_U, Residuo_P
-	  16 format (i11,5x,3(1pe20.13))
+  !    write(8,16) it, Residuo_T, Residuo_U, Residuo_P
+	!  16 format (i11,5x,3(1pe20.13))
 	   
 !-----------------------------------------------------	      
 
@@ -163,8 +163,8 @@ subroutine solucao_numerica
     close(8)
     
     ! coeficiente da pressao
-    call coeficientes_fontes_massa_cds_uds
-    call gera_arq_coef(2)
+ !   call coeficientes_fontes_massa_cds_uds
+ !   call gera_arq_coef(2)
     !coeficiente da Energia
     !call coeficientes_e_fontes_energia_cds
     !call gera_arq_coef(3)

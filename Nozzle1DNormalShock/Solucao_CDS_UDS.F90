@@ -29,7 +29,7 @@ contains
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = roe(i-1) * ue(i-1) * se(i-1)
+       aw(i) = -roe(i-1) * ue(i-1) * se(i-1)
 
        ae(i) = 0.0d0
 
@@ -79,8 +79,20 @@ contains
  
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
-       ue(i) = (somap + somae + (massa_p+massa_e)/dt - 2.0d0*se(i)*(p(i+1)-p(i))) / (ap(i)+ap(i+1))
+       ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
+                -0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
+                -0.5d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
+                +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
+                +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) ) ) &
+                !) &
+               / (ap(i)+ap(i+1))
 
+
+       !ue(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
+       !      + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
+       !      / (ap(i)+ap(i+1))
+             
+             
     end do
 
     ue(1) = 0.5d0 * ( u(1) + u(2) )
@@ -109,7 +121,7 @@ contains
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = cp * roe(i-1) * ue(i-1) * se(i-1)
+       aw(i) = -cp * roe(i-1) * ue(i-1) * se(i-1)
 
        ae(i) = 0.0d0
 
@@ -161,26 +173,26 @@ contains
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) =  0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)          &
-               + ue(i-1)  * se(i-1) / ( R * T(i-1) )
+       aw(i) = - 0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)          &
+               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
 
-       ae(i) = 0.5d0*(ro(i)+ro(i+1)) * de(i) * se(i)       
+       ae(i) = - 0.5d0*(ro(i)+ro(i+1)) * de(i) * se(i)       
 
        ap(i) = ( sp(i) * dx / dt + ue(i) * se(i) ) / ( R * T(i) )   &
              - 0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)                              &
              + 0.5d0*(ro(i)+ro(i+1))   * de(i)   * se(i)
 
        bp(i) = ro_o(i) * sp(i) * dx / dt              &
-               -0.5d0*(-ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
-               -0.5d0*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*se(i-1) &
+               +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
+               -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
                -(sp(i)*dx/dt+ue_o(i)*Se(i))*ro_o(i) &
-               +ue_o(i-1)*ro_o(i-1) &
+               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & ! - daqui pra baixo
                -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
-               -0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
+               +0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
        
-       oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
+       oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue_o(i-1)
 
-       leste = se(i)   * ( ro(i+1) - ro(i) ) * ue(i)
+       leste = se(i)   * ( ro(i+1) - ro(i) ) * ue_o(i)
 
        bc(i) = 0.5d0 * beta * ( oeste - leste )
        
