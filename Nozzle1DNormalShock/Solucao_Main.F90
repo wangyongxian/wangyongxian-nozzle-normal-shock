@@ -4,6 +4,7 @@ use Initialization
 use output
 use variaveis
 use Solucao_CDS
+use Solucao_CDS_UDS
 use Solucao_UDS
 use solvers_1D
 use Solucao_Analitica
@@ -58,15 +59,15 @@ subroutine solucao_numerica
     ds = 0.0d0
     
     !residuo
-    call coeficientes_e_fontes_qml_cds
+    call coeficientes_e_fontes_qml_cds_uds
     call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
 	Residuo_U_o = Residuo_U
 	
-	call coeficientes_fontes_massa_cds
+	call coeficientes_fontes_massa_cds_uds
 	call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
 	Residuo_P_o = Residuo_P
 	
-	call coeficientes_e_fontes_energia_cds
+	call coeficientes_e_fontes_energia_cds_uds
 	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
 	Residuo_T_o = Residuo_T
 	
@@ -77,48 +78,48 @@ subroutine solucao_numerica
 	
     do it = 1, iteracao
     
-        !if ((it > 5000).and.(it < 50000)) beta = 0.9d0
-        !if (it >= 50000 ) beta = 1.0d0
+      !if ((it > 5000).and.(it < 50000)) beta = 0.9d0
+      !if (it >= 50000 ) beta = 1.0d0
 	
-	   ! Atualizando campos para novo avanço
-	   u_o  = u
-	   ue_o = ue
-	   p_o = p
-	   T_o = T
-	   ro_o = ro
+	  ! Atualizando campos para novo avanço
+	  u_o  = u
+	  ue_o = ue
+	  p_o = p
+	  T_o = T
+	  ro_o = ro
 	   
-	   ! atualização da pressão na entrada da tubeira
-       p_ia = p_in
-       M_in = u_in / dsqrt ( gama * R * T_in )
-       k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
-       p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
-       p(1) = 2.0d0*p_in - p(2)
-       pl_in = p_in - p_ia
+	  ! atualização da pressão na entrada da tubeira
+      p_ia = p_in
+      M_in = u_in / dsqrt ( gama * R * T_in )
+      k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_in ** 2 )
+      p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+      p(1) = 2.0d0*p_in - p(2)
+      pl_in = p_in - p_ia
        
-       p_outa = p_outN
-       M_out = u_out / dsqrt ( gama * R * T_out )
-       k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
-       p_outN = p_out / ( k ** ( gama / ( gama - 1.0d0 ) ) )
-       p(N) = 2.0d0*p_outN - p(N-1)
-       pl_out = p_outN - p_outa
+      p_outa = p_outN
+      M_out = u_out / dsqrt ( gama * R * T_out )
+      k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
+      p_outN = p_out / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+      p(N) = 2.0d0*p_outN - p(N-1)
+      pl_out = p_outN - p_outa
 	
 
-	   ! cálculo dos coeficientes e termos fontes
-	   call coeficientes_e_fontes_qml_cds
+	  ! cálculo dos coeficientes e termos fontes
+	  call coeficientes_e_fontes_qml_cds_uds
 	   
-	   ! solução do sistema de equações
-	   call tdma (N,ap,aw,ae,bp,u)	
+	  ! solução do sistema de equações
+	  call tdma (N,ap,aw,ae,bp,u)	
 	  
-	   call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
-	   Residuo_U = Residuo_U/Residuo_U_o
+	  call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
+	  Residuo_U = Residuo_U/Residuo_U_o
 	    
-       ! cálculo dos coeficientes do método SIMPLEC
-	   call coeficientes_simplec
+      ! cálculo dos coeficientes do método SIMPLEC
+	  call coeficientes_simplec
 	   
-       ! cálculos das velocidades na face leste
-	   call calculo_velocidades_face_cds
+      ! cálculos das velocidades na face leste
+	  call calculo_velocidades_face_cds_uds
 !-----------------------------------------------------		  
-     ! inicialização na entrada da tubeira
+      ! inicialização na entrada da tubeira
       u_in  = ue(1)
       u_out  = ue(N-1)
 
@@ -126,7 +127,7 @@ subroutine solucao_numerica
       T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
-	  call coeficientes_e_fontes_energia_cds
+	  call coeficientes_e_fontes_energia_cds_uds
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
@@ -140,7 +141,7 @@ subroutine solucao_numerica
 	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-      call coeficientes_fontes_massa_cds
+      call coeficientes_fontes_massa_cds_uds
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
@@ -162,7 +163,7 @@ subroutine solucao_numerica
     close(8)
     
     ! coeficiente da pressao
-    call coeficientes_fontes_massa_cds
+    call coeficientes_fontes_massa_cds_uds
     call gera_arq_coef(2)
     !coeficiente da Energia
     !call coeficientes_e_fontes_energia_cds

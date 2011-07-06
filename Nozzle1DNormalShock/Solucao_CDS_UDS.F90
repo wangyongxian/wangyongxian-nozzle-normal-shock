@@ -29,11 +29,11 @@ contains
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = - roe(i-1) * ue(i-1) * se(i-1)
+       aw(i) = roe(i-1) * ue(i-1) * se(i-1)
 
        ae(i) = 0.0d0
 
-       ap(i) = ro_o(i) * sp(i) * dx / dt !- ( aw(i) + ae(i) )
+       ap(i) = ro(i) * sp(i) * dx / dt + ( roe(i) * ue(i) * se(i) )
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0  * sp(i) * ( p(i+1) - p(i-1) )
@@ -113,7 +113,7 @@ contains
 
        ae(i) = 0.0d0
 
-       ap(i) = cp * ro_o(i) * sp(i) * dx / dt 
+       ap(i) = cp * ro(i) * sp(i) * dx / dt + cp * roe(i) * ue(i) * se(i)
 
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
@@ -157,22 +157,26 @@ contains
     bp(1) = 2.0d0 * pl_in
 
     ! volumes internos
-
     do i = 2, n-1
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = - roe(i-1) * de(i-1) * se(i-1)          &
-               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
+       aw(i) =  0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)          &
+               + ue(i-1)  * se(i-1) / ( R * T(i-1) )
 
-       ae(i) = - roe(i) * de(i) * se(i)
+       ae(i) = 0.5d0*(ro(i)+ro(i+1)) * de(i) * se(i)       
 
        ap(i) = ( sp(i) * dx / dt + ue(i) * se(i) ) / ( R * T(i) )   &
-             + roe(i-1) * de(i-1) * se(i-1)                              &
-             + roe(i)   * de(i)   * se(i)
+             - 0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)                              &
+             + 0.5d0*(ro(i)+ro(i+1))   * de(i)   * se(i)
 
-       bp(i) = - ( ( ro(i) - ro_o(i) ) * sp(i) * dx / dt              &
-             + ro(i) * ue(i) * se(i) - ro(i-1) * ue(i-1) * se(i-1) )
+       bp(i) = ro_o(i) * sp(i) * dx / dt              &
+               -0.5d0*(-ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
+               -0.5d0*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*se(i-1) &
+               -(sp(i)*dx/dt+ue_o(i)*Se(i))*ro_o(i) &
+               +ue_o(i-1)*ro_o(i-1) &
+               -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
+               -0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
        
        oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue(i-1)
 

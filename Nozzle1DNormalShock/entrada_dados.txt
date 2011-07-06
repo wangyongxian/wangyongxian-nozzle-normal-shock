@@ -2,9 +2,9 @@
       20.00d+5         P0        = pressao de estagnacao
       10.00d+5         P_out     = pressao da saida
       3420.33d+0       T0        = temperatura de estagnacao
-      1002               N         = número de volumes de controle
+      12               N         = número de volumes de controle
       1.0d-7           deltat    = número de avanços no tempo
-      50000            iteracao  = número de iterações (ciclo total)
+      1000            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas
@@ -13,7 +13,7 @@
       0.1d+0	       rg        = rg
       0.1d+0	       Lc        = Lc
       0.4d+0	       Ln        = Ln
-      0.5d+0           beta      = esquema CDS - 1 UDS - 0
+      0.0d+0           beta      = esquema CDS - 1 UDS - 0
 +Razao de refino
       2                RazaoRef  = Razao de refino
       1                Niveis    = Niveis
@@ -37,8 +37,8 @@
 0    = coeficiente de descarga
 0    = dominio
 +Resultados (1 - para mostrar 0 - para nao mostrar)
-1    = txt de resultados
-1    = txt de iteracoes
+0    = txt de resultados
+0    = txt de iteracoes
 0    = txt de coeficientes
-1    = gerar solucao analitica
+0    = gerar solucao analitica
 1000 = numero de nós para a malha da solucao analitica

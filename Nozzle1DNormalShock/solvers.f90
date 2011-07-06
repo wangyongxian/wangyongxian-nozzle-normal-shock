@@ -9,7 +9,6 @@ contains
 
 !-------------------------------------------------
 
-  ! método direto Tri-Diagonal Matrix Algorithm (TDMA)
 subroutine TDMA (N,ap,aw,ae,bp,T)
 
     implicit none
