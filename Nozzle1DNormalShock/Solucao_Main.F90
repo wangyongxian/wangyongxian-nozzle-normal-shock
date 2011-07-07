@@ -5,7 +5,7 @@ use output
 use variaveis
 use Solucao_CDS
 use Solucao_CDS_UDS
-use Solucao_UDS
+use Solucao_UDS_UDS2
 use solvers_1D
 use Solucao_Analitica
 
@@ -105,7 +105,7 @@ subroutine solucao_numerica
 	
 
 	  ! cálculo dos coeficientes e termos fontes
-	  call coeficientes_e_fontes_qml_cds_uds
+	  call coeficientes_e_fontes_qml_uds_uds2
 	   
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	

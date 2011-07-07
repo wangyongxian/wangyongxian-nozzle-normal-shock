@@ -83,7 +83,7 @@ contains
                 -0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
                 -0.5d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
                 +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
-                +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) ) ) &
+                +0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) ) ) &
                 !) &
                / (ap(i)+ap(i+1))
 
