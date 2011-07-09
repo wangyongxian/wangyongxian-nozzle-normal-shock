@@ -105,7 +105,7 @@ subroutine solucao_numerica
 	
 
 	  ! cálculo dos coeficientes e termos fontes
-	  call coeficientes_e_fontes_qml_uds_uds2
+	  call coeficientes_e_fontes_qml_cds_uds
 	   
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	

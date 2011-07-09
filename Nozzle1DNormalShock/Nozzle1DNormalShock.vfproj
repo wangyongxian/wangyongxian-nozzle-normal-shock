@@ -56,7 +56,7 @@
 		<File RelativePath=".\Output.f90"/>
 		<File RelativePath=".\Solucao_Analitica.F90"/>
 		<File RelativePath=".\Solucao_CDS.F90"/>
-		<File RelativePath=".\Solucao_CDS_p.F90"/>
+		<File RelativePath=".\Solucao_CDS_Puro.F90"/>
 		<File RelativePath=".\Solucao_CDS_UDS.F90"/>
 		<File RelativePath=".\Solucao_Main.F90"/>
 		<File RelativePath=".\Solucao_TVD.F90"/>

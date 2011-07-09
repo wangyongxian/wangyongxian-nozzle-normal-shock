@@ -35,7 +35,7 @@ contains
        ap(i) = ro(i) * sp(i) * dx / dt + ( roe(i) * ue(i) * se(i) )
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
-             - 0.5d0  * sp(i) * ( 3.0d0*p(i+1) - 4.0d0*p(i-1) + p(i-2))
+             - 0.5d0  * sp(i) * ( 3.0d0*p(i) - 4.0d0*p(i-1) + p(i-2))
              
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i-1) - u(i-2) )
 
@@ -189,9 +189,9 @@ contains
                -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
                +0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
        
-       oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue_o(i-1)
+       oeste = se(i-1) * ( ro(i-1) - ro(i-2) ) * ue_o(i-1)
 
-       leste = se(i)   * ( ro(i+1) - ro(i) ) * ue_o(i)
+       leste = se(i)   * ( ro(i) - ro(i-1) ) * ue_o(i)
 
        bc(i) = 0.5d0 * beta * ( oeste - leste )
        

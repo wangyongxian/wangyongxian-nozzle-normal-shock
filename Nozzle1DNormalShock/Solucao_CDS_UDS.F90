@@ -190,9 +190,9 @@ contains
                -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
                +0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
        
-       oeste = se(i-1) * ( ro(i) - ro(i-1) ) * ue_o(i-1)
+       oeste = se(i-1) * ( ro_o(i) - ro_o(i-1) ) * ue_o(i-1)
 
-       leste = se(i)   * ( ro(i+1) - ro(i) ) * ue_o(i)
+       leste = se(i)   * ( ro_o(i+1) - ro_o(i) ) * ue_o(i)
 
        bc(i) = 0.5d0 * beta * ( oeste - leste )
        
