@@ -56,8 +56,10 @@
 		<File RelativePath=".\Output.f90"/>
 		<File RelativePath=".\Solucao_Analitica.F90"/>
 		<File RelativePath=".\Solucao_CDS.F90"/>
+		<File RelativePath=".\Solucao_CDS_p.F90"/>
 		<File RelativePath=".\Solucao_CDS_UDS.F90"/>
 		<File RelativePath=".\Solucao_Main.F90"/>
+		<File RelativePath=".\Solucao_TVD.F90"/>
 		<File RelativePath=".\Solucao_UDS_UDS2.F90"/>
 		<File RelativePath=".\Solvers.f90"/>
 		<File RelativePath=".\Variaveis.f90"/></Filter></Files>
