@@ -13,7 +13,7 @@
       0.1d+0	       rg        = rg
       0.1d+0	       Lc        = Lc
       0.4d+0	       Ln        = Ln
-      0.5d+0           beta      = esquema CDS - 1 UDS - 0
+      0.0d+0           beta      = esquema CDS - 1 UDS - 0
 +Razao de refino
       2                RazaoRef  = Razao de refino
       1                Niveis    = Niveis
