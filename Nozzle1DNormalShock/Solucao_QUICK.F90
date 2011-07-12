@@ -20,10 +20,8 @@ contains
     ap(1) =  1.0d0
     ae(1) = -1.0d0
     bp(1) = -fator * ( u(3) - u(2) )
-    bf(1) = 0.0d0
-    bc(1) = 0.0d0
+    
     ! volumes internos
-
     do i = 2, n-1
 
        dx = xe(i) - xe(i-1)
@@ -41,8 +39,6 @@ contains
 
        leste = roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) )
 
-       bc(i) = 0.5d0 * beta * ( oeste - leste )
-
     end do
 
     ! volume n (fictício)
@@ -52,9 +48,6 @@ contains
     ap(n) =  1.0d0
     ae(n) =  0.0d0
     bp(n) =  fator * ( u(n-1) - u(n-2) )
-    bf(n) =  0.0d0
-    bc(n) = 0.0d0
-    bp = bp + bc
     
   end subroutine coeficientes_e_fontes_qml_quick
 
@@ -113,9 +106,8 @@ contains
     ap(1) = 1.0d0
     ae(1) = 1.0d0
     bp(1) = 2.0d0 * T_in
-    bc(1) = 0.0d0
+    
     ! volumes internos
-
     do i = 2, n-1
 
        dx = xe(i) - xe(i-1)
@@ -131,9 +123,6 @@ contains
              + sp(i) * u(i) * ( 3.0d0*p(i) - 4.0d0*p(i-1) + p(i-2) ) * 0.5d0 
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i-1) - T(i-2) )
 
-       leste = roe(i) * ue(i) * se(i) * ( T(i) - T(i-1) )
-
-       bc(i) = 0.5d0 *beta* cp * ( oeste - leste )
     end do
 
     ! volume n (fictício)
@@ -142,14 +131,10 @@ contains
     aw(n) =  -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
-    bc(n) = 0.0d0
     bp(n) =  fator * ( T(n-1) - T(n-2) )
     !bp(n) =  2.0d0*T_out
-! volume n (fictício)
-
     ! atualiza o termo independente
 
-    bp = bp + bc
   end subroutine coeficientes_e_fontes_energia_quick
   
 !-------------------------------------------------
@@ -161,7 +146,6 @@ contains
     integer ::i 
     ! volume 1 (fictício)
 
-    bc(1) = 0.0d0
     aw(1) = 0.0d0
     ap(1) = 1.0d0
     ae(1) = 1.0d0
@@ -190,24 +174,17 @@ contains
                +0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
        
        oeste = se(i-1) * ( ro(i-1) - ro(i-2) ) * ue_o(i-1)
-
-       leste = se(i)   * ( ro(i) - ro(i-1) ) * ue_o(i)
-
-       bc(i) = 0.5d0 * beta * ( oeste - leste )
        
     end do
  ! volume n (fictício)
 
-    bc(n) = 0.0d0
     !fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = 1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
     !bp(n) =  fator * ( pl(n-1) - pl(n-2) )
     bp(n) =  2.0d0*pl_out
-    ! atualiza o termo independente
-
-    bp = bp + bc
+  
   end subroutine coeficientes_fontes_massa_quick
 
 end module Solucao_QUICK

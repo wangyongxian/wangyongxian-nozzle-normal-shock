@@ -37,7 +37,8 @@ contains
 	read(7,*) ! +Saida
     read(7,*) title
     read(7,*) caso
-    read(7,*) ! +Saida para o programa Richardson
+    read(7,*) ! +caminho para o aplicativo de Richardson
+    read(7,*) richardson_path
     read(7,*) richardson_1
     read(7,*) richardson_2
     read(7,*) richardson_3
