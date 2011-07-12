@@ -75,7 +75,7 @@ subroutine solucao_numerica
 	open(8, file='norma_l1.txt')
 	write(8,4)
 	4 format(t1,'iteracao',t18 ,'Residuo T',t38 ,'Residuo U',t58,'Residuo Pl')
-	
+
     do it = 1, iteracao
     
       !if ((it > 5000).and.(it < 50000)) beta = 0.9d0

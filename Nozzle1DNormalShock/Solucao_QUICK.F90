@@ -72,19 +72,12 @@ contains
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
        ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
-                -0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
-                -0.5d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
-                +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
-                +0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) ) ) &
-                !) &
+                -0.25d0 * beta * roe(i) * ue(i) * se(i) * ( u_o(i+1) - u_o(i) ) &
+                -0.25d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u_o(i+2) - u_o(i+1) ) &
+                +0.25d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u_o(i) - u_o(i-1) )   &
+                +0.25d0*beta*roe(i) * ue(i) * se(i) * ( u_o(i) - u_o(i-1) ) ) &
                / (ap(i)+ap(i+1))
 
-
-       !ue(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
-       !      + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
-       !      / (ap(i)+ap(i+1))
-             
-             
     end do
 
     ue(1) = 0.5d0 * ( u(1) + u(2) )

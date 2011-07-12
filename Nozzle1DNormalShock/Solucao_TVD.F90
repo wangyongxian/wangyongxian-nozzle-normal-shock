@@ -39,7 +39,7 @@ end function PSI
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0   * sp(i) * ( p(i+1) - p(i-1) ) &
-             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI() * ( u(i) - u(i-1) )
+             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(12.0d0) * ( u(i) - u(i-1) )
 
 
     end do
@@ -75,25 +75,18 @@ end function PSI
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
        ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
-                -0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
-                -0.5d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
-                +0.5d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
-                +0.5d0*beta*roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) ) ) &
-                !) &
+                -0.25d0 * beta * roe(i) * ue(i) * se(i) * ( u_o(i+1) - u_o(i) ) &
+                -0.25d0*beta*roe(i+1) * ue(i+1) * se(i+1) * ( u_o(i+2) - u_o(i+1) ) &
+                +0.25d0*beta*roe(i-1) * ue(i-1) * se(i-1) * ( u_o(i) - u_o(i-1) )   &
+                +0.25d0*beta*roe(i) * ue(i) * se(i) * ( u_o(i) - u_o(i-1) ) ) &
                / (ap(i)+ap(i+1))
 
-
-       !ue(i) = (-somap - somae + bc(i) + bc(i+1) + bf(i) + bf(i+1)       &
-       !      + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)))  &
-       !      / (ap(i)+ap(i+1))
-             
-             
     end do
 
     ue(1) = 0.5d0 * ( u(1) + u(2) )
 
     ue(n-1) = 0.5d0 * ( u(n) + u(n-1) )
- 
+    
   end subroutine calculo_velocidades_face_tvd
 
 !-------------------------------------------------
@@ -124,8 +117,8 @@ end function PSI
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt           &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt               &
              + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0        &
-             + 0.5d0 * cp * roe(i-1) * ue(i-1) * se(i-1) * PSI() * ( T(i) - T(i-1) )  &
-             - 0.5d0 * cp * roe(i) * ue(i) * se(i) * PSI() * ( T(i+1) - T(i) )
+             + 0.5d0 * cp * roe(i-1) * ue(i-1) * se(i-1) * PSI(12.0d0) * ( T(i) - T(i-1) )  &
+             - 0.5d0 * cp * roe(i) * ue(i) * se(i) * PSI(12.0d0) * ( T(i+1) - T(i) )
 
     end do
 
@@ -171,8 +164,8 @@ end function PSI
        bp(i) = ro_o(i) * sp(i) * dx / dt              &
                +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
-               -0.5d0*Se(i)*PSI()*(ro_o(i)+ro_o(i+1))*ue_o(i) &
-               +0.5d0*Se(i-1)*PSI()*(ro_o(i)+ro_o(i-1))*ue_o(i-1) &
+               -0.5d0*Se(i)*PSI(12.0d0)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
+               +0.5d0*Se(i-1)*PSI(12.0d0)*(ro_o(i)+ro_o(i-1))*ue_o(i-1) &
                -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
                -Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
                -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &

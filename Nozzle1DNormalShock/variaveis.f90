@@ -64,10 +64,11 @@ real*8 :: T_ex  ! temperatura na saída da tubeira (K)
 real*8 :: ro_ex ! massa específica na saída da tubeira (m/s)
 real*8 :: P_out
 
-real*8,dimension(:),allocatable :: ap, aw, ae, bp, AAp ! coeficiente central de u e p
+real*8,dimension(:),allocatable :: ap, aw, ae, bp, aww, AAp ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
 character*512 ::richardson_path
+character*100 ::richardson_exe
 character*100 :: caso      ! nome do arquivo de saída
 character*100 :: richardson_1      ! nome do arquivo principal do programa Richardson
 character*100 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson
