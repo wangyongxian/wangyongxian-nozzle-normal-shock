@@ -15,6 +15,7 @@ contains
 	integer ::i
 	! volume 1 (fictício)
 
+    ! temporario
     fator = 2.0d0 * xp(2) / ( xp(3) - xp(2) )
     aw(1) =  0.0d0
     ap(1) =  1.0d0
@@ -24,7 +25,7 @@ contains
     bc(1) = 0.0d0
     ! volumes internos
 
-    do i = 2, n-1
+    do i = 2, 3
 
        dx = xe(i) - xe(i-1)
 
@@ -35,7 +36,30 @@ contains
        ap(i) = ro(i) * sp(i) * dx / dt + ( roe(i) * ue(i) * se(i) )
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
-             - 0.5d0  * sp(i) * ( 3.0d0*p(i) - 4.0d0*p(i-1) + p(i-2))
+             - 0.5d0  * sp(i) * ( p(i+1) - p(i-1) )
+             
+       oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )
+
+       leste = roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
+
+       bc(i) = 0.5d0 * beta * ( oeste - leste )
+
+    end do
+    
+    !!!!!!!!!!!!!!!!!!!!!!!!!!
+    
+    do i = 4, n-1
+
+       dx = xe(i) - xe(i-1)
+
+       aw(i) = -roe(i-1) * ue(i-1) * se(i-1)
+
+       ae(i) = 0.0d0
+
+       ap(i) = ro(i) * sp(i) * dx / dt + ( roe(i) * ue(i) * se(i) )
+
+       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
+             - 0.5d0  * sp(i) * ( p(i+1) - p(i-1))
              
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i-1) - u(i-2) )
 
@@ -68,7 +92,7 @@ contains
     integer ::i
     ! média antiga
 
-    do i = 2, n-2
+    do i = 4, n-2
 
        massa_p = ro_o(i) * sp(i) * (xe(i) - xe(i-1))
 
@@ -115,8 +139,7 @@ contains
     bp(1) = 2.0d0 * T_in
     bc(1) = 0.0d0
     ! volumes internos
-
-    do i = 2, n-1
+    do i = 2, 3
 
        dx = xe(i) - xe(i-1)
 
@@ -128,7 +151,28 @@ contains
 
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
-             + sp(i) * u(i) * ( 3.0d0*p(i) - 4.0d0*p(i-1) + p(i-2) ) * 0.5d0 
+             + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0 
+       oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i) - T(i-1) )
+
+       leste = roe(i) * ue(i) * se(i) * ( T(i+1) - T(i) )
+
+       bc(i) = 0.5d0 *beta* cp * ( oeste - leste )
+    end do
+    
+    !!!!!!!!!!!!!!!!!!
+    do i = 4, n-1
+
+       dx = xe(i) - xe(i-1)
+
+       aw(i) = -cp * roe(i-1) * ue(i-1) * se(i-1)
+
+       ae(i) = 0.0d0
+
+       ap(i) = cp * ro(i) * sp(i) * dx / dt + cp * roe(i) * ue(i) * se(i)
+
+       bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt        &
+             + sp(i) * dx * ( p(i) - p_o(i) ) / dt              &
+             + sp(i) * u(i) * ( p(i+1) - p(i-1)) * 0.5d0 
        oeste = roe(i-1) * ue(i-1) * se(i-1) * ( T(i-1) - T(i-2) )
 
        leste = roe(i) * ue(i) * se(i) * ( T(i) - T(i-1) )
@@ -167,8 +211,38 @@ contains
     ae(1) = 1.0d0
     bp(1) = 2.0d0 * pl_in
 
+    do i = 2, 3
+
+       dx = xe(i) - xe(i-1)
+
+       aw(i) = - 0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)          &
+               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
+
+       ae(i) = - 0.5d0*(ro(i)+ro(i+1)) * de(i) * se(i)       
+
+       ap(i) = ( sp(i) * dx / dt + ue(i) * se(i) ) / ( R * T(i) )   &
+             - 0.5d0*(ro(i)+ro(i-1)) * de(i-1) * se(i-1)                              &
+             + 0.5d0*(ro(i)+ro(i+1))   * de(i)   * se(i)
+
+       bp(i) = ro_o(i) * sp(i) * dx / dt              &
+               +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
+               -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
+               -(sp(i)*dx/dt+ue_o(i)*Se(i))*ro_o(i) &
+               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & ! - daqui pra baixo
+               -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
+               +0.5d0*Se(i-1)*(ro_o(i)+ro_o(i-1))*ue_o(i-1)
+       
+       oeste = se(i-1) * ( ro_o(i) - ro_o(i-1) ) * ue_o(i-1)
+
+       leste = se(i)   * ( ro_o(i+1) - ro_o(i) ) * ue_o(i)
+
+       bc(i) = 0.5d0 * beta * ( oeste - leste )
+       
+    end do
+    
+    !!!!!!!!!!!!!!!!
     ! volumes internos
-    do i = 2, n-1
+    do i = 4, n-1
 
        dx = xe(i) - xe(i-1)
 

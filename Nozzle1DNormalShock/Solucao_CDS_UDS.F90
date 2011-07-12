@@ -24,7 +24,6 @@ contains
     bf(1) = 0.0d0
     bc(1) = 0.0d0
     ! volumes internos
-
     do i = 2, n-1
 
        dx = xe(i) - xe(i-1)
@@ -45,9 +44,7 @@ contains
        bc(i) = 0.5d0 * beta * ( oeste - leste )
 
     end do
-
     ! volume n (fictício)
-
     fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = -1.0d0
     ap(n) =  1.0d0
