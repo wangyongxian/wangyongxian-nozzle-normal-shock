@@ -2,9 +2,9 @@
       20.00d+5         P0        = pressao de estagnacao
       10.00d+5         P_out     = pressao da saida
       3420.33d+0       T0        = temperatura de estagnacao
-      152               N         = número de volumes de controle
+      102               N         = número de volumes de controle
       1.0d-7           deltat    = número de avanços no tempo
-     2000            iteracao  = número de iterações (ciclo total)
+      100            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas

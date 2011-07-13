@@ -11,8 +11,39 @@ contains
 function PSI(R)
 real*8 PSI
 real*8 R
-
+!Van Leer
+PSI = (R+ABS(R))/(1.0d0+R)
+!Van Albada
+!PSI = (R+R**2.0d0)/(1.0d0+R**2.0d0)
+!Min-Mod
+!if (R <= 0.0d0) then
+!    PSI = 0.0d0
+!else
+!    PSI = MIN(R,1.0d0)
+!end if
+!Superbee de Roe
+!    PSI = MAX(0.0d0,MIN(2.0d0*R,1.0d0),MIN(R,2.0d0))
+!Sweby
+!    PSI = MAX(0.0d0,MIN(BETA_TVD*R,1.0d0),MIN(R,BETA_TVD))
+!QUICK
+!    PSI = MAX(0.0d0,MIN(2.0d0*R,(3.0d0+R)/4.0d0,2.0d0))
+!UMIST
+!    PSI = MAX(0.0d0,MIN(2.0d0*R,(1.0d0+3.0d0*R)/4.0d0,(3.0d0+R)/4.0d0,2))
 end function PSI
+
+function re(i,F)
+real*8 ::re
+integer ::i
+real*8, DIMENSION(N) ::F
+    re = (F(i)-F(i-1))/(F(i+1)-F(i))
+end function re
+
+function rw(i, F)
+real*8 ::rw
+integer ::i
+real*8, DIMENSION(N) ::F
+    rw = (F(i-1)-F(i-2))/(F(i)-F(i-1))
+end function rw
 
   subroutine coeficientes_e_fontes_qml_tvd
 	real*8  :: fator, dx ! auxiliar
@@ -39,13 +70,11 @@ end function PSI
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0   * sp(i) * ( p(i+1) - p(i-1) ) &
-             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(12.0d0) * ( u(i) - u(i-1) )
-
-
+             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(rw(i,u)) * ( u_o(i) - u_o(i-1) ) &
+             - 0.5d0   * roe(i) * ue(i) * se(i) * PSI(re(i,u)) * ( u_o(i) - u_o(i-1) )
     end do
 
     ! volume n (fictício)
-
     fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
     aw(n) = -1.0d0
     ap(n) =  1.0d0
@@ -117,8 +146,8 @@ end function PSI
        bp(i) = cp * ro_o(i) * sp(i) * dx * T_o(i) / dt           &
              + sp(i) * dx * ( p(i) - p_o(i) ) / dt               &
              + sp(i) * u(i) * ( p(i+1) - p(i-1) ) * 0.5d0        &
-             + 0.5d0 * cp * roe(i-1) * ue(i-1) * se(i-1) * PSI(12.0d0) * ( T(i) - T(i-1) )  &
-             - 0.5d0 * cp * roe(i) * ue(i) * se(i) * PSI(12.0d0) * ( T(i+1) - T(i) )
+             + 0.5d0 * cp * roe(i-1) * ue(i-1) * se(i-1) * PSI(rw(i,T)) * ( T(i) - T(i-1) )  &
+             - 0.5d0 * cp * roe(i) * ue(i) * se(i) * PSI(re(i,T)) * ( T(i+1) - T(i) )
 
     end do
 
@@ -164,8 +193,8 @@ end function PSI
        bp(i) = ro_o(i) * sp(i) * dx / dt              &
                +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
-               -0.5d0*Se(i)*PSI(12.0d0)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
-               +0.5d0*Se(i-1)*PSI(12.0d0)*(ro_o(i)+ro_o(i-1))*ue_o(i-1) &
+               -0.5d0*Se(i)*PSI(re(i,ro))*(ro_o(i)+ro_o(i+1))*ue_o(i) &
+               +0.5d0*Se(i-1)*PSI(rw(i,ro))*(ro_o(i)+ro_o(i-1))*ue_o(i-1) &
                -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
                -Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
                -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
