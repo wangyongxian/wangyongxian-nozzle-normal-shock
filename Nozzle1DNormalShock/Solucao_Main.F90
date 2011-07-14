@@ -106,7 +106,7 @@ subroutine solucao_numerica
 	
 
 	  ! cálculo dos coeficientes e termos fontes
-	  !call coeficientes_e_fontes_qml_uds_uds2
+	 ! call coeficientes_e_fontes_qml_uds_uds2
 	  call coeficientes_e_fontes_qml_tvd
 	  !call coeficientes_e_fontes_qml_cds_uds
 	   
@@ -121,7 +121,8 @@ subroutine solucao_numerica
 	   
       ! cálculos das velocidades na face leste
 	  !call calculo_velocidades_face_uds_uds2
-	  call calculo_velocidades_face_cds_uds
+	  call calculo_velocidades_face_tvd
+	  !call calculo_velocidades_face_cds_uds
 !-----------------------------------------------------		  
       ! inicialização na entrada da tubeira
       u_in  = ue(1)
@@ -131,7 +132,8 @@ subroutine solucao_numerica
       T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
-	  call coeficientes_e_fontes_energia_uds_uds2
+	  !call coeficientes_e_fontes_energia_uds_uds2
+	  call coeficientes_e_fontes_energia_tvd
 	  !call coeficientes_e_fontes_energia_cds_uds
 	  
 	  ! solução do sistema de equações
@@ -146,7 +148,8 @@ subroutine solucao_numerica
 	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-      call coeficientes_fontes_massa_uds_uds2
+      !call coeficientes_fontes_massa_uds_uds2
+      call coeficientes_fontes_massa_tvd
       !call coeficientes_fontes_massa_cds_uds
 	  
       ! solução do sistema de equações
