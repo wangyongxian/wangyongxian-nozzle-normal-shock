@@ -16,19 +16,19 @@ real*8 R
 !Van Albada
 !PSI = (R+R**2.0d0)/(1.0d0+R**2.0d0)
 !Min-Mod
-if (R <= 0.0d0) then
-    PSI = 0.0d0
-else
-    PSI = MIN(R,1.0d0)
-end if
+!if (R <= 0.0d0) then
+!    PSI = 0.0d0
+!else
+!    PSI = MIN(R,1.0d0)
+!end if
 !Superbee de Roe
-!    PSI = MAX(0.0d0,MIN(2.0d0*R,1.0d0),MIN(R,2.0d0))
+    PSI = MAX(0.0d0,MIN(2.0d0*R,1.0d0),MIN(R,2.0d0))
 !Sweby
 !    PSI = MAX(0.0d0,MIN(BETA_TVD*R,1.0d0),MIN(R,BETA_TVD))
 !QUICK
-    !PSI = MAX(0.0d0,MIN(2.0d0*R,(3.0d0+R)/4.0d0,2.0d0))
+!    PSI = MAX(0.0d0,MIN(2.0d0*R,(3.0d0+R)/4.0d0,2.0d0))
 !UMIST
-!    PSI = MAX(0.0d0,MIN(2.0d0*R,(1.0d0+3.0d0*R)/4.0d0,(3.0d0+R)/4.0d0,2.0d0))
+    !PSI = MAX(0.0d0,MIN(2.0d0*R,(1.0d0+3.0d0*R)/4.0d0,(3.0d0+R)/4.0d0,2.0d0))
 end function PSI
 
 function re(i,F)
@@ -42,8 +42,8 @@ if (F(i+1)==F(i)) then
 else
     re = (F(i)-F(i-1))/(F(i+1)-F(i))
 end if
-a = isnan(re)
-soma = F(i+1)-F(i)
+!a = isnan(re)
+!soma = F(i+1)-F(i)
 end function re
 
 function rw(i, F)
@@ -146,7 +146,6 @@ end function rw
        somap = aw(i)*u(i-1) + ae(i)*u(i+1)
  
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
-             !+ 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(1.0d0) * ( u_o(i) - u_o(i-1) ) &
 
        ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
                 -0.5d0 * PSI(re(i,u_o)) * roe(i) * ue(i) * se(i) * ( u_o(i+1) - u_o(i) ) &
@@ -229,6 +228,7 @@ end function rw
     real*8 :: fator, dx ! auxiliar
     real*8 :: oeste, leste ! auxiliares
     integer ::i 
+    real*8 ::a1,a2,a3,a4,a5,a6,a7,a8,a9
     
     ! volume 1 (fictício)
     aw(1) = 0.0d0
@@ -241,7 +241,7 @@ i=2
 dx = xe(i) - xe(i-1)
 
        aw(i) = - 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)          &
-               + ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
+               - ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
 
        ae(i) = - 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i) * se(i)       
 
@@ -255,9 +255,19 @@ dx = xe(i) - xe(i-1)
                +0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1) &
                -0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i) &
                -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
-               -Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
+               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
                -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                +0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+               a1 = ro_o(i) * sp(i) * dx / dt 
+               a2 = 0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
+               a3 = 0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+               a4=  0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1)
+               a5=0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)
+               a6=(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i)
+               a7=Se(i-1)*ue_o(i-1)*ro_o(i-1)
+               a8=0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
+               a9=0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+            !   write(*,*) ''
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! volumes internos
     do i = 3, n-1
@@ -265,7 +275,7 @@ dx = xe(i) - xe(i-1)
        dx = xe(i) - xe(i-1)
 
        aw(i) = - 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)          &
-               + ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
+               - ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
 
        ae(i) = - 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i) * se(i)       
 
@@ -279,9 +289,20 @@ dx = xe(i) - xe(i-1)
                +0.5d0*PSI(rw(i,ro))*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*Se(i-1) &
                -0.5d0*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)*Se(i)    &
                -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
-               -Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
+               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
                -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                +0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+               
+               a1 = ro_o(i) * sp(i) * dx / dt 
+               a2 = 0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
+               a3 = -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+               a4=  0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1)
+               a5=-0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)
+               a6=-(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i)
+               a7=+Se(i-1)*ue_o(i-1)*ro_o(i-1)
+               a8=-0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
+               a9=0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
+              ! write(*,*) ''
     end do
 
  ! volume n (fictício)
