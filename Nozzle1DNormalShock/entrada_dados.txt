@@ -4,7 +4,7 @@
       3420.33d+0       T0        = temperatura de estagnacao
       102               N         = número de volumes de controle
       1.0d-7           deltat    = número de avanços no tempo
-      30            iteracao  = número de iterações (ciclo total)
+      20            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas
@@ -31,7 +31,7 @@
 +Graficos (1 - para mostrar 0 - para nao mostrar)
 0    = fluxo de massa
 0    = temperatura
-1    = velocidade
+0    = velocidade
 0    = massa especifica
 1    = pressao
 0    = mach
