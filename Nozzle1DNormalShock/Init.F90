@@ -159,7 +159,13 @@ contains
             Se(i) = Pi*(rin**2.0d0)
        end if
 	end do  
+!Paper: "Weighted Essentially Non-oscillatory Schemes on Triangular Meshes"
 
+ !Paper: "Essentially Non-Oscillatory and Weighted Essentially Non-Oscillatory Schemes for Hyperbolic Conservation Laws"
+
+ !Paper: "Efficient Implementation of Weighted ENO Schemes"
+
+ !Also GoogleScholar search WENO and look into the Journal of Physics, Journal of Fluid Mechanics, and AIAA websites.
 
     
   end subroutine init_alloc
