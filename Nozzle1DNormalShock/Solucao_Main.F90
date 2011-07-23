@@ -154,7 +154,7 @@ subroutine solucao_numerica
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
-      
+      !
       !call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
 	  !Residuo_P = Residuo_P/Residuo_P_o
 	   

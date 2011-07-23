@@ -64,6 +64,17 @@ contains
     
     close(7)
 
+    allocate(files(Niveis))
+    !USE IFPORT
+    !$MAXPATH
+    !richardson_path = trim(adjustl(richardson_path))
+    !richardson_exe =  trim(adjustl(richardson_exe))
+    !richardson_exe =  richardson_path // richardson_exe
+    !richardson_1 = trim(adjustl(richardson_1))
+    !richardson_2 = trim(adjustl(richardson_2))
+    !richardson_3 = trim(adjustl(richardson_3))
+    !richardson_4 = trim(adjustl(richardson_4))
+
   end subroutine conf_file_read
 
 !-------------------------------------------------
@@ -78,6 +89,7 @@ contains
     allocate (afu(N),atu(N),btu(N),bpru(N))
 	allocate (aw(N),ap(N),ae(N),bp(N), bf(N), bc(N), aww(N))
   	allocate (Empuxo(N), Mach(n), Mache(N), Ma(N), Ua(N), Cd(N), Ta(N), T_o(N), Pa(N), roa(N), f(N), AAp(N))
+  	
   	
   	aww = 0.0d0
   	AAp = 0.0d0
@@ -167,8 +179,7 @@ contains
 
  !Also GoogleScholar search WENO and look into the Journal of Physics, Journal of Fluid Mechanics, and AIAA websites.
 
-    
-  end subroutine init_alloc
+end subroutine init_alloc
 
 !-------------------------------------------------
 

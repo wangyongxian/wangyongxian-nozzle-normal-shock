@@ -111,8 +111,6 @@ subroutine gera_graficos
     integer ::i
     real*8 ::T0
     
-
-    
     open(23, file='fm.dat')
     do i = 1, N
 	  write(23,*) xp(i), Ma(i), M(i)

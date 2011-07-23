@@ -2,9 +2,9 @@
       20.00d+5         P0        = pressao de estagnacao
       9.00d+5         P_out     = pressao da saida
       3420.33d+0       T0        = temperatura de estagnacao
-      102               N         = número de volumes de controle
+      10               N         = número de volumes de controle
       1.0d-7           deltat    = número de avanços no tempo
-      500            iteracao  = número de iterações (ciclo total)
+      10            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas
@@ -16,11 +16,11 @@
       0.0d+0           beta      = esquema CDS - 1 UDS - 0
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      1                Niveis    = Niveis
+      5                Niveis    = Niveis
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
-+Richardson D:\projeto\nozzle-normal-shock\Nozzle1DNormalShock\Richardson_3p0
++Richardson D:\projeto\nozzle-normal-shock\Nozzle1DNormalShock\Richardson_3p0\
 'D:\Projects\nozzle-normal-shock\Nozzle1DNormalShock\Richardson_3p0\' ! caminho para o aplicativo de Richardson
 'Richardson_3p0.exe'							 ! nome do aplicativo
 'Richardson_3p0.in'                    `         ! nome do arquivo principal do programa Richardson (nao modificar)
@@ -32,7 +32,7 @@
 0    = fluxo de massa
 0    = temperatura
 0    = velocidade
-1    = massa especifica
+0    = massa especifica
 0    = pressao
 0    = mach
 0    = empuxo

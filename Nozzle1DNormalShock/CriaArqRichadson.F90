@@ -1,30 +1,33 @@
 Module CriaArqRichadson
 
+use variaveis
+
 implicit none
 
 contains
 
-subroutine WriteConfFile(filename1, filename2)
-    character*100, intent(in) ::filename1
-    character*100, intent(in) ::filename2
-character*100 form
+subroutine WriteConf1File(filename1, filename2)
+    character*255, intent(in) ::filename1
+    character*255, intent(in) ::filename2
+character*255 form
+
 open(14, file=filename1)
 form = "'"//trim(adjustl(filename2)) //"'"
-25 format(A50,'(arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)',1/)
+25 format(A52,'(arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)',1/)
 write(14,25) form
 close(14)
-end subroutine WriteConfFile
+end subroutine WriteConf1File
 
-subroutine CreateMeshFile(filename1, filename2, filename3, filename_template, nmalhas)
-    character*100, intent(in) ::filename1
-    character*100, intent(in) ::filename2
-    character*100, intent(in) ::filename3
+subroutine WriteConf2File(filename1, filename2, filename3, filename_template, nmalhas)
+    character*255, intent(in) ::filename1
+    character*255, intent(in) ::filename2
+    character*255, intent(in) ::filename3
     character*100, intent(in) ::filename_template
     integer     , intent(in)  ::nmalhas
     integer ::i
-    character*100 ::form1
-    character*100 ::form2
-    character*100 ::arquivo
+    character*255 ::form1
+    character*255 ::form2
+    character*255 ::arquivo
     
 26 format (I8,  T30, '(variavel) número da variável, nos arquivos de resultados, a analisar', 1/, &
            A30, T30, '(caso)     nome do arquivo de saída', 1/, &
@@ -38,24 +41,85 @@ subroutine CreateMeshFile(filename1, filename2, filename3, filename_template, nm
            d10.2,  T30, '(tol) tolerância na obtenção de pU (r variável)', 1/, &
            d10.1,  T30, '(pU_min) limite inferior de pU (r variável)', 1/, &
            d7.1,  T30, '(pU_max) limite superior de pU (r variável)', 1/, &
-           I8,  T30, '(nm)  número de malhas', 1/)
+           I8,  T30, '(nm)  número de malhas')
 open(12, file=filename1)
 form1 = "'" // trim(adjustl(filename2)) // "'"
 form2 = "'" // trim(adjustl(filename3)) // "'"
 write(12,26) 5, form1 ,0, form2 ,1,1,&
                 3.0d0, 1, 500,1.0d-15,-10.0d0,100.0d0,5
-1000 format(i8)
-do i=1, nmalhas
-write(arquivo,1000) i
-arquivo = trim(adjustl(arquivo)) // ".Richardson_3p0"
-form1 = "'" // trim(adjustl(filename_template)) // arquivo
+10 format(i8)
+11 format(A50)
+
+do i=1,nmalhas
+write(arquivo,10) i
+arquivo = trim(adjustl(filename_template)) // trim(adjustl(arquivo)) // ".Richardson_3p0"
+files(i) = trim(adjustl(arquivo))
+form1 = "'" // trim(adjustl(arquivo)) // "'"
 form1 = trim(adjustl(form1))
-!'Teste_002.Richardson_3p0'  arq_numerico( 2) nome do arquivo com resultados numéricos na malha 2
-write(12,*) form1
+write(12,11) form1
+
 end do
 close(12)
 
-end subroutine CreateMeshFile
+end subroutine WriteConf2File
+
+
+subroutine WriteAnalitico(filename, throat)
+character*255, intent(in) ::filename
+integer , intent(in) ::throat
+integer ::i
+i = throat
+open(15,file=filename)
+14 format (i2, T5 ,1pe16.8, T12 ,A15 )
+!velocidade
+write(15,14) 1, ue(i), 'velocidade'
+!Mach
+write(15,14) 2, (ua(i)/dsqrt(gama*R*T(i))) , 'mach'
+!perssao
+write(15,14) 3, pa(i), 'pressao'
+!ro
+write(15,14) 4, roa(i), 'ro'
+!temperatura
+write(15,14) 5, ta(i), 'temperatura'
+close(15)
+end subroutine WriteAnalitico
+
+subroutine WriteMeshFile(filename, throat)
+character*255, intent(in) ::filename
+integer, intent(in) ::throat
+
+open(16,file=filename)
+12 format (T5 ,1pe16.8, T12 ,A15)
+write(16,12) 1.123d0, 'h (m)'
+!14 format (i2, T5 ,1pe16.8, T12 ,A15 ,1/)
+!write(16,14) 1, 1.123d0, 'exato'
+call WriteData(16,throat)
+close(16)
+
+
+end subroutine WriteMeshFile
+
+subroutine WriteData(descriptor, throat)
+integer, intent(in) ::descriptor
+integer, intent(in) ::throat
+integer ::i
+i = throat
+14 format (i2, T5 ,1pe16.8, T12 ,A15)
+!velocidade
+write(descriptor,14) 1, ue(i), 'velocidade'
+!Mach
+write(descriptor,14) 2, (u(i)/dsqrt(gama*R*T(i))) , 'mach'
+!perssao
+write(descriptor,14) 3, p(i), 'pressao'
+!ro
+write(descriptor,14) 4, ro(i), 'ro'
+!temperatura
+write(descriptor,14) 5, t(i), 'temperatura'
+
+end subroutine WriteData
+
+!USE IFPORT
+!result = CHDIR(dir_name)
+
 
 end module CriaArqRichadson
-

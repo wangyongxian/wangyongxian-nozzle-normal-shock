@@ -42,6 +42,7 @@ real*8,dimension(:),allocatable :: Empuxo, Mach, Mache, Ua, Cd, Ta , Pa, Roa
 real*8,dimension(:),allocatable :: xp, xe  ! coordenada espacial nodal
 real*8,dimension(:),allocatable :: Raio      ! raio do duto
 real*8,dimension(:),allocatable :: bf, bc, f
+character*255, dimension(:), allocatable ::files
 
 real*8 :: R      ! constante dos gases
 real*8 :: cp      ! cp
@@ -67,13 +68,13 @@ real*8 :: P_out
 real*8,dimension(:),allocatable :: ap, aw, ae, bp, aww, AAp ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
-character*512 ::richardson_path
-character*100 ::richardson_exe
+character*255 ::richardson_path
+character*255 ::richardson_exe
 character*100 :: caso      ! nome do arquivo de saída
-character*100 :: richardson_1      ! nome do arquivo principal do programa Richardson
-character*100 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson
-character*100 :: richardson_3      ! nome do arquivo de saída
-character*100 :: richardson_4      ! nome do arquivo de entrada com a solução analítica exata
+character*255 :: richardson_1      ! nome do arquivo principal do programa Richardson
+character*255 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson
+character*255 :: richardson_3      ! nome do arquivo de saída
+character*255 :: richardson_4      ! nome do arquivo de entrada com a solução analítica exata
 character*50 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom, graf_mach

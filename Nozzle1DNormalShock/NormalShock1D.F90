@@ -225,13 +225,26 @@ end subroutine ShockFinder
 function ThroatFinder()
     integer :: ThroatFinder 
     integer ::i
+    !real*8 ::teste1,teste2, teste3
+    real*8 ::loc
+    
     ThroatFinder = -1
-    do i=1, N
+    !teste3 = Se(1)
+    loc = Se(1)
+    do i=1, N-1
+    !teste1 = Pi*rg**2.0d0 
+    !teste2 = Se(i)
         if ( Se(i) == Pi*rg**2.0d0 ) then
             ThroatFinder = i
             exit
         end if
+        if (loc > Se(i)) then
+        ThroatFinder = i
+     !   teste3 = Se(i)
+        loc = Se(i)
+        end if
     end do
+    
 end function
 
 function MachAACalc(razao, Mach)
