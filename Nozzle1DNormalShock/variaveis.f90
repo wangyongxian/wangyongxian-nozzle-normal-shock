@@ -75,7 +75,7 @@ character*255 :: richardson_1      ! nome do arquivo principal do programa Richa
 character*255 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson
 character*255 :: richardson_3      ! nome do arquivo de saída
 character*255 :: richardson_4      ! nome do arquivo de entrada com a solução analítica exata
-character*50 :: title     ! título do grafico
+character*92 :: title     ! título do grafico
 !graficos
 integer :: graf_m, graf_t, graf_v, graf_ro, graf_p, graf_e, graf_cdesc, graf_dom, graf_mach
 integer :: res_iter, res_result, res_coef

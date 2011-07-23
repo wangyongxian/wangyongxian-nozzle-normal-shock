@@ -57,8 +57,12 @@ files(i) = trim(adjustl(arquivo))
 form1 = "'" // trim(adjustl(arquivo)) // "'"
 form1 = trim(adjustl(form1))
 write(12,11) form1
-
 end do
+
+12 format (A92, '(título) (até 90 caracteres)',2/, &
+                '012345    1         2         3         4         5         6         7         8         9        ')
+title = "'" // trim(adjustl(title)) // "'"
+write(12,12)  title  
 close(12)
 
 end subroutine WriteConf2File
