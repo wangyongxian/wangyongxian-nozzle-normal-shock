@@ -74,7 +74,6 @@ end function PSI
 function re(i,F)
 real*8 ::re
 logical a
-real*8 soma
 integer ::i
 real*8, DIMENSION(N) ::F
 if (F(i+1)==F(i)) then
@@ -103,8 +102,6 @@ end function rw
 
   subroutine coeficientes_e_fontes_qml_tvd
 	real*8  :: fator, dx ! auxiliar
-	real*8 :: oeste, leste ! auxiliares
-	real*8 ::teste1, teste2
 	integer ::i
 	! volume 1 (fictício)
 
@@ -210,7 +207,6 @@ end function rw
 
   subroutine coeficientes_e_fontes_energia_tvd
 	real*8  :: fator, dx ! auxiliar
-	real*8 :: oeste, leste ! auxiliares
 	integer ::i
 	! volume 1 (fictício)
 
@@ -268,8 +264,7 @@ end function rw
 
   subroutine coeficientes_fontes_massa_tvd
 
-    real*8 :: fator, dx ! auxiliar
-    real*8 :: oeste, leste ! auxiliares
+    real*8 :: dx ! auxiliar
     integer ::i 
     real*8 ::a1,a2,a3,a4,a5,a6,a7,a8,a9
     

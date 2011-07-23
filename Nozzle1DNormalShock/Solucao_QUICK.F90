@@ -91,7 +91,7 @@ contains
 
   subroutine coeficientes_e_fontes_energia_quick
 	real*8  :: fator, dx ! auxiliar
-	real*8 :: oeste, leste ! auxiliares
+	real*8 :: oeste ! auxiliares
 	integer ::i
 	! volume 1 (fictício)
 
@@ -134,8 +134,7 @@ contains
 
   subroutine coeficientes_fontes_massa_quick
 
-    real*8 :: fator, dx ! auxiliar
-    real*8 :: oeste, leste ! auxiliares
+    real*8 :: dx, oeste ! auxiliar
     integer ::i 
     ! volume 1 (fictício)
 

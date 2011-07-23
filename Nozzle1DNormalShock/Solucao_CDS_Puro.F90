@@ -12,7 +12,6 @@ contains
 
   subroutine coeficientes_e_fontes_qml_cds_p
 	real*8  :: fator, dx ! auxiliar
-	real*8 :: oeste, leste ! auxiliares
 	integer ::i
 	! volume 1 (fictício)
 
@@ -94,7 +93,6 @@ contains
 
   subroutine coeficientes_e_fontes_energia_cds_p
 	real*8  :: fator, dx ! auxiliar
-	real*8 :: oeste, leste ! auxiliares
 	integer ::i
 
 	! volume 1 (fictício)
@@ -135,8 +133,7 @@ contains
 
   subroutine coeficientes_fontes_massa_cds_p
 
-    real*8 :: fator, dx ! auxiliar
-    real*8 :: oeste, leste ! auxiliares
+    real*8 :: dx ! auxiliar
     integer ::i 
     ! volume 1 (fictício)
 

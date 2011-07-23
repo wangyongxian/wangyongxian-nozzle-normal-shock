@@ -3,10 +3,10 @@ module Main
 use Initialization
 use output
 use variaveis
-use Solucao_CDS
-use Solucao_CDS_UDS
-use Solucao_UDS_UDS2
-use Solucao_TVD
+!use Solucao_CDS
+!use Solucao_CDS_UDS
+!use Solucao_UDS_UDS2
+!use Solucao_TVD
 use solvers_1D
 use Solucao_Analitica
 
@@ -14,7 +14,24 @@ implicit none
 
 contains
 
-subroutine solucao_numerica
+subroutine solucao_numerica(QML, VELOCIDADES_FACES, ENERGIA, MASSA)
+
+interface
+
+subroutine QML
+end subroutine
+
+subroutine ENERGIA
+end subroutine 
+
+subroutine VELOCIDADES_FACES
+end subroutine
+
+subroutine MASSA
+end subroutine
+
+end interface
+
 
 	integer :: it
     real*8 :: k    ! auxiliar
@@ -65,15 +82,15 @@ subroutine solucao_numerica
     ds = 0.0d0
     
     !residuo
-    call coeficientes_e_fontes_qml_cds_uds
+   ! call coeficientes_e_fontes_qml_cds_uds
     !call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
 	!Residuo_U_o = Residuo_U
 	
-	call coeficientes_fontes_massa_cds_uds
+	!call coeficientes_fontes_massa_cds_uds
 	!call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
 	!Residuo_P_o = Residuo_P
 	
-	call coeficientes_e_fontes_energia_cds_uds
+	!call coeficientes_e_fontes_energia_cds_uds
 	!call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
 	!Residuo_T_o = Residuo_T
 	
@@ -115,7 +132,8 @@ subroutine solucao_numerica
 	 ! call coeficientes_e_fontes_qml_uds_uds2
 	  !call coeficientes_e_fontes_qml_tvd
 	  !call coeficientes_e_fontes_qml_cds_uds
-	  call coeficientes_e_fontes_qml_cds
+	  !call coeficientes_e_fontes_qml_cds
+	  call QML
 	   
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	
@@ -130,7 +148,8 @@ subroutine solucao_numerica
 	  !call calculo_velocidades_face_uds_uds2
 	  !call calculo_velocidades_face_tvd
 	  !call calculo_velocidades_face_cds_uds
-	  call calculo_velocidades_face_cds
+	  !call calculo_velocidades_face_cds
+	  call VELOCIDADES_FACES
 !-----------------------------------------------------		  
       ! inicialização na entrada da tubeira
       u_in  = ue(1)
@@ -143,7 +162,8 @@ subroutine solucao_numerica
 	  !call coeficientes_e_fontes_energia_uds_uds2
 	  !call coeficientes_e_fontes_energia_tvd
 	  !call coeficientes_e_fontes_energia_cds_uds
-	  call coeficientes_e_fontes_energia_cds
+	  !call coeficientes_e_fontes_energia_cds
+	  call ENERGIA
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
@@ -160,7 +180,8 @@ subroutine solucao_numerica
       !call coeficientes_fontes_massa_uds_uds2
       !call coeficientes_fontes_massa_tvd
       !call coeficientes_fontes_massa_cds_uds
-      call coeficientes_fontes_massa_cds
+      !call coeficientes_fontes_massa_cds
+	  call MASSA
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)

@@ -31,6 +31,7 @@ contains
 	read(7,*) Lc
 	read(7,*) Ln
 	read(7,*) Beta
+	read(7,*) tipo
 	read(7,*) ! +Razao de refino
     read(7,*) RazaoRef
     read(7,*) Niveis

@@ -193,7 +193,7 @@ contains
 
   subroutine coeficientes_fontes_massa_uds_uds2
 
-    real*8 :: fator, dx ! auxiliar
+    real*8 :: dx ! auxiliar
     real*8 :: oeste, leste ! auxiliares
     integer ::i 
     ! volume 1 (fictício)

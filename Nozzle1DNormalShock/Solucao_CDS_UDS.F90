@@ -147,7 +147,7 @@ contains
 
   subroutine coeficientes_fontes_massa_cds_uds
 
-    real*8 :: fator, dx ! auxiliar
+    real*8 :: dx ! auxiliar
     real*8 :: oeste, leste ! auxiliares
     integer ::i 
     ! volume 1 (fictício)
