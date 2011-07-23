@@ -51,7 +51,12 @@ subroutine solucao_numerica
     ro(1) = p(1) / ( R * T(1) )
     
     ! inicialização na saída da tubeira
-    p(n)  = 2.0d0*p_out - p(n-1)  !2.0d0*p(n-1) - p(n-2)
+    if (P_OUT /= -1.0d0) then
+        p(n) = 2.0d0*p_out - p(n-1)  !2.0d0*p(n-1) - p(n-2)
+    else
+        p(n) = 2.0d0*p(n-1) - p(n-2)
+    end if
+    
     u(n)  = 2.0d0*u(n-1) - u(n-2)
    ! T(n)  = 2.0d0*T(n-1) - T(n-2)
     T(N) = -T(N-1) + 2*T_out
@@ -96,19 +101,21 @@ subroutine solucao_numerica
       p_in = p_cam / ( k ** ( gama / ( gama - 1.0d0 ) ) )
       p(1) = 2.0d0*p_in - p(2)
       pl_in = p_in - p_ia
-       
-      p_outa = p_outN
-      M_out = u_out / dsqrt ( gama * R * T_out )
-      k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
-      p_outN = p_out / ( k ** ( gama / ( gama - 1.0d0 ) ) )
-      p(N) = 2.0d0*p_outN - p(N-1)
-      pl_out = p_outN - p_outa
-	
+      
+      if (P_OUT /= -1.0d0) then
+          p_outa = p_outN
+          M_out = u_out / dsqrt ( gama * R * T_out )
+          k = 1.0d0 + 0.5d0 * ( gama - 1.0d0 ) * ( M_out ** 2 )
+          p_outN = p_out / ( k ** ( gama / ( gama - 1.0d0 ) ) )
+          p(N) = 2.0d0*p_outN - p(N-1)
+          pl_out = p_outN - p_outa
+	  end if
 
 	  ! cálculo dos coeficientes e termos fontes
 	 ! call coeficientes_e_fontes_qml_uds_uds2
-	  call coeficientes_e_fontes_qml_tvd
+	  !call coeficientes_e_fontes_qml_tvd
 	  !call coeficientes_e_fontes_qml_cds_uds
+	  call coeficientes_e_fontes_qml_cds
 	   
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	
@@ -121,8 +128,9 @@ subroutine solucao_numerica
 	   
       ! cálculos das velocidades na face leste
 	  !call calculo_velocidades_face_uds_uds2
-	  call calculo_velocidades_face_tvd
+	  !call calculo_velocidades_face_tvd
 	  !call calculo_velocidades_face_cds_uds
+	  call calculo_velocidades_face_cds
 !-----------------------------------------------------		  
       ! inicialização na entrada da tubeira
       u_in  = ue(1)
@@ -133,8 +141,9 @@ subroutine solucao_numerica
     
 	  ! cálculo dos coef e fontes da energia
 	  !call coeficientes_e_fontes_energia_uds_uds2
-	  call coeficientes_e_fontes_energia_tvd
+	  !call coeficientes_e_fontes_energia_tvd
 	  !call coeficientes_e_fontes_energia_cds_uds
+	  call coeficientes_e_fontes_energia_cds
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
@@ -149,8 +158,9 @@ subroutine solucao_numerica
 	  
 	  ! cálculo dos coef e fontes da massa
       !call coeficientes_fontes_massa_uds_uds2
-      call coeficientes_fontes_massa_tvd
+      !call coeficientes_fontes_massa_tvd
       !call coeficientes_fontes_massa_cds_uds
+      call coeficientes_fontes_massa_cds
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
