@@ -1,10 +1,10 @@
 +Propriedades
       20.00d+5         P0        = pressao de estagnacao
-      -1.0d0         P_out      = pressao da saida (-1.0d0 - para sem choque) 9.00d+5
+      -1.0d0           P_out     = pressao da saida (-1.0d0 - para sem choque) 9.00d+5
       3420.33d+0       T0        = temperatura de estagnacao
-      100               N         = número de volumes de controle
+      150              N         = número de volumes de controle
       1.0d-6           deltat    = número de avanços no tempo
-      50            iteracao  = número de iterações (ciclo total)
+      1000             iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas
@@ -14,10 +14,10 @@
       0.1d+0	       Lc        = Lc
       0.4d+0	       Ln        = Ln
       0.0d+0           beta      = esquema CDS - 1 UDS - 0
-      3                 tipo     1 - CDS padrao 2- CDS novo 3- tvd
+      1                tipo      = 1 - CDS padrao 2- CDS novo 3- tvd
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      1                Niveis    = Niveis
+      5                Niveis    = Niveis
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
@@ -32,7 +32,7 @@
 +Graficos (1 - para mostrar 0 - para nao mostrar)
 0    = fluxo de massa
 0    = temperatura
-1    = velocidade
+0    = velocidade
 0    = massa especifica
 0    = pressao
 0    = mach

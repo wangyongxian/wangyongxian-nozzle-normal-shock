@@ -70,7 +70,7 @@ integer , intent(in) ::throat
 integer ::i
 i = throat
 open(15,file=filename)
-14 format (i2, T5 ,1pe16.8, T12 ,A15 )
+14 format (i2, T5 ,1PE21.13, T30 ,A15 )
 !velocidade
 write(15,14) 1, ue(i), 'velocidade'
 !Mach
@@ -78,21 +78,20 @@ write(15,14) 2, (ua(i)/dsqrt(gama*R*T(i))) , 'mach'
 !perssao
 write(15,14) 3, pa(i), 'pressao'
 !ro
-write(15,14) 4, roa(i), 'ro'
+write(15,14) 4, roa(i), 'roa'
 !temperatura
 write(15,14) 5, ta(i), 'temperatura'
 close(15)
 end subroutine WriteAnalitico
 
-subroutine WriteMeshFile(filename, throat)
+subroutine WriteMeshFile(filename, throat, h)
 character*255, intent(in) ::filename
+real*8, intent(in) ::h
 integer, intent(in) ::throat
 
 open(16,file=filename)
-12 format (T5 ,1pe16.8, T12 ,A15)
-write(16,12) 1.123d0, 'h (m)'
-!14 format (i2, T5 ,1pe16.8, T12 ,A15 ,1/)
-!write(16,14) 1, 1.123d0, 'exato'
+12 format (T5 ,1pe21.13, T30 ,A15)
+write(16,12) h, 'h (m)'
 call WriteData(16,throat)
 close(16)
 
@@ -104,7 +103,7 @@ integer, intent(in) ::descriptor
 integer, intent(in) ::throat
 integer ::i
 i = throat
-14 format (i2, T5 ,1pe16.8, T12 ,A15)
+14 format (i2, T5 ,1pe21.13, T30 ,A15)
 !velocidade
 write(descriptor,14) 1, ue(i), 'velocidade'
 !Mach

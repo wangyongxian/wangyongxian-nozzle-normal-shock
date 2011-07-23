@@ -31,7 +31,7 @@ implicit none
       call solucao_analitica_init(N)
       
       !para o richardson
-      if(i == Niveis) call WriteAnalitico(richardson_4,local)
+      if(i == Niveis)   call WriteAnalitico(richardson_4,local)
       
       select case(tipo)
       case (1)
@@ -63,7 +63,7 @@ implicit none
       
       !call teste(local)
       
-      call WriteMeshFile(files(i), local)
+      call WriteMeshFile(files(i), local, Lt/(N-2))
       
       call dealloc
       N = RazaoRef*N
@@ -79,10 +79,10 @@ implicit none
 
 contains
 subroutine teste
-    call WriteConf1File(richardson_1, richardson_2)
-    call WriteConf2File(richardson_2,richardson_3,richardson_4,caso,Niveis)
-    ver = system('notepad.exe ' // richardson_1)
-    ver = system('notepad.exe ' // richardson_2)
+    !call WriteConf1File(richardson_1, richardson_2)
+    !call WriteConf2File(richardson_2,richardson_3,richardson_4,caso,Niveis)
+    !ver = system('notepad.exe ' // richardson_1)
+    !ver = system('notepad.exe ' // richardson_2)
     !ver = system('notepad.exe ' // richardson_3)
 !write(*,*), 'a'
 

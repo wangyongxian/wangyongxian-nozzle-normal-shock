@@ -82,6 +82,7 @@ subroutine solucao_analitica_init(N)
     roe = ro
     p_o = p
     u_o = u
+    ue = u
     ue_o = u
     T_o = T
     
