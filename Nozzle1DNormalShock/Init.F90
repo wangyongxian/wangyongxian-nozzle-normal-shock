@@ -61,7 +61,7 @@ contains
     read(7,*) res_iter ! coeficiente de descarga
     read(7,*) res_coef ! abrir arquivo de coeficientes
     read(7,*) gerar_analitico ! gerar solucao analitica
-    read(7,*) numeroNos ! numero de nós para a malha da solucao analitica
+    read(7,*) N_Sol ! numero de nós para a malha da solucao analitica
     
     close(7)
 

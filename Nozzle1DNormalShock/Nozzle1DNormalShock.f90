@@ -19,7 +19,8 @@ implicit none
     
     call conf_file_read
     
-    if(gerar_analitico) call GenerateSolutionFile(numeroNos)
+    call create_gnufile('u.gnu', 'u.dat', 'solucao_analitica', 3, .false., 'x(m)', 'u(m/s)', 'teste titulo', .false.)
+    if(gerar_analitico) call GenerateSolutionFile(N_Sol)
     
     call WriteConf1File(richardson_1, richardson_2)
     call WriteConf2File(richardson_2,richardson_3,richardson_4,caso,Niveis)

@@ -4,7 +4,7 @@
       3420.33d+0       T0        = temperatura de estagnacao
       150              N         = número de volumes de controle
       1.0d-6           deltat    = número de avanços no tempo
-      1000             iteracao  = número de iterações (ciclo total)
+      10000            iteracao  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
       526.97d+0	       R         = R constante do gas
@@ -17,7 +17,7 @@
       1                tipo      = 1 - CDS padrao 2- CDS novo 3- tvd
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      5                Niveis    = Niveis
+      1                Niveis    = Niveis
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
@@ -32,7 +32,7 @@
 +Graficos (1 - para mostrar 0 - para nao mostrar)
 0    = fluxo de massa
 0    = temperatura
-0    = velocidade
+1    = velocidade
 0    = massa especifica
 0    = pressao
 0    = mach
@@ -43,5 +43,5 @@
 0    = txt de resultados
 0    = txt de iteracoes
 0    = txt de coeficientes
-0    = gerar solucao analitica
-1000 = numero de nós para a malha da solucao analitica
+1    = gerar solucao analitica
+10000 = numero de nós para a malha da solucao analitica

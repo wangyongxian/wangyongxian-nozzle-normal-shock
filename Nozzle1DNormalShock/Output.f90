@@ -227,17 +227,31 @@ subroutine gera_arq_coef(prop)
     close(14)
 end subroutine gera_arq_coef
 
-subroutine create_gnufile()
+subroutine create_gnufile(filename, dat_file, filename_analictic, column, analitica, xlabel, ylabel, title, geometry)
+character(*), intent(in) ::filename
+character*50, intent(in) ::dat_file
+character*50, intent(in) ::filename_analictic
+logical, intent(in) ::analitica
+logical, intent(in) ::geometry
+character*50, intent(in) ::title
+character*10, intent(in) ::xlabel
+character*10, intent(in) ::ylabel
+integer, intent(in) ::column
 
-!set data style linespoints
-!set grid
-!plot 'T.dat' using 1:2 title 'analítica' 
-!replot 'T.dat' using 1:3 title 'numérica' 
-!replot 'T.dat' using 1:4 title 'geometria'
-!set xlabel 'x (m)'
-!set ylabel 'T (K)'
-!set title ''                              
-!replot
+12 format ('set data style linespoints',1/,                  &
+'set grid',1/,                                               &
+'plot ',a50,' using 1:', i1,' title ''analítica 1''', 1/,    &
+'replot ',a50,' using 1:2 title ''analítica 2''',1/,         &
+'replot ',a50,' using 1:3 title ''numérica''',1/,            &
+'replot ',a50,' using 1:4 title ''geometria''',1/,           &
+'set xlabel ',a10,1/,                                        &
+'set ylabel ',a10,1/,                                        &
+'set title ',a50,1/,                                         &
+'replot')
+
+open(12, file=filename) 
+write(12,12) filename_analictic, column, dat_file, dat_file, dat_file, xlabel, ylabel, title
+close(12)
 
 end subroutine create_gnufile
 

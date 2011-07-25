@@ -53,7 +53,7 @@ real*8 GAMA_TVD
 !PSI = max(0.0d0,min(2.0d0*R,0.5*(1.0d0+R),2.0d0))
 !OSHER promissor
 !1.0d0<=BETA_TVD <=2.0d0
-!BETA_TVD=1.9d0
+BETA_TVD=1.9d0
 !PSI = max(0.0d0,min(R,BETA_TVD))
 !ospre promissor
 !PSI = 1.5d0*(R**2.0d0+R)/(R**2.0d0+R+1.0d0)
@@ -61,13 +61,13 @@ real*8 GAMA_TVD
 !PSI = max(0.0d0,min(2.0d0*R,(0.25d0+0.75d0*R),4.0d0))
 !TOPUS parece promissor
 !ALPHA_TVD = -2.0d0, 0.0d0, 2.0d0
-!ALPHA_TVD = -2.0d0
+ALPHA_TVD = -2.0d0
 !PSI = max(0.0d0,0.5d0*(ABS(R)+R)*((-0.5d0+1.0d0)*R**2.0d0+(ALPHA_TVD+4.0d0)*R+(-0.5d0*ALPHA_TVD+3.0d0))/(1.0d0+ABS(R))**3.0d0)
 !FDPUS-C1 parece promissor
 !PSI = max(0.0d0,0.5d0*(ABS(R)+R)*(4.0d0*R**2.0d0+12.0*R)/(1.0d0+ABS(R))**4.0d0)
 !SDPUS-C1 parece promissor
 !GAMA - 4.0d0, 6.0d0,8.0d0,10.0d0,12.0d0
-!GAMA_TVD = 12.0d0
+GAMA_TVD = 12.0d0
 !PSI = max(0.0d0,0.5d0*(ABS(R)+R)*((-8.0d0+2.0d0*GAMA_TVD)*R**3.0d0+(40.0d0-4.0d0*GAMA_TVD)*R**2.0d0+2.0d0*GAMA_TVD*R)/(1.0d0+ABS(R))**5.0d0)
 end function PSI
 
