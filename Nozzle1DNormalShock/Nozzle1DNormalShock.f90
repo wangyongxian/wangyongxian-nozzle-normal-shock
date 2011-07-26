@@ -19,7 +19,7 @@ implicit none
     
     call conf_file_read
     
-    call create_gnufile('u.gnu', 'u.dat', 'solucao_analitica', 3, .false., 'x(m)', 'u(m/s)', 'teste titulo', .false.)
+    
     if(gerar_analitico) call GenerateSolutionFile(N_Sol)
     
     call WriteConf1File(richardson_1, richardson_2)
@@ -41,10 +41,15 @@ implicit none
         coeficientes_e_fontes_energia_cds,                   &
         coeficientes_fontes_massa_cds)
       case (2)
-        call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
+      call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
         calculo_velocidades_face_cds_uds,                        &
         coeficientes_e_fontes_energia_cds_uds,                   &
         coeficientes_fontes_massa_cds_uds)
+        
+        !call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
+        !calculo_velocidades_face_cds_uds,                        &
+        !coeficientes_e_fontes_energia_cds_uds,                   &
+        !coeficientes_fontes_massa_cds_uds)
       case (3)
         call solucao_numerica(coeficientes_e_fontes_qml_tvd,    &
         calculo_velocidades_face_tvd,                           &
@@ -59,7 +64,7 @@ implicit none
       
       ! escrita da variável primária e sua visualização
       call gera_txt
-      call gera_graficos
+      call gera_graficos(.false.)
       call mostra_dados
       
       !call teste(local)

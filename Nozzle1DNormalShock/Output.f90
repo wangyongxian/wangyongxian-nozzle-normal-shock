@@ -107,7 +107,8 @@ subroutine gera_txt
     
 end subroutine gera_txt
 
-subroutine gera_graficos
+subroutine gera_graficos(analitica)
+logical, intent(in) ::analitica
     integer ::i
     real*8 ::T0
     
@@ -155,6 +156,16 @@ subroutine gera_graficos
 	  write(22,48) xp(i), Ta(i), T(i), raio(i)
 	end do
 	close(22)
+	
+	call create_gnufile('U.gnu', '''u.dat''', '''solucao_analitica.txt''', 3, analitica, '''x(m)''', '''u(m/s)''', '''teste titulo''')
+    call create_gnufile('T.gnu', '''T.dat''', '''solucao_analitica.txt''', 5, analitica, '''x(m)''', '''T(K)''', '''teste titulo''')
+    call create_gnufile('RO.gnu', '''RO.dat''', '''solucao_analitica.txt''', 7, analitica, '''x(m)''', '''Ro(km/m^3)''', '''teste titulo''')
+    call create_gnufile('P.gnu', '''P.dat''', '''solucao_analitica.txt''', 6, analitica, '''x(m)''', '''P(Pa)''', '''teste titulo''')
+    call create_gnufile('Mach.gnu', '''Mach.dat''', '''solucao_analitica.txt''', 8, analitica, '''x(m)''', '''Mach''', '''teste titulo''')
+    call create_gnufile('fm.gnu', '''fm.dat''', '''solucao_analitica.txt''',  9    , analitica, '''x(m)''', '''Fluxo de Massa (kg/s)''', '''teste titulo''')
+    call create_gnufile('coef_descarga.gnu', '''fm.dat''', '''solucao_analitica.txt''',  10    , analitica, '''x(m)''', '''Coeficiente de Descarga (kg/s)''', '''teste titulo''')
+    call create_gnufile('empuxo.gnu', '''fm.dat''', '''solucao_analitica.txt''',  11    , analitica, '''x(m)''', '''Empuxo (kg/s)''', '''teste titulo''')
+    
     
 end subroutine gera_graficos
 
@@ -227,20 +238,20 @@ subroutine gera_arq_coef(prop)
     close(14)
 end subroutine gera_arq_coef
 
-subroutine create_gnufile(filename, dat_file, filename_analictic, column, analitica, xlabel, ylabel, title, geometry)
+subroutine create_gnufile(filename, dat_file, filename_analictic, column, analitica, xlabel, ylabel, title)
 character(*), intent(in) ::filename
-character*50, intent(in) ::dat_file
-character*50, intent(in) ::filename_analictic
+character(*), intent(in) ::dat_file
+character(*), intent(in) ::filename_analictic
 logical, intent(in) ::analitica
-logical, intent(in) ::geometry
-character*50, intent(in) ::title
-character*10, intent(in) ::xlabel
-character*10, intent(in) ::ylabel
+character(*), intent(in) ::title
+character(*), intent(in) ::xlabel
+character(*), intent(in) ::ylabel
 integer, intent(in) ::column
-
+open(12, file=filename) 
+if (analitica) then
 12 format ('set data style linespoints',1/,                  &
 'set grid',1/,                                               &
-'plot ',a50,' using 1:', i1,' title ''analítica 1''', 1/,    &
+'plot ',a50,' using 1:', i2,' title ''analítica 1''', 1/,    &
 'replot ',a50,' using 1:2 title ''analítica 2''',1/,         &
 'replot ',a50,' using 1:3 title ''numérica''',1/,            &
 'replot ',a50,' using 1:4 title ''geometria''',1/,           &
@@ -248,9 +259,21 @@ integer, intent(in) ::column
 'set ylabel ',a10,1/,                                        &
 'set title ',a50,1/,                                         &
 'replot')
-
-open(12, file=filename) 
 write(12,12) filename_analictic, column, dat_file, dat_file, dat_file, xlabel, ylabel, title
+else
+13 format ('set data style linespoints',1/,                  &
+'set grid',1/,                                               &
+'plot ',a50,' using 1:2 title ''analítica 2''',1/,         &
+'replot ',a50,' using 1:3 title ''numérica''',1/,            &
+'replot ',a50,' using 1:4 title ''geometria''',1/,           &
+'set xlabel ',a10,1/,                                        &
+'set ylabel ',a10,1/,                                        &
+'set title ',a50,1/,                                         &
+'replot')
+write(12,13) dat_file, dat_file, dat_file, xlabel, ylabel, title
+end if
+
+
 close(12)
 
 end subroutine create_gnufile

@@ -12,17 +12,16 @@ subroutine GenerateSolutionFile(numeroNos)
     integer ::i
     call init_alloc(numeroNos)
     call solucao_analitica_init(numeroNos)
-    12 format(8(1pe21.13))
+    12 format(11(1pe21.13))
     open(12,file='solucao_analitica.txt')
-    !do i=1, numeroNos
-        write(12,12) xp, xe, u, ue, t, p, ro, Mach
-    !end do
+    do i=1, numeroNos
+        write(12,12) xp(i), xe(i), u(i), ue(i), t(i), p(i), ro(i), Mach(i), m(i), cd(i), empuxo(i)
+    end do
     13 format(t3, 'Xp' ,t24 ,'Xe' ,t45 ,'Velocidade nó' ,t66 ,'Velocidade face' ,t87 ,'Temperatura' ,t108 ,&
-            'Pressão',t129 ,'Ro' ,t150 ,'Mach')
+            'Pressão',t129 ,'Ro' ,t150 ,'Mach', t171, 'Fluxo de Massa', t192, 'Coeficiente de Descarga', t213, 'Empuxo')
     write(12,13)
     close(12)
     call dealloc()
-    i = system('solucao_analitica.txt')
 end subroutine
 
 subroutine solucao_analitica_init(N)
@@ -87,6 +86,13 @@ subroutine solucao_analitica_init(N)
     ue = u
     ue_o = u
     T_o = T
+    
+    !calculo do fluxo de massa
+    m = roe*ue*Se
+    !calculo do coeficiente de descarga
+    Cd = m/(dsqrt(gama*R*T))
+    !calculo do empuxo
+    Empuxo = ro*u*Sp*u
     
     
 end subroutine solucao_analitica_init

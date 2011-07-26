@@ -175,8 +175,8 @@ contains
        bp(i) = ro_o(i) * sp(i) * dx / dt              &
                +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
-               -0.5d0*beta*(-ro_o(i)+ro_o(i+1))*ue_o(i+1)*se(i+1) &
-               +0.5d0*beta*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*se(i-1) &
+               !-0.5d0*beta*(-ro_o(i)+ro_o(i+1))*ue_o(i+1)*se(i+1) &
+               !+0.5d0*beta*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*se(i-1) &
                -(sp(i)*dx/dt+ue_o(i)*Se(i))*ro_o(i) &
                +Se(i-1)*ue_o(i-1)*ro_o(i-1) & ! - daqui pra baixo
                -0.5d0*Se(i)*(ro_o(i)+ro_o(i+1))*ue_o(i) &
@@ -185,7 +185,7 @@ contains
        oeste = se(i-1) * ( ro_o(i) - ro_o(i-1) ) * ue_o(i-1)
 
        leste = se(i)   * ( ro_o(i+1) - ro_o(i) ) * ue_o(i)
-
+       
        bc(i) = 0.5d0 * beta * ( oeste - leste )
        
     end do
