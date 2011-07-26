@@ -22,6 +22,7 @@ contains
     read(7,*) N
     read(7,*) dt
 	read(7,*) iteracao
+	read(7,*) freq
 	read(7,*) Lt
 	read(7,*) fDarcy
 	read(7,*) R

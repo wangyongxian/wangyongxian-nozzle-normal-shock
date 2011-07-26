@@ -3,10 +3,6 @@ module Main
 use Initialization
 use output
 use variaveis
-!use Solucao_CDS
-!use Solucao_CDS_UDS
-!use Solucao_UDS_UDS2
-!use Solucao_TVD
 use solvers_1D
 use Solucao_Analitica
 
@@ -82,17 +78,17 @@ end interface
     ds = 0.0d0
     
     !residuo
-   ! call coeficientes_e_fontes_qml_cds_uds
-    !call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
-	!Residuo_U_o = Residuo_U
+    call QML
+    call Norma_L1( n, aw, ap, ae, bp, u, Residuo_U )
+	Residuo_U_o = Residuo_U
 	
-	!call coeficientes_fontes_massa_cds_uds
-	!call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
-	!Residuo_P_o = Residuo_P
+	call MASSA
+	call Norma_L1( n, aw, ap, ae, bp, pl, Residuo_P )
+	Residuo_P_o = Residuo_P
 	
-	!call coeficientes_e_fontes_energia_cds_uds
-	!call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
-	!Residuo_T_o = Residuo_T
+	call ENERGIA
+	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
+	Residuo_T_o = Residuo_T
 	
 	
 	open(8, file='norma_l1.txt')
@@ -129,26 +125,18 @@ end interface
 	  end if
 
 	  ! cálculo dos coeficientes e termos fontes
-	 ! call coeficientes_e_fontes_qml_uds_uds2
-	  !call coeficientes_e_fontes_qml_tvd
-	  !call coeficientes_e_fontes_qml_cds_uds
-	  !call coeficientes_e_fontes_qml_cds
 	  call QML
 	   
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,u)	
 	  
-	  !call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
-	  !Residuo_U = Residuo_U/Residuo_U_o
+	  call Norma_L1 (N,ap,aw,ae,bp,u,Residuo_U)
+	  Residuo_U = Residuo_U/Residuo_U_o
 	    
       ! cálculo dos coeficientes do método SIMPLEC
 	  call coeficientes_simplec
 	   
       ! cálculos das velocidades na face leste
-	  !call calculo_velocidades_face_uds_uds2
-	  !call calculo_velocidades_face_tvd
-	  !call calculo_velocidades_face_cds_uds
-	  !call calculo_velocidades_face_cds
 	  call VELOCIDADES_FACES
 !-----------------------------------------------------		  
       ! inicialização na entrada da tubeira
@@ -159,17 +147,13 @@ end interface
       T_out = T_cam - 0.5d0*(gama-1.0d0)*(u_out**2)/(gama*R)
     
 	  ! cálculo dos coef e fontes da energia
-	  !call coeficientes_e_fontes_energia_uds_uds2
-	  !call coeficientes_e_fontes_energia_tvd
-	  !call coeficientes_e_fontes_energia_cds_uds
-	  !call coeficientes_e_fontes_energia_cds
 	  call ENERGIA
 	  
 	  ! solução do sistema de equações
 	  call tdma (N,ap,aw,ae,bp,T)
 	  
-	  !call Norma_L1 (N,ap,aw,ae,bp,T,Residuo_T)
-	  !Residuo_T = Residuo_T/Residuo_T_o
+	  call Norma_L1 (N,ap,aw,ae,bp,T,Residuo_T)
+	  Residuo_T = Residuo_T/Residuo_T_o
 	   
 	  ! cálculo da massa específica
       ro = p / ( R * T )
@@ -177,26 +161,22 @@ end interface
 	  call calculo_massa_especifica_nas_faces
 	  
 	  ! cálculo dos coef e fontes da massa
-      !call coeficientes_fontes_massa_uds_uds2
-      !call coeficientes_fontes_massa_tvd
-      !call coeficientes_fontes_massa_cds_uds
-      !call coeficientes_fontes_massa_cds
 	  call MASSA
 	  
       ! solução do sistema de equações
       call tdma (N,ap,aw,ae,bp,pl)
       !
-      !call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
-	  !Residuo_P = Residuo_P/Residuo_P_o
+      call Norma_L1 (N,ap,aw,ae,bp,pl,Residuo_P)
+	  Residuo_P = Residuo_P/Residuo_P_o
 	   
       call correcoes_com_plinha
       call calculo_massa_especifica_nas_faces
       
       !T_ex   = 0.5d0 * ( T(n-1) + T(n) )
-      
-  !    write(8,16) it, Residuo_T, Residuo_U, Residuo_P
-	!  16 format (i11,5x,3(1pe20.13))
-	   
+      IF(MOD(it,freq)==0) THEN
+        write(8,16) it, Residuo_T, Residuo_U, Residuo_P
+	    16 format (i11,5x,3(1pe20.13))
+	  END IF
 !-----------------------------------------------------	      
 
 	end do

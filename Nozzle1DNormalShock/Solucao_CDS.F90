@@ -150,7 +150,7 @@ contains
 
   subroutine coeficientes_fontes_massa_cds
 
-    real*8 :: dx ! auxiliar
+    real*8 :: dx, fator ! auxiliar
     real*8 :: oeste, leste ! auxiliares
     integer ::i 
     ! volume 1 (fictício)
@@ -189,12 +189,12 @@ contains
  ! volume n (fictício)
 
     bc(n) = 0.0d0
-    !fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
-    aw(n) = 1.0d0
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    aw(n) = -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
-    !bp(n) =  fator * ( pl(n-1) - pl(n-2) )
-    bp(n) =  2.0d0*pl_out
+    bp(n) =  fator * ( pl(n-1) - pl(n-2) )
+    !bp(n) =  2.0d0*pl_out
     ! atualiza o termo independente
 
     bp = bp + bc

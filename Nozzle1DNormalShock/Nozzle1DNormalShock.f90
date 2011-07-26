@@ -15,7 +15,7 @@ implicit none
 
 !-------------------------------------------------
     integer ::i
-    integer ::local
+    integer ::local, shock
     
     call conf_file_read
     
@@ -62,6 +62,8 @@ implicit none
         coeficientes_fontes_massa_cds)      
       end select
       
+      call ShockNumFinder(p,shock)
+      
       ! escrita da variável primária e sua visualização
       call gera_txt
       call gera_graficos(.false.)
@@ -69,10 +71,12 @@ implicit none
       
       !call teste(local)
       
-      call WriteMeshFile(files(i), local, Lt/(N-2))
+      call WriteMeshFile(files(i), local,shock, Lt/(N-2))
       
       call dealloc
-      N = RazaoRef*N
+      N = RazaoRef*(N-2)+2
+      dt = dt/RazaoRef
+      iteracao = 2*iteracao
     end do
     !ESCREVER OS COEFICIENTES E TERMO FONTE TODOS ok
     !propriedades DA GARGANTA

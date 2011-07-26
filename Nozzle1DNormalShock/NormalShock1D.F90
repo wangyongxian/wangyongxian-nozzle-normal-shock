@@ -98,6 +98,7 @@ subroutine ShockLocationCalc(gama, Pe, P01, P02, Ae, A, AA, At)
     call AARatioCalc(gama, Mach, AA)
     
     call NewACalc(gama, Me, Ae, At)
+    
 end subroutine
 
 subroutine P0Calc(gama, P, Mach, P0)
@@ -267,6 +268,22 @@ function MachAACalc(razao, Mach)
     
 end function
 
+subroutine ShockNumFinder(p,local)
+real*8, dimension(:) , intent(in) ::p
+integer, intent(out) ::local
+
+real*8 ::diff
+integer ::i
+
+diff = 0.0d0
+do i=2,n-1
+if((p(i+1)-p(i)) > diff) then
+local = i
+diff = p(i+1)-p(i)
+end if
+end do
+
+end subroutine ShockNumFinder
 
 end module NormalShock1D
 
