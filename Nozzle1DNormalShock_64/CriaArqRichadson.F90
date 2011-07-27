@@ -74,7 +74,7 @@ integer , intent(in) ::throat
 integer ::i
 i = throat
 open(15,file=filename)
-14 format (i2, T5 ,1PE25.16, T30 ,A15 )
+14 format (i2, T5 ,1pe45.32, T30 ,A15 )
 !velocidade
 write(15,14) 1, 0.5q0*(ua(i)+ua(i+1)), 'velocidade'
 !Mach
@@ -95,7 +95,7 @@ integer, intent(in) ::throat
 integer, intent(in) ::shock
 
 open(16,file=filename)
-12 format (T5 ,1pe25.16, T30 ,A15)
+12 format (T5 ,1pe45.32, T30 ,A15)
 write(16,12) h, 'h (m)'
 call WriteData(16,throat, shock)
 close(16)
@@ -110,7 +110,7 @@ integer, intent(in) ::shock
 real*16 ::x
 integer ::i
 i = throat
-14 format (i2, T5 ,1pe25.16, T50 ,A25)
+14 format (i2, T5 ,1pe45.32, T50 ,A25)
 !velocidade
 write(descriptor,14) 1, ue(i), 'velocidade - garganta'
 !Mach

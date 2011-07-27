@@ -175,7 +175,7 @@ end interface
       !T_ex   = 0.5q0 * ( T(n-1) + T(n) )
       IF(MOD(it,freq)==0) THEN
         write(8,16) it, Residuo_T, Residuo_U, Residuo_P
-	    16 format (i11,5x,3(1pe20.13))
+	    16 format (i11,5x,3(1pe45.32))
 	  END IF
 !-----------------------------------------------------	      
 

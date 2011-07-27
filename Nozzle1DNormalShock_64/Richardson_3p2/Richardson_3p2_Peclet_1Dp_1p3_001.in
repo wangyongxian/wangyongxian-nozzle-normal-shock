@@ -1,0 +1,42 @@
+       1  .................   (variavel) número da variável, nos arquivos de resultados, a analisar 
+'Richardson_3p2_Peclet_1Dp_1p3_001.txt'   (caso) nome do arquivo de saída
+       1                      (com_solucao_analitica) com solução analítica?   1 = sim;   0 = não
+'Peclet_1Dp_1p3_analitico_001.Richardson_3p0' (arq_exato) nome do arquivo da solução analítica exata (até 50 caracteres)
+       2.0q0 ..............   (pL)  ordem assintótica do erro verdadeiro
+       2.0q0 ..............   (dpL) variação entre as ordens verdadeiras do erro verdadeiro
+       3.0q0 ..............   (Fs)  fator de segurança do estimador GCI
+       1  .................   (tipo_refino) tipo de refino de malha (r):   1 = constante;   2 = variável
+     500        ...........   (numero_iteracoes) número máximo de iterações para obter a ordem aparente (pU) com r variável
+       1.0q-15  ...........   (tol) tolerância na obtenção de pU (r variável)
+     -10.0q0    ...........   (pU_min) limite inferior de pU (r variável)
+     100.0q0    ...........   (pU_max) limite superior de pU (r variável)   
+      26  .................   (nm)  número de malhas
+'Peclet_1Dp_1p3_001.Richardson_3p0'  arq_numerico( 1) nome do arquivo com resultados numéricos na malha 1 (mais grossa)
+'Peclet_1Dp_1p3_002.Richardson_3p0'  arq_numerico( 2) nome do arquivo com resultados numéricos na malha 2
+'Peclet_1Dp_1p3_003.Richardson_3p0'  arq_numerico( 3) nome do arquivo com resultados numéricos na malha 3
+'Peclet_1Dp_1p3_004.Richardson_3p0'  arq_numerico( 4) nome do arquivo com resultados numéricos na malha 4
+'Peclet_1Dp_1p3_005.Richardson_3p0'  arq_numerico( 5) nome do arquivo com resultados numéricos na malha 5
+'Peclet_1Dp_1p3_006.Richardson_3p0'  arq_numerico( 6) nome do arquivo com resultados numéricos na malha 6
+'Peclet_1Dp_1p3_007.Richardson_3p0'  arq_numerico( 7) nome do arquivo com resultados numéricos na malha 7
+'Peclet_1Dp_1p3_008.Richardson_3p0'  arq_numerico( 8) nome do arquivo com resultados numéricos na malha 8
+'Peclet_1Dp_1p3_009.Richardson_3p0'  arq_numerico( 9) nome do arquivo com resultados numéricos na malha 9
+'Peclet_1Dp_1p3_010.Richardson_3p0'  arq_numerico(10) nome do arquivo com resultados numéricos na malha 10
+'Peclet_1Dp_1p3_011.Richardson_3p0'  arq_numerico(11) nome do arquivo com resultados numéricos na malha 11
+'Peclet_1Dp_1p3_012.Richardson_3p0'  arq_numerico(12) nome do arquivo com resultados numéricos na malha 12
+'Peclet_1Dp_1p3_013.Richardson_3p0'  arq_numerico(13) nome do arquivo com resultados numéricos na malha 13
+'Peclet_1Dp_1p3_014.Richardson_3p0'  arq_numerico(14) nome do arquivo com resultados numéricos na malha 14
+'Peclet_1Dp_1p3_015.Richardson_3p0'  arq_numerico(15) nome do arquivo com resultados numéricos na malha 15
+'Peclet_1Dp_1p3_016.Richardson_3p0'  arq_numerico(16) nome do arquivo com resultados numéricos na malha 16
+'Peclet_1Dp_1p3_017.Richardson_3p0'  arq_numerico(17) nome do arquivo com resultados numéricos na malha 17
+'Peclet_1Dp_1p3_018.Richardson_3p0'  arq_numerico(18) nome do arquivo com resultados numéricos na malha 18
+'Peclet_1Dp_1p3_019.Richardson_3p0'  arq_numerico(19) nome do arquivo com resultados numéricos na malha 19
+'Peclet_1Dp_1p3_020.Richardson_3p0'  arq_numerico(20) nome do arquivo com resultados numéricos na malha 20
+'Peclet_1Dp_1p3_021.Richardson_3p0'  arq_numerico(21) nome do arquivo com resultados numéricos na malha 21
+'Peclet_1Dp_1p3_022.Richardson_3p0'  arq_numerico(22) nome do arquivo com resultados numéricos na malha 22
+'Peclet_1Dp_1p3_023.Richardson_3p0'  arq_numerico(23) nome do arquivo com resultados numéricos na malha 23
+'Peclet_1Dp_1p3_024.Richardson_3p0'  arq_numerico(24) nome do arquivo com resultados numéricos na malha 24
+'Peclet_1Dp_1p3_025.Richardson_3p0'  arq_numerico(25) nome do arquivo com resultados numéricos na malha 25
+'Peclet_1Dp_1p3_026.Richardson_3p0'  arq_numerico(26) nome do arquivo com resultados numéricos na malha 26 (mais fina)
+'T(1/2), Peclet 1Dp 1.3, CDS, S(0), Pe=10, Richardson 3.2' (título) (até 90 caracteres)
+
+012345    1         2         3         4         5         6         7         8         9        

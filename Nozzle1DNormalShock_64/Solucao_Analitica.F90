@@ -12,7 +12,7 @@ subroutine GenerateSolutionFile(numeroNos)
     integer ::i
     call init_alloc(numeroNos)
     call solucao_analitica_init(numeroNos)
-    12 format(11(1pe21.13))
+    12 format(11(1pe45.32))
     open(12,file='solucao_analitica.txt')
     do i=1, numeroNos
         write(12,12) xp(i), xe(i), u(i), ue(i), t(i), p(i), ro(i), Mach(i), m(i), cd(i), empuxo(i)

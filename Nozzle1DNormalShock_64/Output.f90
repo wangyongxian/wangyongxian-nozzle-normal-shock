@@ -62,7 +62,7 @@ subroutine gera_txt
 				 1pe16.8,  ' = Ln',/,  & 
 				 1pe16.8,  ' = Beta',/)
 
-    9 format(i4,4x,4(1pe21.11))
+    9 format(i4,4x,4(1pe45.32))
 	
 	write(10,13)
     13 format(//,t1,'volume',t13,'U(Analitica)',t34,'U(Numerica)',t55,'Erro')
@@ -121,7 +121,7 @@ logical, intent(in) ::analitica
     open(23, file='u.dat')
     do i = 1, N
 	  write(23,48) xp(i), Ua(i), U(i), raio(i)*10000.q0
-	  48 format(4(1pe27.18))
+	  48 format(4(1pe45.32))
 	end do
 	
     close(23)
@@ -221,7 +221,7 @@ subroutine gera_arq_coef(prop)
     2 format('Coeficientes de Pl', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
     3 format('Coeficientes Energia', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
     4 format('Coeficientes QML', /,t4, 'volume', t13, 'x', t34,'oeste',t55,'central',t76,'leste',t97,'fonte',/)
-    5 format(i4, 4x, 5(1pe21.11))
+    5 format(i4, 4x, 5(1pe45.32))
     select case(prop)
         case(2)
             write(14, 2)

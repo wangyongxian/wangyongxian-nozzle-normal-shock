@@ -1,0 +1,121 @@
+program Richardson_3p2
+
+!  Analisador e estimador de erros de discretização
+!     com base na extrapolação de Richardson
+
+!  Versão original 1.0 ( 1 Fev 04)
+!  Versão          2.0 (10 Jan 07)
+!  Versão          1.1 (30 Abr 07)
+!  Versão          3.0 (10 Nov 07)
+!  Versão          3.1 ( 2 Dez 07)
+!  Versão atual    3.2 (10 Jul 09)
+!  Última alteração =   10 Jul 09
+
+!  Autor: Carlos Henrique Marchi
+!         DEMEC/TC/UFPR, Curitiba, PR
+
+!  MODELO NUMÉRICO (resumo)
+
+!     Faz extrapolações simples e múltiplas dos resultados numéricos
+!     Calcula ordens efetiva e aparente de resultados extrapolados ou não
+!     Calcula erro estimado de resultados numéricos com e sem extrapolações,
+!        com estimadores delta, Richardson, GCI, convergente e multicoeficientes
+!     Se a solução exata está disponível, calcula erros verdadeiros e o
+!        desempenho dos estimadores
+!     Razão de refino de malha (r) pode ser constante ou variável;
+!        método da bisseção para obter ordens aparente com r variável
+!     Malhas uniformes
+!     Precisão quádrupla
+!     Linguagem Fortran 2003
+!     Tipo de projeto: Console Application
+!     Aplicativo usado: Fortran Intel 11.0
+!     Extrapolações bi e tricoeficiente só se aplicam para refino constante
+!     Os dados devem conter no mínimo duas malhas
+!     Os valores de pL e dpL são necessários mesmo que a solução analítica
+!        não seja conhecida; seus valores podem ser reais
+!     Resultados em branco de parâmetros significa que não há dados suficientes
+!        para calculá-lo ou não é possível calculá-lo
+
+! ARQUIVOS envolvidos no programa:
+
+!    Fontes (prefixo Richardson_3p2_):
+!       data_hora.f90  = obtém a data e hora do sistema
+!       variaveis.f90  = define todas as variáveis globais do programa
+!       dados.f90      = lê e escreve os dados do programa
+!       calculos.f90   = calcula as variáveis
+!       resultados.f90 = escreve resultados e apresenta gráficos
+!       main.f90       = programa principal
+      
+!    Dados:
+!       Richardson_3p0.in  = leitura do nome do arquivo principal de dados do CASO a analisar
+!       "arq_dados"        = leitura dos dados principais
+!       "arq_exato"        = nome do arquivo da solução exata
+!       "arq_numerico"     = nomes dos arquivos das soluções numéricas (um arquivo para cada
+!                            malha mas com os resultados de todas as variáveis de interesse )
+
+!    Saída principal:
+!       "caso"             = saída principal do programa
+
+!    Aplicativos auxiliares:
+!       Notepad.exe        = editor de arquivos
+!       Wgnuplot.exe       = programa gerador de gráfico
+
+!    Arquivos de saída auxiliares para gráficos:
+!       pL.dat     = dados para gráfico de pL
+!       p2.dat     = dados para gráfico de pV(2)
+!       p3.dat     = dados para gráfico de pV(3)
+!       pE_h.dat   = dados para gráfico de pE_h
+!       pE_i.dat   = dados para gráfico de pE_i
+!       pE_bi.dat  = dados para gráfico de pE_bi
+!       pE_c12.dat = dados para gráfico de pE_c12
+!       pE_c13.dat = dados para gráfico de pE_c13
+!       pU_h.dat   = dados para gráfico de pU_h
+!       pU_i.dat   = dados para gráfico de pU_i
+!       pU_bi.dat  = dados para gráfico de pU_bi
+!       pU_c12.dat = dados para gráfico de pU_c12
+!       pU_c13.dat = dados para gráfico de pU_c13
+!       Eh.dat     = dados para gráfico de Eh
+!       Ei_12.dat  = dados para gráfico de Ei_12
+!       Ei_pU.dat  = dados para gráfico de Ei_pU
+!       Ec_12.dat  = dados para gráfico de Ec_12
+!       Ec_13.dat  = dados para gráfico de Ec_13
+!       Ei_13.dat  = dados para gráfico de Ei_13
+!       Ei_23.dat  = dados para gráfico de Ei_23
+!       Ei_bi.dat  = dados para gráfico de Ei_bi
+!       Ei_tri.dat = dados para gráfico de Ei_tri
+!       Ebi.dat    = dados para gráfico de Ebi_pU
+!       U_12.dat   = dados para gráfico de Ud, Uri_12 e GCI_pL
+!       Uri_13.dat = dados para gráfico de Uri_13
+!       Uri_23.dat = dados para gráfico de Uri_23
+!       Uri_bi.dat = dados para gráfico de Uri_bi
+!       Utri.dat   = dados para gráfico de Uri_tri
+!       Uri_pU.dat = dados para gráfico de Uri_pU, Uri_p, GCI_p
+!       Uc_12.dat  = dados para gráfico de Uc_12
+!       Uc_13.dat  = dados para gráfico de Uc_13
+!       E_pL_p2.dat= auxiliar para gráficos de E
+!       E_p3.dat   = auxiliar para gráficos de E
+!       U_pL.dat   = auxiliar para gráficos de U
+!       U_p2.dat   = auxiliar para gráficos de U
+!       U_p3.dat   = auxiliar para gráficos de U
+
+!    Arquivos de comandos para Wgnuplot (prefixo Richardson_3p0_):
+!       pU.gnu    = gráfico de pU
+!       pE_pU.gnu = gráfico de pE e pU
+!       U.gnu     = gráfico de erros estimados (U*) do grupo 1
+!       U_2.gnu   = gráfico de erros estimados (U*) do grupo 2
+!       E.gnu     = gráfico de erros verdadeiros (E*)
+!       E_U.gnu   = gráfico de E* e U* do grupo 1
+!       E_U_2.gnu = gráfico de E* e U* do grupo 2
+
+!    Arquivo texto com informações básicas sobre o programa:
+!       LEIA-ME_Richardson_3p2.txt
+
+!-------------------------------------------------------------------------------
+
+Seqüência para compilação dos módulos pela primeira vez após criar o projeto:
+1) data_hora.f90
+2) variaveis.f90
+3) dados.f90
+4) calculos.f90
+5) resultados.f90
+6) main.f90
