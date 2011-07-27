@@ -1,9 +1,2 @@
-'Richardson_3p2_Peclet_1Dp_1p3_001.in'  (arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)
+'Richardson_3p0_Caso_001.in'                        (arq_dados) nome do arquivo principal de dados do CASO a analisar (até 50 caracteres)
 
-012345    1         2         3         4         5        
-
-Richardson_3p1_Peclet_1Dp_1p3_001.in
-
-Richardson_3p0_Teste_001.in
-
-Richardson_3p0_Stokes_1p5_001.in

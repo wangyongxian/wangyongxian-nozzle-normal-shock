@@ -13,5 +13,5 @@ replot 'pU_i.dat'   using 1:2 title 'pU(Ti_pU)'
 replot 'pU_c12.dat' using 1:2 title 'pU(Tc_12)'
 replot 'pU_c13.dat' using 1:2 title 'pU(Tc_13)'
 replot 'pU_bi.dat'  using 1:2 title 'pU(Tbi_pU)'
-set title 'T(1/2), Peclet 1Dp 1.3, CDS, S(0), Pe=10, Richardson 3.1 (4/12/2007)'
+set title 'Resultado para N=12 (27/7/2011)'
 replot

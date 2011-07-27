@@ -18,7 +18,7 @@
       1                tipo      = 1- CDS padrao 2- CDS novo 3- tvd
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      1                Niveis    = Niveis
+      8                Niveis    = Niveis
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
