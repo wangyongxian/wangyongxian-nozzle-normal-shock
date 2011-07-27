@@ -45,7 +45,6 @@ implicit none
         calculo_velocidades_face_cds_uds,                        &
         coeficientes_e_fontes_energia_cds_uds,                   &
         coeficientes_fontes_massa_cds_uds)
-        
         !call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
         !calculo_velocidades_face_cds_uds,                        &
         !coeficientes_e_fontes_energia_cds_uds,                   &
