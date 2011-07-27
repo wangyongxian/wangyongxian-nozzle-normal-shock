@@ -21,8 +21,6 @@ contains
     ap(1) =  1.0d0
     ae(1) = -1.0d0
     bp(1) = -fator * ( u(3) - u(2) )
-    bf(1) = 0.0d0
-    bc(1) = 0.0d0
     ! volumes internos
     do i = 2, n-1
 
@@ -34,14 +32,11 @@ contains
 
        ap(i) = ro(i) * sp(i) * dx / dt + ( roe(i) * ue(i) * se(i) )
 
-       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
-             - 0.5d0  * sp(i) * ( p(i+1) - p(i-1) )
+       bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt   &
+             - 0.5d0 * sp(i) * ( p(i+1) - p(i-1) ) &
+             + 0.5d0 * beta * (ro(i)*sp(i) - ro(i-1) * Sp(i-1) * u(i-1)) &
+             - 0.5d0 * beta * (roe(i) * Se(i) * ue(i))
              
-       oeste = roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )
-
-       leste = roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) )
-
-       bc(i) = 0.5d0 * beta * ( oeste - leste )
 
     end do
     ! volume n (fictício)
@@ -50,9 +45,6 @@ contains
     ap(n) =  1.0d0
     ae(n) =  0.0d0
     bp(n) =  fator * ( u(n-1) - u(n-2) )
-    bf(n) =  0.0d0
-    bc(n) = 0.0d0
-    bp = bp + bc
     
   end subroutine coeficientes_e_fontes_qml_cds_uds
 
