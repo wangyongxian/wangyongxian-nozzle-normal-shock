@@ -14,5 +14,5 @@ replot 'Uri_13.dat' using 1:2 title 'Uri_13(Th)'
 replot 'Uri_23.dat' using 1:2 title 'Uri_23(Th)'
 replot 'Uri_bi.dat' using 1:2 title 'Uri_bi(Th)'
 replot 'Utri.dat'   using 1:2 title 'Uri_tri(Th)'
-set title 'Resultado para N=12 (27/7/2011)'
+set title 'Resultado para N=12 (28/7/2011)'
 replot

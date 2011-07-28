@@ -51,7 +51,7 @@ real*16 :: rin      ! rin
 real*16 :: rg      ! rg
 real*16 :: Lc      ! Lc
 real*16 :: Ln      ! Ln
-
+real*16 :: ShockDistAnalitical
 real*16 :: u_in  ! velocidade na entrada da tubeira (m/s)
 real*16 :: p_in  ! pressão na entrada da tubeira que satisfaz QM (Pa)
 real*16 :: T_in  ! temperatura na entrada da tubeira (K)

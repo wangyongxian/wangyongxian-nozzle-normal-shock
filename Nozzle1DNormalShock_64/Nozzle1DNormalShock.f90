@@ -32,7 +32,7 @@ implicit none
       call solucao_analitica_init(N)
       
       !para o richardson
-      if(i == Niveis)   call WriteAnalitico(richardson_4,local)
+      if(i == Niveis)   call WriteAnalitico(richardson_4,local,ShockDistAnalitical)
       
       select case(tipo)
       case (1)

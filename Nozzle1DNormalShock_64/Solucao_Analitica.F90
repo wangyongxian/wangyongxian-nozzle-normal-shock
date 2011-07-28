@@ -36,6 +36,8 @@ subroutine solucao_analitica_init(N)
         call ShockLocationCalc(gama, P_out, P_cam, P02, Se(N-1),(rin/rg)**2.0q0, AA, At)
         
         call ShockFinder(AA, N, pos)
+        
+        ShockDistAnalitical = ShockDistance(AA, rin, rg, Lc, Ln, Lt)
     else
         !para a analitica ignorar o choque
         pos = N + 1

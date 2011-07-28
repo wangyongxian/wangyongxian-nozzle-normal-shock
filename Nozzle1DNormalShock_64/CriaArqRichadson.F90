@@ -68,11 +68,13 @@ close(12)
 end subroutine WriteConf2File
 
 
-subroutine WriteAnalitico(filename, throat)
+subroutine WriteAnalitico(filename, throat, ShockDist)
 character*255, intent(in) ::filename
 integer , intent(in) ::throat
+real*16 , intent(in) ::ShockDist
 integer ::i
 i = throat
+
 open(15,file=filename)
 14 format (i2, T5 ,1pe45.32, T80 ,A15 )
 !velocidade
@@ -85,6 +87,25 @@ write(15,14) 3, 0.5q0*(pa(i)+pa(i+1)), 'pressao'
 write(15,14) 4, 0.5q0*(roa(i)+roa(i+1)), 'roa'
 !temperatura
 write(15,14) 5, 0.5q0*(ta(i)+ta(i+1)), 'temperatura'
+!velocidade
+write(15,14) 6, 0.5q0*(u(1)+u(2)), 'velocidade - entrada'
+write(15,14) 7, 0.5q0*(u(n-1)+u(n)), 'velocidade - saida'
+!pressao
+write(15,14) 8, 0.5q0*(p(1)+p(2)), 'pressao - entrada'
+write(15,14) 9, 0.5q0*(p(n-1)+p(n)), 'pressao - saida'
+!temperatura
+write(15,14) 10, 0.5q0*(t(1)+t(2)), 'temperatura - entrada'
+write(15,14) 11, 0.5q0*(t(n-1)+t(n)), 'temperatura - saida'
+!coeficiente de descarga
+write(15,14) 12, 1.0q0, 'coeficiente de descarga - saida adm'
+!empuxo dinamico
+write(15,14) 13, 1.0q0, 'empuxo - saida adm'
+write(15,14) 14, 0.0q0 , 'media da norma l1 - velocidade'
+write(15,14) 15, 0.0q0 , 'media da norma l1 - temperatura'
+write(15,14) 16, 0.0q0 , 'media da norma l1 - Ro'
+write(15,14) 17, 0.0q0 , 'media da norma l1 - pressao'
+write(15,14) 18, ShockDist , 'local do choque'
+
 close(15)
 end subroutine WriteAnalitico
 
