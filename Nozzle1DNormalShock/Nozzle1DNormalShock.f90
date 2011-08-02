@@ -39,11 +39,13 @@ implicit none
         call solucao_numerica(coeficientes_e_fontes_qml_cds, &
         calculo_velocidades_face_cds,                        &
         coeficientes_e_fontes_energia_cds,                   &
+        calculo_massa_especifica_nas_faces,                 &
         coeficientes_fontes_massa_cds)
       case (2)
       call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
         calculo_velocidades_face_cds_uds,                        &
         coeficientes_e_fontes_energia_cds_uds,                   &
+        calculo_massa_especifica_nas_faces,                     &
         coeficientes_fontes_massa_cds_uds)
         !call solucao_numerica(coeficientes_e_fontes_qml_cds_uds, &
         !calculo_velocidades_face_cds_uds,                        &
@@ -53,11 +55,15 @@ implicit none
         call solucao_numerica(coeficientes_e_fontes_qml_tvd,    &
         calculo_velocidades_face_tvd,                           &
         coeficientes_e_fontes_energia_tvd,                      &
-        coeficientes_fontes_massa_tvd)
+        calculo_massa_especifica_nas_faces,                     &
+        coeficientes_fontes_massa_cds_uds)
+        
+        
       case  default
         call solucao_numerica(coeficientes_e_fontes_qml_cds,    &
         calculo_velocidades_face_cds,                           &
         coeficientes_e_fontes_energia_cds,                      &
+        calculo_massa_especifica_nas_faces,                     &
         coeficientes_fontes_massa_cds)      
       end select
       

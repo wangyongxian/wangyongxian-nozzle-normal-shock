@@ -107,7 +107,6 @@ subroutine WriteData(descriptor, throat, shock)
 integer, intent(in) ::descriptor
 integer, intent(in) ::throat
 integer, intent(in) ::shock
-real*8 ::x
 integer ::i
 i = throat
 14 format (i2, T5 ,1pe25.16, T50 ,A25)

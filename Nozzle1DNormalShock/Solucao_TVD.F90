@@ -122,8 +122,8 @@ end function rw
         
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0   * sp(i) * ( p(i+1) - p(i-1) ) &
-             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(1.0d0) * ( u_o(i) - u_o(i-1) ) &
-             - 0.5d0   * roe(i) * ue(i) * se(i) * PSI(re(i,u)) * ( -u_o(i) + u_o(i-1) )
+             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(1.0d0) * ( u(i) - u(i-1) ) &
+             - 0.5d0   * roe(i) * ue(i) * se(i) * PSI(re(i,u)) * ( -u(i) + u(i-1) )
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! volumes internos
     do i = 3, n-1
@@ -138,8 +138,8 @@ end function rw
 
        bp(i) = ro_o(i) * sp(i) * dx * u_o(i) / dt  &
              - 0.5d0   * sp(i) * ( p(i+1) - p(i-1) ) &
-             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(rw(i,u)) * ( u_o(i) - u_o(i-1) ) &
-             - 0.5d0   * roe(i) * ue(i) * se(i) * PSI(re(i,u)) * ( -u_o(i) + u_o(i+1) )
+             + 0.5d0   * roe(i-1) * ue(i-1) * se(i-1) * PSI(rw(i,u)) * ( u(i) - u(i-1) ) &
+             - 0.5d0   * roe(i) * ue(i) * se(i) * PSI(re(i,u)) * ( -u(i) + u(i+1) )
     end do
 
     ! volume n (fictício)
@@ -170,10 +170,10 @@ end function rw
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
        ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
-                -0.5d0 * PSI(re(i,u_o)) * roe(i) * ue(i) * se(i) * ( u_o(i+1) - u_o(i) ) &
-                -0.5d0 * PSI(re(i,u_o)) * roe(i+1) * ue(i+1) * se(i+1) * ( u_o(i+2) - u_o(i+1) ) &
-                +0.5d0 * PSI(1.0d0) * roe(i-1) * ue(i-1) * se(i-1) * ( u_o(i) - u_o(i-1) )   &
-                +0.5d0 * PSI(1.0d0) * roe(i) * ue(i) * se(i) * ( u_o(i) - u_o(i-1) ) ) &
+                -0.5d0 * PSI(re(i,u_o)) * roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
+                -0.5d0 * PSI(re(i,u_o)) * roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
+                +0.5d0 * PSI(1.0d0) * roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
+                +0.5d0 * PSI(1.0d0) * roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) ) ) &
                / (ap(i)+ap(i+1))
                
 
@@ -188,10 +188,10 @@ end function rw
        somae = aw(i+1)*u(i) + ae(i+1)*u(i+2)
 
        ue(i) = (-somap - somae + (massa_p+massa_e)*ue_o(i)/dt - 2.0d0*se(i)*(p(i+1)-p(i)) &
-                -0.5d0 * PSI(re(i,u_o)) * roe(i) * ue(i) * se(i) * ( u_o(i+1) - u_o(i) ) &
-                -0.5d0 * PSI(re(i,u_o)) * roe(i+1) * ue(i+1) * se(i+1) * ( u_o(i+2) - u_o(i+1) ) &
-                +0.5d0 * PSI(rw(i,u_o)) * roe(i-1) * ue(i-1) * se(i-1) * ( u_o(i) - u_o(i-1) )   &
-                +0.5d0 * PSI(rw(i,u_o)) * roe(i) * ue(i) * se(i) * ( u_o(i) - u_o(i-1) ) ) &
+                -0.5d0 * PSI(re(i,u_o)) * roe(i) * ue(i) * se(i) * ( u(i+1) - u(i) ) &
+                -0.5d0 * PSI(re(i,u_o)) * roe(i+1) * ue(i+1) * se(i+1) * ( u(i+2) - u(i+1) ) &
+                +0.5d0 * PSI(rw(i,u_o)) * roe(i-1) * ue(i-1) * se(i-1) * ( u(i) - u(i-1) )   &
+                +0.5d0 * PSI(rw(i,u_o)) * roe(i) * ue(i) * se(i) * ( u(i) - u(i-1) ) ) &
                / (ap(i)+ap(i+1))
 
     end do
@@ -264,9 +264,9 @@ end function rw
 
   subroutine coeficientes_fontes_massa_tvd
 
-    real*8 :: dx ! auxiliar
+    real*8 :: dx, fator ! auxiliar
     integer ::i 
-    real*8 ::a1,a2,a3,a4,a5,a6,a7,a8,a9
+    !real*8 ::a1,a2,a3,a4,a5,a6,a7,a8,a9
     
     ! volume 1 (fictício)
     aw(1) = 0.0d0
@@ -296,64 +296,56 @@ dx = xe(i) - xe(i-1)
                +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
                -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
                +0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-               a1 = ro_o(i) * sp(i) * dx / dt 
-               a2 = 0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
-               a3 = 0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-               a4=  0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1)
-               a5=0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)
-               a6=(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i)
-               a7=Se(i-1)*ue_o(i-1)*ro_o(i-1)
-               a8=0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
-               a9=0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-            !   write(*,*) ''
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! volumes internos
     do i = 3, n-1
 
        dx = xe(i) - xe(i-1)
 
-       aw(i) = - 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)          &
-               - ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
+       aw(i) = - roe(i-1) * de(i-1) * se(i-1)          &
+               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
 
        ae(i) = - 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i) * se(i)       
 
        ap(i) = ( sp(i) * dx / dt + ue_o(i) * se(i) ) / ( R * T(i) )   &
-             + 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)                              &
-             + 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i)   * se(i)
+             + roe(i-1) * de(i-1) * se(i-1)                              &
+             + roe(i) * de(i)   * se(i)
 
        bp(i) = ro_o(i) * sp(i) * dx / dt              &
-               +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
-               -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
+               +roe(i)*ue_o(i)*se(i) &
+               -roe(i-1)*ue_o(i-1)*se(i-1) &
                +0.5d0*PSI(rw(i,ro))*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*Se(i-1) &
                -0.5d0*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)*Se(i)    &
                -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
                +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
-               -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
-               +0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-               
-               a1 = ro_o(i) * sp(i) * dx / dt 
-               a2 = 0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
-               a3 = -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-               a4=  0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1)
-               a5=-0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)
-               a6=-(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i)
-               a7=+Se(i-1)*ue_o(i-1)*ro_o(i-1)
-               a8=-0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i)
-               a9=0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-              ! write(*,*) ''
+               -roe(i)*ue_o(i)*se(i) &
+               +roe(i-1)*ue_o(i-1)*se(i-1)
+ 
     end do
 
  ! volume n (fictício)
-    !fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
-    aw(n) = 1.0d0
+    fator = 2.0d0 * ( xp(n) - xp(n-1) ) / ( xp(n-1) - xp(n-2) )
+    aw(n) = -1.0d0
     ap(n) =  1.0d0
     ae(n) =  0.0d0
-    !bp(n) =  fator * ( pl(n-1) - pl(n-2) )
-    bp(n) =  2.0d0*pl_out
+    bp(n) =  fator * ( pl(n-1) - pl(n-2) )
+    !bp(n) =  2.0d0*pl_out
 
   end subroutine coeficientes_fontes_massa_tvd
 
 !-------------------------------------------------
+
+subroutine calculo_massa_especifica_nas_faces_tvd
+    integer ::i
+    
+    roe(1) = ro(1) + 0.5d0*PSI(1.0d0)*( ro(1+1) - ro(1) )
+    
+    do i = 2, n-1
+       roe(i) = ro(i) + 0.5d0*PSI(re(i,ro))*( ro(i+1) - ro(i) )
+    end do
+    
+end subroutine calculo_massa_especifica_nas_faces_tvd
 
 end module Solucao_TVD
 

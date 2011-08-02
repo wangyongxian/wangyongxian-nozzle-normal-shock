@@ -22,9 +22,7 @@
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
-+Richardson D:\projeto\nozzle-normal-shock\Nozzle1DNormalShock\Richardson_3p0\
-'D:\Projects\nozzle-normal-shock\Nozzle1DNormalShock\Richardson_3p0\' ! caminho para o aplicativo de Richardson
-'Richardson_3p0.exe'							 ! nome do aplicativo
++Richardson
 'Richardson_3p0.in'                    `         ! nome do arquivo principal do programa Richardson (nao modificar)
 'Richardson_3p0_Caso_001.in'                     ! nome do arquivo de entrada de dados para o programa Richardson (até 50 caracteres)
 'Caso_001.txt'                                   ! nome do arquivo de saída (até 50 caracteres)

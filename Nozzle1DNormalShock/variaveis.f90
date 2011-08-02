@@ -68,8 +68,6 @@ real*8 :: P_out
 real*8,dimension(:),allocatable :: ap, aw, ae, bp, aww, AAp ! coeficiente central de u e p
 real*8,dimension(:),allocatable :: afu, atu, btu, bpru ! termos inclusos apu e bpu
 real*8,dimension(:),allocatable :: ds, de   ! coeficientes do método SIMPLEC
-character*255 ::richardson_path
-character*255 ::richardson_exe
 character*100 :: caso      ! nome do arquivo de saída
 character*255 :: richardson_1      ! nome do arquivo principal do programa Richardson
 character*255 :: richardson_2      ! nome do arquivo de entrada de dados para o programa Richardson

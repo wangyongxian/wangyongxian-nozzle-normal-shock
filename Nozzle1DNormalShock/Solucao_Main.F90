@@ -10,7 +10,7 @@ implicit none
 
 contains
 
-subroutine solucao_numerica(QML, VELOCIDADES_FACES, ENERGIA, MASSA)
+subroutine solucao_numerica(QML, VELOCIDADES_FACES, ENERGIA, MASSA_ESPECIFICA_FACES, MASSA)
 
 interface
 
@@ -21,6 +21,9 @@ subroutine ENERGIA
 end subroutine 
 
 subroutine VELOCIDADES_FACES
+end subroutine
+
+subroutine MASSA_ESPECIFICA_FACES
 end subroutine
 
 subroutine MASSA
@@ -158,7 +161,8 @@ end interface
 	  ! cálculo da massa específica
       ro = p / ( R * T )
        
-	  call calculo_massa_especifica_nas_faces
+	  !call calculo_massa_especifica_nas_faces
+	  call MASSA_ESPECIFICA_FACES
 	  
 	  ! cálculo dos coef e fontes da massa
 	  call MASSA
@@ -170,7 +174,8 @@ end interface
 	  Residuo_P = Residuo_P/Residuo_P_o
 	   
       call correcoes_com_plinha
-      call calculo_massa_especifica_nas_faces
+      !call calculo_massa_especifica_nas_faces
+      call MASSA_ESPECIFICA_FACES
       
       !T_ex   = 0.5d0 * ( T(n-1) + T(n) )
       IF(MOD(it,freq)==0) THEN
