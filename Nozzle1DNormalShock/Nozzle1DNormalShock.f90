@@ -32,7 +32,7 @@ implicit none
       call solucao_analitica_init(N)
       
       !para o richardson
-      if(i == Niveis)   call WriteAnalitico(richardson_4,local)
+      if(i == Niveis)   call WriteAnalitico(richardson_4,local,ShockDistAnalitical)
       
       select case(tipo)
       case (1)
@@ -55,8 +55,8 @@ implicit none
         call solucao_numerica(coeficientes_e_fontes_qml_tvd,    &
         calculo_velocidades_face_tvd,                           &
         coeficientes_e_fontes_energia_tvd,                      &
-        calculo_massa_especifica_nas_faces,                     &
-        coeficientes_fontes_massa_cds_uds)
+        calculo_massa_especifica_nas_faces_tvd,                 &
+        coeficientes_fontes_massa_tvd)
         
         
       case  default

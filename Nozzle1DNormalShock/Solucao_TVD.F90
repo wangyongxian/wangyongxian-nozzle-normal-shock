@@ -266,7 +266,7 @@ end function rw
 
     real*8 :: dx, fator ! auxiliar
     integer ::i 
-    !real*8 ::a1,a2,a3,a4,a5,a6,a7,a8,a9
+    real*8 ::Mp_ro,Me_ro,Mw_ro,Me_u,Mw_u,bpn
     
     ! volume 1 (fictício)
     aw(1) = 0.0d0
@@ -277,50 +277,59 @@ end function rw
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 i=2
 dx = xe(i) - xe(i-1)
+    Mp_ro = sp(i)*dx/dt + ue(i)*se(i) + 0.5d0*PSI(re(i,ro))*ue(i)*se(i)-0.5d0*PSI(1.0d0)*ue(i-1)*se(i-1)
+    Me_ro = 0.5d0*PSI(re(i,ro))*ue(i)*se(i)
+    Mw_ro = -ue(i-1)*se(i-1)+0.5d0*PSI(1.0d0)*ue(i-1)*se(i-1)
+    Me_u = -ro(i)*se(i) - 0.5d0*PSI(re(i,ro))*ro(i+1)*se(i)+0.5*PSI(re(i,ro))*ro(i)*se(i)
+    Mw_u = -ro(i-1)*se(i-1)-0.5d0*PSI(1.0d0)*ro(i)*se(i-1)+0.5d0*PSI(1.0d0)*ro(i-1)*se(i-1)
+    bpn = ro_o(i)*sp(i)*dx/dt+ro(i)*ue(i)*se(i)+0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i)-0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i) &
+         -ro(i-1)*ue(i-1)*se(i-1)-0.5*PSI(1.0d0)*ro(i)*ue(i-1)*se(i-1)+0.5d0*PSI(1.0d0)*ro(i-1)*ue(i-1)*se(i-1)
+         
+       aw(i) = Mw_u * de(i-1) &
+               + Mw_ro / ( R * T(i-1) )
 
-       aw(i) = - 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)          &
-               - ue_o(i-1)  * se(i-1) / ( R * T(i-1) )
+       ae(i) = Me_ro / (R* T(i+1)) &
+               - Me_u * de(i) 
 
-       ae(i) = - 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i) * se(i)       
+       ap(i) = Mp_ro / ( R * T(i) )   &
+              + Me_u * de(i)    &
+              - Mw_u * de(i-1)
 
-       ap(i) = ( sp(i) * dx / dt + ue_o(i) * se(i) ) / ( R * T(i) )   &
-             + 0.5d0*(ro_o(i)+ro_o(i-1)) * de(i-1) * se(i-1)                              &
-             + 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i)   * se(i)
-
-       bp(i) = ro_o(i) * sp(i) * dx / dt              &
-               +0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
-               -0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1) &
-               +0.5d0*Se(i-1)*PSI(1.0d0)*(ro_o(i)-ro_o(i-1))*ue_o(i-1) &
-               -0.5d0*Se(i)*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i) &
-               -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
-               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
-               -0.5d0*(ro_o(i)+ro_o(i+1))*ue_o(i)*se(i) &
-               +0.5d0*(ro_o(i)+ro_o(i-1))*ue_o(i-1)*se(i-1)
-
+       bp(i) = bpn  &
+               -(Mp_ro*ro(i)  &
+               +Me_ro*ro(i+1) &
+               +Mw_ro*ro(i-1) &
+               +Me_u*ue(i)    &
+               +Me_u*ue(i-1))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! volumes internos
     do i = 3, n-1
+        dx = xe(i) - xe(i-1)
 
-       dx = xe(i) - xe(i-1)
+    Mp_ro = sp(i)*dx/dt + ue(i)*se(i) + 0.5d0*PSI(re(i,ro))*ue(i)*se(i)-0.5d0*PSI(rw(i,ro))*ue(i-1)*se(i-1)
+    Me_ro = 0.5d0*PSI(re(i,ro))*ue(i)*se(i)
+    Mw_ro = -ue(i-1)*se(i-1)+0.5d0*PSI(rw(i,ro))*ue(i-1)*se(i-1)
+    Me_u = -ro(i)*se(i) - 0.5d0*PSI(re(i,ro))*ro(i+1)*se(i)+0.5*PSI(re(i,ro))*ro(i)*se(i)
+    Mw_u = -ro(i-1)*se(i-1)-0.5d0*PSI(rw(i,ro))*ro(i)*se(i-1)+0.5d0*PSI(rw(i,ro))*ro(i-1)*se(i-1)
+    bpn = ro_o(i)*sp(i)*dx/dt+ro(i)*ue(i)*se(i)+0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i)-0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i) &
+         -ro(i-1)*ue(i-1)*se(i-1)-0.5*PSI(rw(i,ro))*ro(i)*ue(i-1)*se(i-1)+0.5d0*PSI(rw(i,ro))*ro(i-1)*ue(i-1)*se(i-1)
+         
+       aw(i) = Mw_u * de(i-1) &
+               + Mw_ro / ( R * T(i-1) )
 
-       aw(i) = - roe(i-1) * de(i-1) * se(i-1)          &
-               - ue(i-1)  * se(i-1) / ( R * T(i-1) )
+       ae(i) = Me_ro / (R* T(i+1)) &
+               - Me_u * de(i) 
 
-       ae(i) = - 0.5d0*(ro_o(i)+ro_o(i+1)) * de(i) * se(i)       
+       ap(i) = Mp_ro / ( R * T(i) )   &
+              + Me_u * de(i)    &
+              - Mw_u * de(i-1)
 
-       ap(i) = ( sp(i) * dx / dt + ue_o(i) * se(i) ) / ( R * T(i) )   &
-             + roe(i-1) * de(i-1) * se(i-1)                              &
-             + roe(i) * de(i)   * se(i)
-
-       bp(i) = ro_o(i) * sp(i) * dx / dt              &
-               +roe(i)*ue_o(i)*se(i) &
-               -roe(i-1)*ue_o(i-1)*se(i-1) &
-               +0.5d0*PSI(rw(i,ro))*(ro_o(i)-ro_o(i-1))*ue_o(i-1)*Se(i-1) &
-               -0.5d0*PSI(re(i,ro))*(-ro_o(i)+ro_o(i+1))*ue_o(i)*Se(i)    &
-               -(Sp(i)*dx/dt+Se(i)*ue_o(i))*ro_o(i) & ! - daqui pra baixo
-               +Se(i-1)*ue_o(i-1)*ro_o(i-1) & 
-               -roe(i)*ue_o(i)*se(i) &
-               +roe(i-1)*ue_o(i-1)*se(i-1)
+       bp(i) = bpn  &
+               -(Mp_ro*ro(i)  &
+               +Me_ro*ro(i+1) &
+               +Mw_ro*ro(i-1) &
+               +Me_u*ue(i)    &
+               +Me_u*ue(i-1))
  
     end do
 

@@ -68,23 +68,43 @@ close(12)
 end subroutine WriteConf2File
 
 
-subroutine WriteAnalitico(filename, throat)
+subroutine WriteAnalitico(filename, throat, shock)
 character*255, intent(in) ::filename
 integer , intent(in) ::throat
+real*8, intent(in) ::shock
 integer ::i
 i = throat
 open(15,file=filename)
 14 format (i2, T5 ,1PE25.16, T30 ,A15 )
 !velocidade
-write(15,14) 1, 0.5d0*(ua(i)+ua(i+1)), 'velocidade'
+write(15,14) 1, ue(i), 'velocidade - garganta'
 !Mach
-write(15,14) 2, (0.5d0*(ua(i)+ua(i+1))/dsqrt(gama*R*0.5d0*(Ta(i)+Ta(i+1)))) , 'mach'
+write(15,14) 2, (ue(i)/dsqrt(gama*R*0.5d0*(T(i)+T(i+1)))) , 'mach - garganta'
 !perssao
-write(15,14) 3, 0.5d0*(pa(i)+pa(i+1)), 'pressao'
+write(15,14) 3, 0.5d0*(pa(i)+pa(i+1)), 'pressao - garganta'
 !ro
-write(15,14) 4, 0.5d0*(roa(i)+roa(i+1)), 'roa'
+write(15,14) 4, 0.5d0*(roa(i)+roa(i+1)), 'ro - garganta'
 !temperatura
-write(15,14) 5, 0.5d0*(ta(i)+ta(i+1)), 'temperatura'
+write(15,14) 5, 0.5d0*(ta(i)+ta(i+1)), 'temperatura - garganta'
+!velocidade
+write(15,14) 6, 0.5d0*(ua(1)+ua(2)), 'velocidade - entrada'
+write(15,14) 7, 0.5d0*(ua(n-1)+ua(n)), 'velocidade - saida'
+!pressao
+write(15,14) 8, 0.5d0*(pa(1)+pa(2)), 'pressao - entrada'
+write(15,14) 9, 0.5d0*(pa(n-1)+pa(n)), 'pressao - saida'
+!temperatura
+write(15,14) 10, 0.5d0*(ta(1)+ta(2)), 'temperatura - entrada'
+write(15,14) 11, 0.5d0*(ta(n-1)+ta(n)), 'temperatura - saida'
+!coeficiente de descarga
+write(15,14) 12, 1.0d0, 'coeficiente de descarga - saida (adm)'
+!empuxo dinamico
+write(15,14) 13, 1.0d0, 'empuxo - saida (adm)'
+write(15,14) 14, 0.0d0 , 'media da norma l1 - velocidade'
+write(15,14) 15, 0.0d0 , 'media da norma l1 - temperatura'
+write(15,14) 16, 0.0d0 , 'media da norma l1 - Ro'
+write(15,14) 17, 0.0d0 , 'media da norma l1 - pressao'
+write(15,14) 18, shock , 'local do choque (m)'
+
 close(15)
 end subroutine WriteAnalitico
 
@@ -119,7 +139,7 @@ write(descriptor,14) 3, 0.5d0*(p(i)+p(i+1)), 'pressao - garganta'
 !ro
 write(descriptor,14) 4, 0.5d0*(ro(i)+ro(i+1)), 'ro - garganta'
 !temperatura
-write(descriptor,14) 5, 0.5d0*(t(i)+t(i+1)), 'temperatura'
+write(descriptor,14) 5, 0.5d0*(t(i)+t(i+1)), 'temperatura - garganta'
 !velocidade
 write(descriptor,14) 6, 0.5d0*(u(1)+u(2)), 'velocidade - entrada'
 write(descriptor,14) 7, 0.5d0*(u(n-1)+u(n)), 'velocidade - saida'
@@ -130,9 +150,9 @@ write(descriptor,14) 9, 0.5d0*(p(n-1)+p(n)), 'pressao - saida'
 write(descriptor,14) 10, 0.5d0*(t(1)+t(2)), 'temperatura - entrada'
 write(descriptor,14) 11, 0.5d0*(t(n-1)+t(n)), 'temperatura - saida'
 !coeficiente de descarga
-write(descriptor,14) 12, roe(n-1)*ue(n-1)*Se(n-1)/(0.5d0*(Ma(n-1)+Ma(n))), 'coeficiente de descarga - saida adm'
+write(descriptor,14) 12, roe(n-1)*ue(n-1)*Se(n-1)/(0.5d0*(Ma(n-1)+Ma(n))), 'coeficiente de descarga - saida (adm)'
 !empuxo dinamico
-write(descriptor,14) 13, roe(n-1)*ue(n-1)*Se(n-1)*ue(n-1)/(0.25d0*(Ma(n-1)+Ma(n))*(ua(n)+ua(n-1))), 'empuxo - saida adm'
+write(descriptor,14) 13, roe(n-1)*ue(n-1)*Se(n-1)*ue(n-1)/(0.25d0*(Ma(n-1)+Ma(n))*(ua(n)+ua(n-1))), 'empuxo - saida (adm)'
 write(descriptor,14) 14,sum(abs(Ua(2:n-1)-u(2:n-1)))/(N-2) , 'media da norma l1 - velocidade'
 write(descriptor,14) 15,sum(abs(Ta(2:n-1)-T(2:n-1)))/(N-2) , 'media da norma l1 - temperatura'
 write(descriptor,14) 16,sum(abs(Roa(2:n-1)-Ro(2:n-1)))/(N-2) , 'media da norma l1 - Ro'
@@ -141,9 +161,6 @@ write(descriptor,14) 18, xp(shock) , 'local do choque'
 
 
 end subroutine WriteData
-
-!USE IFPORT
-!result = CHDIR(dir_name)
 
 
 end module CriaArqRichadson
