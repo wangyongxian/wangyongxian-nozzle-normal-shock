@@ -277,13 +277,13 @@ end function rw
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 i=2
 dx = xe(i) - xe(i-1)
-    Mp_ro = sp(i)*dx/dt + ue(i)*se(i) + 0.5d0*PSI(re(i,ro))*ue(i)*se(i)-0.5d0*PSI(1.0d0)*ue(i-1)*se(i-1)
-    Me_ro = 0.5d0*PSI(re(i,ro))*ue(i)*se(i)
-    Mw_ro = -ue(i-1)*se(i-1)+0.5d0*PSI(1.0d0)*ue(i-1)*se(i-1)
-    Me_u = -ro(i)*se(i) - 0.5d0*PSI(re(i,ro))*ro(i+1)*se(i)+0.5*PSI(re(i,ro))*ro(i)*se(i)
-    Mw_u = -ro(i-1)*se(i-1)-0.5d0*PSI(1.0d0)*ro(i)*se(i-1)+0.5d0*PSI(1.0d0)*ro(i-1)*se(i-1)
-    bpn = ro_o(i)*sp(i)*dx/dt+ro(i)*ue(i)*se(i)+0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i)-0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i) &
-         -ro(i-1)*ue(i-1)*se(i-1)-0.5*PSI(1.0d0)*ro(i)*ue(i-1)*se(i-1)+0.5d0*PSI(1.0d0)*ro(i-1)*ue(i-1)*se(i-1)
+    Mp_ro = sp(i)*dx/dt + ue(i)*se(i)
+    Me_ro = 0.0d0
+    Mw_ro = -ue(i-1)*se(i-1)
+    Me_u = se(i)*(ro(i) + 0.5d0*PSI(1.0d0)*(ro(i+1)-ro(i)))
+    Mw_u = -se(i-1)*(ro(i-1)+0.5d0*PSI(1.0d0)*(ro(i)-ro(i-1)))
+    bpn = ro_o(i)*sp(i)*dx/dt + se(i)*ue(i)*(ro(i)+0.5d0*PSI(1.0d0)*(ro(i+1)-ro(i))) &
+          -se(i-1)*ue(i-1)*(ro(i-1)+0.5d0*PSI(1.0d0)*(ro(i)-ro(i-1)))
          
        aw(i) = Mw_u * de(i-1) &
                + Mw_ro / ( R * T(i-1) )
@@ -306,13 +306,13 @@ dx = xe(i) - xe(i-1)
     do i = 3, n-1
         dx = xe(i) - xe(i-1)
 
-    Mp_ro = sp(i)*dx/dt + ue(i)*se(i) + 0.5d0*PSI(re(i,ro))*ue(i)*se(i)-0.5d0*PSI(rw(i,ro))*ue(i-1)*se(i-1)
-    Me_ro = 0.5d0*PSI(re(i,ro))*ue(i)*se(i)
-    Mw_ro = -ue(i-1)*se(i-1)+0.5d0*PSI(rw(i,ro))*ue(i-1)*se(i-1)
-    Me_u = -ro(i)*se(i) - 0.5d0*PSI(re(i,ro))*ro(i+1)*se(i)+0.5*PSI(re(i,ro))*ro(i)*se(i)
-    Mw_u = -ro(i-1)*se(i-1)-0.5d0*PSI(rw(i,ro))*ro(i)*se(i-1)+0.5d0*PSI(rw(i,ro))*ro(i-1)*se(i-1)
-    bpn = ro_o(i)*sp(i)*dx/dt+ro(i)*ue(i)*se(i)+0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i)-0.5d0*PSI(re(i,ro))*ro(i)*ue(i)*se(i) &
-         -ro(i-1)*ue(i-1)*se(i-1)-0.5*PSI(rw(i,ro))*ro(i)*ue(i-1)*se(i-1)+0.5d0*PSI(rw(i,ro))*ro(i-1)*ue(i-1)*se(i-1)
+    Mp_ro = sp(i)*dx/dt + ue(i)*se(i)
+    Me_ro = 0.0d0
+    Mw_ro = -ue(i-1)*se(i-1)
+    Me_u = se(i)*(ro(i) + 0.5d0*PSI(re(i,ro))*(ro(i+1)-ro(i)))
+    Mw_u = -se(i-1)*(ro(i-1)+0.5d0*PSI(rw(i,ro))*(ro(i)-ro(i-1)))
+    bpn = ro_o(i)*sp(i)*dx/dt + se(i)*ue(i)*(ro(i)+0.5d0*PSI(re(i,ro))*(ro(i+1)-ro(i))) &
+          -se(i-1)*ue(i-1)*(ro(i-1)+0.5d0*PSI(rw(i,ro))*(ro(i)-ro(i-1)))
          
        aw(i) = Mw_u * de(i-1) &
                + Mw_ro / ( R * T(i-1) )
