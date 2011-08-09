@@ -16,12 +16,9 @@ implicit none
 !-------------------------------------------------
     integer ::i
     integer ::local, shock
-    
     call conf_file_read
     
-    
     if(gerar_analitico) call GenerateSolutionFile(N_Sol)
-    
     call WriteConf1File(richardson_1, richardson_2)
     call WriteConf2File(richardson_2,richardson_3,richardson_4,caso,Niveis)
     
@@ -33,6 +30,8 @@ implicit none
       
       !para o richardson
       if(i == Niveis)   call WriteAnalitico(richardson_4,local,ShockDistAnalitical)
+    
+      write(*,*) 'iniciando'
       
       select case(tipo)
       case (1)
@@ -66,6 +65,8 @@ implicit none
         calculo_massa_especifica_nas_faces,                     &
         coeficientes_fontes_massa_cds)      
       end select
+      
+      write(*,*) 'finalizando'
       
       call ShockNumFinder(p,shock)
       

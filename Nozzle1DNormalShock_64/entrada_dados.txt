@@ -1,24 +1,24 @@
 +Propriedades
-      20.00d+5         P0        = pressao de estagnacao
-      -1.0d0           P_out     = pressao da saida (-1.0d0 - para sem choque) 9.00d+5
-      3420.33d+0       T0        = temperatura de estagnacao
+      20.00q+5         P0        = pressao de estagnacao
+      -1.0q0           P_out     = pressao da saida (-1.0q0 - para sem choque) 9.00d+5
+      3420.33q+0       T0        = temperatura de estagnacao
       12              N         = número de volumes de controle
-      1.0d-4           deltat    = número de avanços no tempo
+      1.0q-4           deltat    = número de avanços no tempo
       10000            iteracao  = número de iterações (ciclo total)
       1000            FREQ  = número de iterações (ciclo total)
-      0.5d+0           Lt        = comprimento do domínio de cálculo
-      0.0d+0           fDarcy    = fator de atrito de Darcy
-      526.97d+0	       R         = R constante do gas
-      1.4000d+0        gama      = gama
-      0.3d+0	       rin       = rin
-      0.1d+0	       rg        = rg
-      0.1d+0	       Lc        = Lc
-      0.4d+0	       Ln        = Ln
-      1.0d+0           beta      = esquema CDS - 1 UDS - 0
+      0.5q+0           Lt        = comprimento do domínio de cálculo
+      0.0q+0           fDarcy    = fator de atrito de Darcy
+      526.97q+0	       R         = R constante do gas
+      1.4000q+0        gama      = gama
+      0.3q+0	       rin       = rin
+      0.1q+0	       rg        = rg
+      0.1q+0	       Lc        = Lc
+      0.4q+0	       Ln        = Ln
+      1.0q+0           beta      = esquema CDS - 1 UDS - 0
       1                tipo      = 1- CDS padrao 2- CDS novo 3- tvd
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      8                Niveis    = Niveis
+      8                Niveis    = Numero de Malhas
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt

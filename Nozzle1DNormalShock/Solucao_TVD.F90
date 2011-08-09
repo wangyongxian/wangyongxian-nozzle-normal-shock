@@ -300,7 +300,7 @@ dx = xe(i) - xe(i-1)
                +Me_ro*ro(i+1) &
                +Mw_ro*ro(i-1) &
                +Me_u*ue(i)    &
-               +Me_u*ue(i-1))
+               +Mw_u*ue(i-1))
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     ! volumes internos
     do i = 3, n-1
@@ -329,7 +329,7 @@ dx = xe(i) - xe(i-1)
                +Me_ro*ro(i+1) &
                +Mw_ro*ro(i-1) &
                +Me_u*ue(i)    &
-               +Me_u*ue(i-1))
+               +Mw_u*ue(i-1))
  
     end do
 

@@ -1,8 +1,0 @@
-set data style linespoints
-set grid
-plot   'Norma.dat' using 1:2 title 'L1 x Ite' with points
-set logscale y
-set xlabel 'iterações'
-set ylabel 'Norma L1(n)/L1(0)'
-set title 'norma'                
-replot

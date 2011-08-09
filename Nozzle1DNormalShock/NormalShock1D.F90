@@ -303,10 +303,10 @@ do
     FLL = -(2.0d0*(rin-rg)*(PI**2.0d0)/(Ln**2.0d0))*dcos(2.0d0*PI*(M-Lc)/Ln)
     !ShockDistance = M - F/FL
     ShockDistance = M - F*FL/(Fl**2.0d0-F*Fll)
-    IF (ABS((M-ShockDistance)/ShockDistance) .LT. 1E-16) RETURN
+    IF (ABS((M-ShockDistance)/ShockDistance) .LT. 1E-12) RETURN
     M = ShockDistance
 end do
-write(*,*)
+
 end function
 
 
