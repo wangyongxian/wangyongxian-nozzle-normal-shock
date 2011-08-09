@@ -285,9 +285,8 @@ end do
 
 end subroutine ShockNumFinder
 
-
-real*16 function ShockDistance(ARatio, rin, rg, Lc, Ln, Lt)
-real*16 ::ARatio
+real*16 function ShockDistance(AA, rin, rg, Lc, Ln, Lt)
+real*16 ::AA
 real*16 ::M
 real*16 ::rin
 real*16 ::rg
@@ -296,15 +295,18 @@ real*16 ::Ln
 real*16 ::Lt
 real*16 ::F
 real*16 ::Fl
-M = Lt
+real*16 ::Fll
+M = Lt-0.01q0
 do
-    F = rg+0.5q0*(rin-rg)*(1.0q0+qcos(2.0q0*PI*(M-Lc)/Ln)) - rg*qsqrt(ARatio)
-    FL = -0.5q0*(rin-rg)*PI*qsin(2.0q0*(M-Lc)/Ln)/Ln
-    ShockDistance  = M - F/FL
-    IF (ABS((M-ShockDistance)/ShockDistance) .LT. 1E-06) RETURN
+    F = rg + 0.5q0*(rin-rg)*(1.0q0+qcos(2.0q0*PI*(M-Lc)/Ln)) - rg*qsqrt(AA)
+    FL = -((rin-rg)*PI/Ln)*qsin(2.0q0*PI*(M-Lc)/Ln)
+    FLL = -(2.0q0*(rin-rg)*(PI**2.0q0)/(Ln**2.0q0))*qcos(2.0q0*PI*(M-Lc)/Ln)
+    !ShockDistance = M - F/FL
+    ShockDistance = M - F*FL/(Fl**2.0q0-F*Fll)
+    IF (ABS((M-ShockDistance)/ShockDistance) .LT. 1E-32) RETURN
     M = ShockDistance
 end do
+write(*,*)
 end function
-
 end module NormalShock1D
 
