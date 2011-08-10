@@ -208,19 +208,19 @@ subroutine mostra_dados
         ver = system('wgnuplot dominio.gnu')
     end if
     if (graf_ro) then
-        ver = system('wgnuplot ro.gnu')
+        ver = system('wgnuplot ro_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_m) then
-        ver = system('wgnuplot fm.gnu')
+        ver = system('wgnuplot fm_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_v) then
-        ver = system('wgnuplot U.gnu')
+        ver = system('wgnuplot U_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_t) then
-       ver = system('wgnuplot T.gnu')
+       ver = system('wgnuplot T_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if(graf_mach)then
-       ver = system('wgnuplot Mach.gnu')
+       ver = system('wgnuplot Mach_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if(res_coef) then
     ver = system('coeficientes.txt')

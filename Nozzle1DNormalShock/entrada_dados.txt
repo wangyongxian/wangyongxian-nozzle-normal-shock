@@ -1,10 +1,10 @@
 +Propriedades
       20.00d+5         P0        = pressao de estagnacao
-      -1.0d0           P_out     = pressao da saida (-1.0d0 - para sem choque) 9.00d+5
+      9.00d+5           P_out     = pressao da saida (-1.0d0 - para sem choque) 9.00d+5
       3420.33d+0       T0        = temperatura de estagnacao
-      1002              N         = número de volumes de controle
-      1.0d-7           deltat    = número de avanços no tempo
-      100            iteracao  = número de iterações (ciclo total)
+      12              N         = número de volumes de controle
+      1.0d-5           deltat    = número de avanços no tempo
+      10000            iteracao  = número de iterações (ciclo total)
       1000            FREQ  = número de iterações (ciclo total)
       0.5d+0           Lt        = comprimento do domínio de cálculo
       0.0d+0           fDarcy    = fator de atrito de Darcy
@@ -18,7 +18,7 @@
       3                tipo      = 1- CDS padrao 2- CDS novo 3- tvd
 +Razao de refino
       2                RazaoRef  = Razao de refino
-      8                Niveis    = Numero de Malhas
+      11                Niveis    = Numero de Malhas
 +Saida 
 'Resultado para N=12'                       ! Título para os gráficos (até 50 caracteres)
 'Resultado_Caso_'                           ! Template do nome para o arquivo de saida. A saida sera: Resultado_Caso_<N>.txt
@@ -33,7 +33,7 @@
 0    = temperatura
 0    = velocidade
 0    = massa especifica
-1    = pressao
+0    = pressao
 0    = mach
 0    = empuxo
 0    = coeficiente de descarga
