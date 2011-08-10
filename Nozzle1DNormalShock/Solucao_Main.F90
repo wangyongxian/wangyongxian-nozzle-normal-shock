@@ -35,6 +35,7 @@ end interface
 	integer :: it
     real*8 :: k    ! auxiliar
     real*8 :: M_in ! número de Mach na entrada
+    character*255 ::arquivo
     
 	tcpu = timef() ! zera cronômetro
 	
@@ -93,8 +94,10 @@ end interface
 	call Norma_L1( n, aw, ap, ae, bp, T, Residuo_T )
 	Residuo_T_o = Residuo_T
 	
-	
-	open(8, file='norma_l1.txt')
+	10 format(i8)
+	write(arquivo,10) N
+	arquivo = 'norma_l1_caso_' // trim(adjustl(arquivo)) // '.txt'
+	open(8, file=arquivo)
 	write(8,4)
 	4 format(t1,'iteracao',t18 ,'Residuo T',t38 ,'Residuo U',t58,'Residuo Pl')
 

@@ -33,7 +33,7 @@ implicit none
       
       !para o richardson
       if(i == Niveis)   call WriteAnalitico(richardson_4,local,ShockDistAnalitical)
-      
+      write(*,*) 'iniciando'
       select case(tipo)
       case (1)
         call solucao_numerica(coeficientes_e_fontes_qml_cds, &
@@ -60,6 +60,7 @@ implicit none
         coeficientes_e_fontes_energia_cds,                      &
         coeficientes_fontes_massa_cds)      
       end select
+      write(*,*) 'finalizando'
       
       call ShockNumFinder(p,shock)
       
