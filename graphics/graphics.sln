@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "graphics", "graphics\graphics.vfproj", "{DFD46D28-0ACD-4CD6-BC73-A7BD33C68E06}"
 EndProject
 Global

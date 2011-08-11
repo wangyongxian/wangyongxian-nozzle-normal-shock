@@ -110,59 +110,79 @@ end subroutine gera_txt
 subroutine gera_graficos(analitica)
 logical, intent(in) ::analitica
     integer ::i
-    real*16 ::T0
+    real*8 ::T0
+    character*255 ::arquivo
+    character*255 ::arquivo1
+    character*255 ::arquivo2
     
-    open(23, file='fm.dat')
+    10 format(i8)
+	
+	write(arquivo,10) N
+	arquivo1 = 'FM_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'FM_' // trim(adjustl(arquivo)) // '.gnu'
+    open(23, file=arquivo1)
     do i = 1, N
 	  write(23,*) xp(i), Ma(i), M(i)
 	end do
     close(23)
+    call create_gnufile(arquivo2, arquivo1, '''solucao_analitica.txt''',  9    , analitica, '''x(m)''', '''Fluxo de Massa (kg/s)''', '''teste titulo''')
     
-    open(23, file='u.dat')
+	arquivo1 = 'U_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'U_' // trim(adjustl(arquivo)) // '.gnu'
+    open(23, file=arquivo1)
     do i = 1, N
-	  write(23,48) xp(i), Ua(i), U(i), raio(i)*10000.q0
-	  48 format(4(1pe45.32))
+	  write(23,48) xp(i), Ua(i), U(i), raio(i)*10000.d0
+	  48 format(4(1pe27.18))
 	end do
-	
     close(23)
+    call create_gnufile(arquivo2, arquivo1, '''solucao_analitica.txt''', 3, analitica, '''x(m)''', '''u(m/s)''', '''teste titulo''')
     
-    open(23, file='Mach.dat')
+	arquivo1 = 'Mach_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'Mach_' // trim(adjustl(arquivo)) // '.gnu'
+    open(23, file=arquivo1)
     do i = 1, N
-	  write(23,48) xp(i), Mach(i), (u(i)/qsqrt(gama*R*T(i))), raio(i)
+	  write(23,48) xp(i), Mach(i), (u(i)/dsqrt(gama*R*T(i))), raio(i)
 	end do
-	
 	close(23)
-    open(23, file='ro.dat')
+	call create_gnufile(arquivo2, arquivo1, '''solucao_analitica.txt''', 8, analitica, '''x(m)''', '''Mach''', '''teste titulo''')
+	
+	arquivo1 = 'RO_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'RO_' // trim(adjustl(arquivo)) // '.gnu'
+    open(23, file=arquivo1)
     do i = 1, N
 	  write(23,48) xp(i), roa(i), ro(i), raio(i)
 	end do
+	close(23)
+	call create_gnufile(arquivo2, arquivo1, '''solucao_analitica.txt''', 7, analitica, '''x(m)''', '''Ro(km/m^3)''', '''teste titulo''')
 	
-	open(23, file='p.dat')
+	arquivo1 = 'P_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'P_' // trim(adjustl(arquivo)) // '.gnu'
+	open(23, file=arquivo1)
     do i = 1, N
 	  write(23,48) xp(i), pa(i), p(i), raio(i)
 	end do
-	
     close(23)
-    open(22,file='dominio.dat')
+    call create_gnufile(arquivo2, arquivo1 , '''solucao_analitica.txt''', 6, analitica, '''x(m)''', '''P(Pa)''', '''teste titulo''')
+    
+	arquivo1 = 'dominio_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'dominio_' // trim(adjustl(arquivo)) // '.gnu'
+    open(22,file=arquivo1)
 	do i = 1, N
 	  write(22,*) xp(i), raio(i)
 	end do
 	close(22)
 	
-    open(22,file='T.dat')
+	arquivo1 = 'T_' // trim(adjustl(arquivo)) // '.dat'
+	arquivo2 = 'T_' // trim(adjustl(arquivo)) // '.gnu'
+    open(22,file=arquivo1)
 	do i = 1, N
-	    call T0Calc(gama,T(i), (u(i)/qsqrt(gama*R*T(i))), T0)
-	    !call T0Calc(gama,Ta(i), Mach(i), T0)
+	    call T0Calc(gama,T(i), (u(i)/dsqrt(gama*R*T(i))), T0)
 	  write(22,48) xp(i), Ta(i), T(i), raio(i)
 	end do
 	close(22)
+    call create_gnufile(arquivo2, arquivo1, '''solucao_analitica.txt''', 5, analitica, '''x(m)''', '''T(K)''', '''teste titulo''')
 	
-	call create_gnufile('U.gnu', '''u.dat''', '''solucao_analitica.txt''', 3, analitica, '''x(m)''', '''u(m/s)''', '''teste titulo''')
-    call create_gnufile('T.gnu', '''T.dat''', '''solucao_analitica.txt''', 5, analitica, '''x(m)''', '''T(K)''', '''teste titulo''')
-    call create_gnufile('RO.gnu', '''RO.dat''', '''solucao_analitica.txt''', 7, analitica, '''x(m)''', '''Ro(km/m^3)''', '''teste titulo''')
-    call create_gnufile('P.gnu', '''P.dat''', '''solucao_analitica.txt''', 6, analitica, '''x(m)''', '''P(Pa)''', '''teste titulo''')
-    call create_gnufile('Mach.gnu', '''Mach.dat''', '''solucao_analitica.txt''', 8, analitica, '''x(m)''', '''Mach''', '''teste titulo''')
-    call create_gnufile('fm.gnu', '''fm.dat''', '''solucao_analitica.txt''',  9    , analitica, '''x(m)''', '''Fluxo de Massa (kg/s)''', '''teste titulo''')
+    
     call create_gnufile('coef_descarga.gnu', '''fm.dat''', '''solucao_analitica.txt''',  10    , analitica, '''x(m)''', '''Coeficiente de Descarga (kg/s)''', '''teste titulo''')
     call create_gnufile('empuxo.gnu', '''fm.dat''', '''solucao_analitica.txt''',  11    , analitica, '''x(m)''', '''Empuxo (kg/s)''', '''teste titulo''')
     
@@ -170,9 +190,13 @@ logical, intent(in) ::analitica
 end subroutine gera_graficos
 
 subroutine mostra_dados
-
+    character*255 ::arquivo
+    10 format(i8)
+	
+	write(arquivo,10) N
+	
     if (graf_p) then
-        ver = system('wgnuplot p.gnu')
+        ver = system('wgnuplot P_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_cdesc) then
         ver = system('wgnuplot coef_descarga.gnu')
@@ -184,29 +208,29 @@ subroutine mostra_dados
         ver = system('wgnuplot dominio.gnu')
     end if
     if (graf_ro) then
-        ver = system('wgnuplot ro.gnu')
+        ver = system('wgnuplot ro_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_m) then
-        ver = system('wgnuplot fm.gnu')
+        ver = system('wgnuplot fm_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_v) then
-        ver = system('wgnuplot U.gnu')
+        ver = system('wgnuplot U_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if (graf_t) then
-       ver = system('wgnuplot T.gnu')
+       ver = system('wgnuplot T_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if(graf_mach)then
-       ver = system('wgnuplot Mach.gnu')
+       ver = system('wgnuplot Mach_' // trim(adjustl(arquivo)) // '.gnu')
     end if
     if(res_coef) then
     ver = system('coeficientes.txt')
     end if 
     if (res_result) then
-        ver = system('resultados.txt')
+        ver = system('resultados')
     end if
     
     if (res_iter) then
-        ver = system('norma_l1.txt')
+        ver = system('norma_l1')
     end if
     
 end subroutine mostra_dados
@@ -231,9 +255,9 @@ subroutine gera_arq_coef(prop)
             write(14, 4)
     end select
     
-    do i=1,N
+    !do i=1,N
      !   write(14, 5) i, xp(i), aw(i), ap(i), ae(i), bp(i)
-    end do
+    !end do
     
     close(14)
 end subroutine gera_arq_coef
@@ -270,10 +294,8 @@ else
 'set ylabel ',a10,1/,                                        &
 'set title ',a50,1/,                                         &
 'replot')
-write(12,13) dat_file, dat_file, dat_file, xlabel, ylabel, title
+write(12,13) "'" // trim(adjustl(dat_file)) // "'", "'" // trim(adjustl(dat_file)) // "'", "'" // trim(adjustl(dat_file)) // "'", xlabel, ylabel, title
 end if
-
-
 close(12)
 
 end subroutine create_gnufile
