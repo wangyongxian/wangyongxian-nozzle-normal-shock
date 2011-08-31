@@ -27,7 +27,7 @@ real*8 GAMA_TVD
 !    PSI = MIN(R,1.0d0)
 !end if
 !Superbee de Roe
-    !PSI = MAX(0.0d0,MIN(2.0d0*R,1.0d0),MIN(R,2.0d0))
+    PSI = MAX(0.0d0,MIN(2.0d0*R,1.0d0),MIN(R,2.0d0))
 !Sweby muito promissor
 !1.0d0<=BETA_TVD <=2.0d0
 !BETA_TVD = 1.0d0
@@ -35,7 +35,7 @@ real*8 GAMA_TVD
 !QUICK
 !    PSI = MAX(0.0d0,MIN(2.0d0*R,(3.0d0+R)/4.0d0,2.0d0))
 !UMIST
-    PSI = MAX(0.0d0,MIN(2.0d0*R,(1.0d0+3.0d0*R)/4.0d0,(3.0d0+R)/4.0d0,2.0d0))
+    !PSI = MAX(0.0d0,MIN(2.0d0*R,(1.0d0+3.0d0*R)/4.0d0,(3.0d0+R)/4.0d0,2.0d0))
 !http://en.wikipedia.org/wiki/Flux_limiter
 !Koren ruim
 !PSI = max(0.0d0,min(2.0d0*R,(1.0d0+2.0d0*R)/3.0d0,2.0d0))
