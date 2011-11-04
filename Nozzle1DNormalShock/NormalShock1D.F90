@@ -277,10 +277,10 @@ integer ::i
 
 diff = 0.0d0
 do i=2,n-1
-if((p(i+1)-p(i)) > diff) then
-local = i
-diff = p(i+1)-p(i)
-end if
+    if((p(i+1)-p(i)) > diff) then
+        local = i
+        diff = p(i+1)-p(i)
+    end if
 end do
 
 end subroutine ShockNumFinder

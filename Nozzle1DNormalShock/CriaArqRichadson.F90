@@ -158,7 +158,7 @@ write(descriptor,14) 15,sum(abs(Ta(2:n-1)-T(2:n-1)))/(N-2) , 'media da norma l1 
 write(descriptor,14) 16,sum(abs(Roa(2:n-1)-Ro(2:n-1)))/(N-2) , 'media da norma l1 - Ro'
 write(descriptor,14) 17,sum(abs(Pa(2:n-1)-P(2:n-1)))/(N-2) , 'media da norma l1 - pressao'
 if(P_OUT /= -1.0d0) then
-write(descriptor,14) 18, xp(shock) , 'local do choque'
+write(descriptor,14) 18, (xp(shock+1)+xp(shock))/2.0d0 , 'local do choque'
 end if
 
 end subroutine WriteData
